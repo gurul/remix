@@ -29,6 +29,8 @@ const Mono = ({ children, className = "" }: { children: React.ReactNode; classNa
   </span>
 );
 
+const GLOBE_AMBER = [245 / 255, 158 / 255, 11 / 255] as [number, number, number];
+
 const Globe = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -42,20 +44,14 @@ const Globe = () => {
       height: 600 * 2,
       phi: 0,
       theta: 0,
-      dark: 1,
+      dark: 0.2,
       diffuse: 1.2,
       mapSamples: 16000,
-      mapBrightness: 6,
-      baseColor: [0.1, 0.1, 0.1],
-      markerColor: [245 / 255, 158 / 255, 11 / 255],
-      glowColor: [0.1, 0.1, 0.1],
-      markers: [
-        { location: [47.6062, -122.3321], size: 0.1 }, // Seattle
-        { location: [37.7749, -122.4194], size: 0.05 }, // SF
-        { location: [40.7128, -74.0060], size: 0.05 },  // NYC
-        { location: [51.5074, -0.1278], size: 0.05 },   // London
-        { location: [35.6762, 139.6503], size: 0.05 },  // Tokyo
-      ],
+      mapBrightness: 12,
+      baseColor: GLOBE_AMBER,
+      markerColor: GLOBE_AMBER,
+      glowColor: GLOBE_AMBER,
+      markers: [],
       onRender: (state) => {
         state.phi = phi;
         phi += 0.003;
@@ -66,7 +62,7 @@ const Globe = () => {
   }, []);
 
   return (
-    <div className="relative w-full aspect-square max-w-[600px] mx-auto opacity-40 grayscale transition-all duration-1000">
+    <div className="relative w-full aspect-square max-w-[600px] mx-auto opacity-70 transition-all duration-1000">
       <canvas
         ref={canvasRef}
         style={{ width: '100%', height: '100%', maxWidth: '100%', aspectRatio: '1' }}
@@ -75,20 +71,21 @@ const Globe = () => {
   );
 };
 
+const CONSOLE_LOGS = [
+  "SYNCING_SEA_NODES",
+  "POLLING_COMMUNITY_METRICS",
+  "VERIFYING_PROTOCOL_V2",
+  "ENCRYPTING_SHARED_INTELLIGENCE",
+  "UPLOADING_EVENT_TELEMETRY",
+  "CONNECTION_ESTABLISHED",
+];
+
 const ConsoleSystem = () => {
-  const logs = [
-    "SYNCING_SEA_NODES",
-    "POLLING_COMMUNITY_METRICS",
-    "VERIFYING_PROTOCOL_V2",
-    "ENCRYPTING_SHARED_INTELLIGENCE",
-    "UPLOADING_EVENT_TELEMETRY",
-    "CONNECTION_ESTABLISHED"
-  ];
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex(i => (i + 1) % logs.length);
+      setIndex((i) => (i + 1) % CONSOLE_LOGS.length);
     }, 2500);
     return () => clearInterval(interval);
   }, []);
@@ -104,7 +101,7 @@ const ConsoleSystem = () => {
           className="flex items-center gap-2"
         >
           <span className="w-1 h-1 bg-accent animate-pulse shrink-0" />
-          {logs[index]}
+          {CONSOLE_LOGS[index]}
         </motion.div>
       </AnimatePresence>
     </div>
@@ -401,18 +398,14 @@ export default function Home() {
       {/* About Us / Launch Video */}
       <section id="about-us" className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-          <div>
-            <div className="aspect-video bg-white/5 border border-white/10 flex items-center justify-center relative group cursor-pointer overflow-hidden">
-              <div className="absolute inset-0 grayscale opacity-40 group-hover:opacity-60 group-hover:scale-105 transition-all duration-1000">
-                <Image src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=1200" alt="Launch Video" fill className="object-cover" />
-              </div>
-              <div className="relative z-10 text-center">
-                <div className="w-20 h-20 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-accent group-hover:border-accent transition-all duration-500">
-                  <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[16px] border-l-white border-b-[10px] border-b-transparent ml-1 group-hover:border-l-black" />
-                </div>
-                <Mono className="mt-6 block text-white tracking-[0.4em]">Launch_Video.mp4</Mono>
-              </div>
-            </div>
+          <div className="aspect-video w-full overflow-hidden border border-white/10 bg-white/5">
+            <iframe
+              src="https://www.youtube.com/embed/36i7pkaHqow?start=9"
+              title="About Us - AI Collective Seattle"
+              className="w-full h-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           </div>
           
           <div className="space-y-10">
