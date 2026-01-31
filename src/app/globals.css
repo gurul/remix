@@ -1,0 +1,52 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-serif: var(--font-playfair);
+  --font-sans: var(--font-inter);
+  --font-mono: "JetBrains Mono", ui-monospace;
+  
+  --color-background: #0c0a09;
+  --color-foreground: #fafaf9;
+  --color-accent: #f59e0b;
+  --color-secondary: #a8a29e;
+  --color-muted: #1c1917;
+  --color-border: #292524;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans selection:bg-accent/20 selection:text-accent antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif tracking-tight;
+  }
+}
+
+.grain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.04;
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+}
+
+.glass {
+  @apply bg-white/5 backdrop-blur-xl border border-white/10;
+}
+
+.grid-bg {
+  background-image: radial-gradient(circle at 1px 1px, rgba(245, 158, 11, 0.05) 1px, transparent 0);
+  background-size: 24px 24px;
+}
