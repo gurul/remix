@@ -546,7 +546,7 @@ export default function Home() {
               From its humble beginnings as an intimate gathering in a cozy San Francisco apartment, we've blossomed into a vibrant global community built on the belief that the most meaningful connections are made when exploring a shared curiosity together.
             </p>
             <a 
-              href="https://www.aicollective.com/about"
+              href="https://www.aicollective.com/why"
               target="_blank"
               rel="noopener noreferrer"
               className="group flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.3em] text-accent border-b border-accent/20 pb-1 hover:border-accent transition-all"
