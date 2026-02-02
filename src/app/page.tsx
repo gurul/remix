@@ -371,7 +371,7 @@ export default function Home() {
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-8 h-px bg-accent/50" />
-              <Mono className="text-accent">Seattle Chapter_04</Mono>
+              <Mono className="text-accent">Seattle Chapter</Mono>
             </div>
             <h1 className="text-6xl md:text-[7rem] font-serif leading-[0.9] tracking-tighter mb-10">
               The AI<br />
@@ -381,20 +381,24 @@ export default function Home() {
               Join our vibrant AI community in Seattle! Connect with local pioneers and innovators shaping the future of AI through <span className="text-white">meaningful gatherings</span> and collaborative exploration.
             </p>
             <div className="flex flex-wrap gap-6">
-              <button 
-                onClick={() => window.parent.postMessage({ type: "OPEN_EXTERNAL_URL", data: { url: "https://www.aicollective.com/" } }, "*")}
+              <a 
+                href="https://www.aicollective.com/chapters/seattle"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group flex items-center gap-4 bg-white/5 border border-white/10 px-8 py-5 hover:bg-white hover:text-black transition-all"
               >
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em] font-bold">Join Our Chapter</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </button>
-              <button 
-                onClick={() => window.parent.postMessage({ type: "OPEN_EXTERNAL_URL", data: { url: "https://docs.google.com/forms/d/e/1FAIpQLSelDyidSPMTyFagOEp7AYuRXH8-Wt8JgJqCwGnR_puhUScyJg/viewform?usp=header" } }, "*")}
+              </a>
+              <a 
+                href="https://docs.google.com/forms/d/e/1FAIpQLSelDyidSPMTyFagOEp7AYuRXH8-Wt8JgJqCwGnR_puhUScyJg/viewform?usp=header"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group flex items-center gap-4 border border-white/10 px-8 py-5 hover:border-accent transition-all"
               >
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em]">Partner With Us</span>
                 <ExternalLink size={14} className="text-secondary group-hover:text-accent" />
-              </button>
+              </a>
             </div>
           </div>
           
@@ -760,12 +764,14 @@ export default function Home() {
           <p className="text-xl max-w-2xl mx-auto mb-16 leading-relaxed">
             Get involved with our chapter! We're always looking for passionate volunteers to help organize events and shape the future of AI in our community.
           </p>
-          <button 
-            onClick={() => window.parent.postMessage({ type: "OPEN_EXTERNAL_URL", data: { url: "https://tally.so/r/n0r0xR" } }, "*")}
-            className="bg-black text-white px-12 py-6 text-xs font-mono font-bold uppercase tracking-[0.4em] hover:bg-white hover:text-black transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,0.15)]"
+          <a 
+            href="https://docs.google.com/forms/d/e/1FAIpQLSexvCAcYFJASap0tDcu29esoWj-56x87gcoUKj0HQfQ9GbczA/viewform?usp=header"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-black text-white px-12 py-6 text-xs font-mono font-bold uppercase tracking-[0.4em] hover:bg-white hover:text-black transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,0.15)]"
           >
             Apply_To_Volunteer
-          </button>
+          </a>
         </div>
       </section>
 
