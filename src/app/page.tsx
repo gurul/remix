@@ -382,13 +382,16 @@ export default function Home() {
             </p>
             <div className="flex flex-wrap gap-6">
               <button 
-                onClick={() => window.parent.postMessage({ type: "OPEN_EXTERNAL_URL", data: { url: "https://tally.so/r/n0r0xR" } }, "*")}
+                onClick={() => window.parent.postMessage({ type: "OPEN_EXTERNAL_URL", data: { url: "https://www.aicollective.com/" } }, "*")}
                 className="group flex items-center gap-4 bg-white/5 border border-white/10 px-8 py-5 hover:bg-white hover:text-black transition-all"
               >
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em] font-bold">Join Our Chapter</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </button>
-              <button className="group flex items-center gap-4 border border-white/10 px-8 py-5 hover:border-accent transition-all">
+              <button 
+                onClick={() => window.parent.postMessage({ type: "OPEN_EXTERNAL_URL", data: { url: "https://docs.google.com/forms/d/e/1FAIpQLSelDyidSPMTyFagOEp7AYuRXH8-Wt8JgJqCwGnR_puhUScyJg/viewform?usp=header" } }, "*")}
+                className="group flex items-center gap-4 border border-white/10 px-8 py-5 hover:border-accent transition-all"
+              >
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em]">Partner With Us</span>
                 <ExternalLink size={14} className="text-secondary group-hover:text-accent" />
               </button>
@@ -527,9 +530,14 @@ export default function Home() {
             <p className="text-secondary leading-relaxed font-light">
               From its humble beginnings as an intimate gathering in a cozy San Francisco apartment, we've blossomed into a vibrant global community built on the belief that the most meaningful connections are made when exploring a shared curiosity together.
             </p>
-            <button className="group flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.3em] text-accent border-b border-accent/20 pb-1 hover:border-accent transition-all">
+            <a 
+              href="https://www.aicollective.com/about"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.3em] text-accent border-b border-accent/20 pb-1 hover:border-accent transition-all"
+            >
               Learn More About Our Mission <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-            </button>
+            </a>
           </div>
         </div>
       </section>
@@ -562,9 +570,14 @@ export default function Home() {
             <p className="text-secondary leading-relaxed mb-10 italic">
               "The future of AI will be shaped by the conversations happening today. By bringing together the brightest minds across disciplines, we ensure that this future is one where AI serves as a force for human flourishing."
             </p>
-            <button className="flex items-center gap-4 text-[10px] font-mono uppercase tracking-[0.3em] text-white hover:text-accent transition-colors group">
+            <a 
+              href="https://www.aicollective.com/trust"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 text-[10px] font-mono uppercase tracking-[0.3em] text-white hover:text-accent transition-colors group"
+            >
               Founding Perspective <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-            </button>
+            </a>
           </div>
         </div>
       </section>
