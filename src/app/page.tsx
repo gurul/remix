@@ -30,7 +30,8 @@ const Mono = ({ children, className = "" }: { children: React.ReactNode; classNa
   </span>
 );
 
-const GLOBE_AMBER = [245 / 255, 158 / 255, 11 / 255] as [number, number, number];
+// Accent orange for globe (matches #ff7a1a)
+const GLOBE_AMBER = [255 / 255, 122 / 255, 26 / 255] as [number, number, number];
 
 const Globe = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -66,8 +67,18 @@ const Globe = () => {
     <div className="relative w-full aspect-square max-w-[600px] mx-auto opacity-70 transition-all duration-1000">
       <canvas
         ref={canvasRef}
-        style={{ width: '100%', height: '100%', maxWidth: '100%', aspectRatio: '1' }}
+        style={{ width: "100%", height: "100%", maxWidth: "100%", aspectRatio: "1" }}
       />
+      {/* Overlay logo on top of globe */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <Image
+          src="/Untitled_design.png"
+          alt="AI Collective mark"
+          width={360}
+          height={360}
+          className="opacity-100 mix-blend-screen"
+        />
+      </div>
     </div>
   );
 };
@@ -334,7 +345,7 @@ export default function Home() {
           </div>
           <button 
             onClick={() => window.parent.postMessage({ type: "OPEN_EXTERNAL_URL", data: { url: "https://tally.so/r/n0r0xR" } }, "*")}
-            className="bg-accent text-black px-5 py-2 text-[9px] font-mono font-bold hover:bg-white transition-all uppercase tracking-[0.2em] shadow-[3px_3px_0px_0px_rgba(245,158,11,0.2)]"
+            className="bg-accent text-black px-5 py-2 text-[9px] font-mono font-bold hover:bg-white transition-all uppercase tracking-[0.2em] shadow-[3px_3px_0px_0px_rgba(255,122,26,0.2)]"
           >
             Apply_Member
           </button>
