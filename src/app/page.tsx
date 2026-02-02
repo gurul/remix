@@ -503,6 +503,109 @@ export default function Home() {
         </div>
       </section>
 
+      {/* About Us / Launch Video */}
+      <section id="about-us" className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+          <div className="aspect-video w-full overflow-hidden border border-white/10 bg-white/5">
+            <iframe
+              src="https://www.youtube.com/embed/36i7pkaHqow?start=9"
+              title="About Us - AI Collective Seattle"
+              className="w-full h-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+          
+          <div className="space-y-10">
+            <div>
+              <Mono className="text-accent mb-6 block">Legacy_Manifesto</Mono>
+              <h2 className="text-5xl md:text-6xl font-serif italic mb-8">About Us.</h2>
+              <p className="text-lg text-secondary leading-relaxed">
+                The AI Collective is a non-profit, grassroots community uniting <span className="text-white">150,000+ pioneers</span> – founders, researchers, operators, and investors – exploring the frontier of AI.
+              </p>
+            </div>
+            <p className="text-secondary leading-relaxed font-light">
+              From its humble beginnings as an intimate gathering in a cozy San Francisco apartment, we've blossomed into a vibrant global community built on the belief that the most meaningful connections are made when exploring a shared curiosity together.
+            </p>
+            <button className="group flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.3em] text-accent border-b border-accent/20 pb-1 hover:border-accent transition-all">
+              Learn More About Our Mission <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Values & Why */}
+      <section className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/10 border border-white/10">
+          <div className="bg-[#0c0a09] p-16 border-b md:border-b-0 md:border-r border-white/10">
+            <Mono className="text-accent mb-8 block">Cultural_Directives</Mono>
+            <h2 className="text-5xl font-serif italic mb-8">Our Values.</h2>
+            <p className="text-secondary leading-relaxed mb-12 font-light">
+              Our community is built on three core values that guide everything we do. These values shape our events, research, and interactions, ensuring that we create a space where diverse voices are heard and meaningful progress is made.
+            </p>
+            <div className="space-y-6">
+              {["Trust & Integrity", "Radical Curiosity", "Human-Centered Innovation"].map((v, i) => (
+                <div key={i} className="flex items-center gap-4 group cursor-default">
+                  <div className="w-2 h-2 rounded-full bg-accent/40 group-hover:bg-accent transition-colors" />
+                  <span className="text-sm font-mono tracking-widest text-white/60 group-hover:text-white transition-colors">{v}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div className="bg-[#0c0a09] p-16">
+            <Mono className="text-accent mb-8 block">Foundational_Thesis</Mono>
+            <h2 className="text-5xl font-serif italic mb-8">Our Why.</h2>
+            <p className="text-secondary leading-relaxed mb-12 font-light">
+              We believe that the development of AI should be collaborative, transparent, and human-centered. Our mission is rooted in nine core beliefs about AI's trajectory and humanity's role in shaping it.
+            </p>
+            <p className="text-secondary leading-relaxed mb-10 italic">
+              "The future of AI will be shaped by the conversations happening today. By bringing together the brightest minds across disciplines, we ensure that this future is one where AI serves as a force for human flourishing."
+            </p>
+            <button className="flex items-center gap-4 text-[10px] font-mono uppercase tracking-[0.3em] text-white hover:text-accent transition-colors group">
+              Founding Perspective <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* How We Gather */}
+      <section className="py-32 bg-white/[0.01] border-y border-white/5 overflow-hidden">
+        <div className="px-6 md:px-12 max-w-[1400px] mx-auto">
+          <div className="flex flex-col lg:flex-row gap-20 items-end mb-24">
+            <div className="lg:w-1/2">
+              <Mono className="text-accent mb-6 block">Interaction_Framework</Mono>
+              <h2 className="text-6xl font-serif italic mb-8">How We Gather.</h2>
+              <p className="text-secondary text-lg leading-relaxed">
+                We bring our community together through diverse, intentional gatherings designed for deep connection and meaningful dialogue. From intimate living room meetups to large-scale demo nights, every event centers on <span className="text-white">thoughtful conversation</span> and shared exploration.
+              </p>
+            </div>
+            <div className="lg:w-1/2 lg:text-right pb-4">
+              <button className="bg-white/5 border border-white/10 px-8 py-5 text-[10px] font-mono uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all">
+                Explore Events Archive
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+              <div key={i} className="aspect-square bg-white/5 border border-white/5 relative grayscale hover:grayscale-0 transition-all duration-700 overflow-hidden group">
+                <Image 
+                  src={`https://images.unsplash.com/photo-${1515187029135 + i}?auto=format&fit=crop&q=80&w=600`} 
+                  alt={`Event ${i}`} 
+                  fill 
+                  className="object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-0 group-hover:opacity-80 transition-opacity" />
+                <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
+                  <Mono className="text-white text-[8px]">Event_Fragment_0{i}</Mono>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Past Events */}
       <section className="py-24 px-6 md:px-12 max-w-[1400px] mx-auto">
         <div className="mb-16">
@@ -627,109 +730,6 @@ export default function Home() {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* About Us / Launch Video */}
-      <section id="about-us" className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-          <div className="aspect-video w-full overflow-hidden border border-white/10 bg-white/5">
-            <iframe
-              src="https://www.youtube.com/embed/36i7pkaHqow?start=9"
-              title="About Us - AI Collective Seattle"
-              className="w-full h-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-          
-          <div className="space-y-10">
-            <div>
-              <Mono className="text-accent mb-6 block">Legacy_Manifesto</Mono>
-              <h2 className="text-5xl md:text-6xl font-serif italic mb-8">About Us.</h2>
-              <p className="text-lg text-secondary leading-relaxed">
-                The AI Collective is a non-profit, grassroots community uniting <span className="text-white">150,000+ pioneers</span> – founders, researchers, operators, and investors – exploring the frontier of AI.
-              </p>
-            </div>
-            <p className="text-secondary leading-relaxed font-light">
-              From its humble beginnings as an intimate gathering in a cozy San Francisco apartment, we've blossomed into a vibrant global community built on the belief that the most meaningful connections are made when exploring a shared curiosity together.
-            </p>
-            <button className="group flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.3em] text-accent border-b border-accent/20 pb-1 hover:border-accent transition-all">
-              Learn More About Our Mission <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* How We Gather */}
-      <section className="py-32 bg-white/[0.01] border-y border-white/5 overflow-hidden">
-        <div className="px-6 md:px-12 max-w-[1400px] mx-auto">
-          <div className="flex flex-col lg:flex-row gap-20 items-end mb-24">
-            <div className="lg:w-1/2">
-              <Mono className="text-accent mb-6 block">Interaction_Framework</Mono>
-              <h2 className="text-6xl font-serif italic mb-8">How We Gather.</h2>
-              <p className="text-secondary text-lg leading-relaxed">
-                We bring our community together through diverse, intentional gatherings designed for deep connection and meaningful dialogue. From intimate living room meetups to large-scale demo nights, every event centers on <span className="text-white">thoughtful conversation</span> and shared exploration.
-              </p>
-            </div>
-            <div className="lg:w-1/2 lg:text-right pb-4">
-              <button className="bg-white/5 border border-white/10 px-8 py-5 text-[10px] font-mono uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all">
-                Explore Events Archive
-              </button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-              <div key={i} className="aspect-square bg-white/5 border border-white/5 relative grayscale hover:grayscale-0 transition-all duration-700 overflow-hidden group">
-                <Image 
-                  src={`https://images.unsplash.com/photo-${1515187029135 + i}?auto=format&fit=crop&q=80&w=600`} 
-                  alt={`Event ${i}`} 
-                  fill 
-                  className="object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" 
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-0 group-hover:opacity-80 transition-opacity" />
-                <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-                  <Mono className="text-white text-[8px]">Event_Fragment_0{i}</Mono>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Values & Why */}
-      <section className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/10 border border-white/10">
-          <div className="bg-[#0c0a09] p-16 border-b md:border-b-0 md:border-r border-white/10">
-            <Mono className="text-accent mb-8 block">Cultural_Directives</Mono>
-            <h2 className="text-5xl font-serif italic mb-8">Our Values.</h2>
-            <p className="text-secondary leading-relaxed mb-12 font-light">
-              Our community is built on three core values that guide everything we do. These values shape our events, research, and interactions, ensuring that we create a space where diverse voices are heard and meaningful progress is made.
-            </p>
-            <div className="space-y-6">
-              {["Trust & Integrity", "Radical Curiosity", "Human-Centered Innovation"].map((v, i) => (
-                <div key={i} className="flex items-center gap-4 group cursor-default">
-                  <div className="w-2 h-2 rounded-full bg-accent/40 group-hover:bg-accent transition-colors" />
-                  <span className="text-sm font-mono tracking-widest text-white/60 group-hover:text-white transition-colors">{v}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          <div className="bg-[#0c0a09] p-16">
-            <Mono className="text-accent mb-8 block">Foundational_Thesis</Mono>
-            <h2 className="text-5xl font-serif italic mb-8">Our Why.</h2>
-            <p className="text-secondary leading-relaxed mb-12 font-light">
-              We believe that the development of AI should be collaborative, transparent, and human-centered. Our mission is rooted in nine core beliefs about AI's trajectory and humanity's role in shaping it.
-            </p>
-            <p className="text-secondary leading-relaxed mb-10 italic">
-              "The future of AI will be shaped by the conversations happening today. By bringing together the brightest minds across disciplines, we ensure that this future is one where AI serves as a force for human flourishing."
-            </p>
-            <button className="flex items-center gap-4 text-[10px] font-mono uppercase tracking-[0.3em] text-white hover:text-accent transition-colors group">
-              Founding Perspective <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-            </button>
           </div>
         </div>
       </section>
