@@ -1,0 +1,19 @@
+{
+  "events": [
+    {
+      "id": "dc1e58f8-0d33-4635-8154-7c06ad8f2801",
+      "lumaUrl": "https://luma.com/seattle-v0",
+      "title": "v0 Prompt to Production — Seattle [Vercel x AI Collective]",
+      "description": "We're bringing Vercel's global \"Prompt to Production\" event to Seattle for the very first time. Think of it as a hands-on build session where you'll take an idea and ship an actual, live application in one evening using v0.\nWhen & Where:\nDate: Thursday, 05 February 2026\nTime: 3:00pm - 5:00pm\nLocation: Comotion Labs @ Startup Hall\nWhat's happening:\nThis is very much a doing session. Whether you're testing out a startup idea or exploring AI tooling, you'll walk away with something deployed and live.\nYou'll learn how to use v0 to generate UI components quickly and combine them with modern frameworks to build faster\nEveryone gets free credits to use v0 during the session\nWhatever gets built enters a global showcase - the v0 team picks winners who get featured in the community plus some swag\nSchedule:\n3:00pm — Welcome, quick v0 intro video\n3:30pm — Start building (we'll have some prompt ideas if you need them)\n4:30pm — Show what you made + community voting\n5:00pm — Wrap up, photos, hang out\nWho should come?\nAnyone curious about this space. Frontend devs, founders prototyping, students, people exploring AI and web development. If you want to see what building with AI tools actually looks like in practice, come through.\nWhat to bring: If you're joining in person bring your laptop and a kickass idea!\n\nPlease be advised: Unfortunately, space is very limited at these community events and we can not always accept everyone we would like to. If you are not accepted to this event, please keep applying! We appreciate your application tremendously and we are looking forward to seeing you at a future event very soon!\nThe AI Collective is a global non-profit building the human layer for the AI age. We unite 150,000+ leaders, builders, and stakeholders across 100+ forums worldwide to democratize the frontier, build trust, and coordinate how society navigates the rapid acceleration of technological progress.\nAll attendees and organizers at events affiliated with The AI Collective agree to our privacy policy and are subject to our code of conduct.",
+      "startAt": "2026-02-05T15:00:00.000-08:00",
+      "endAt": "2026-02-05T17:00:00.000-08:00",
+      "timezone": "America/Los_Angeles",
+      "location": "Seattle, Washington",
+      "imageUrl": [
+        "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,anim=false,background=white,quality=75,width=500,height=500/event-covers/oz/b4ca6469-37f1-44cf-96bc-e5b944abd22d.png"
+      ],
+      "type": "Meetup",
+      "addedAt": "2026-02-02T07:04:49.265Z"
+    }
+  ]
+}

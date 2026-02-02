@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import createGlobe from "cobe";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  ArrowRight, 
-  ArrowUpRight, 
-  Cpu, 
-  Database, 
-  Layers, 
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Cpu,
+  Database,
+  Layers,
   ChevronRight,
   Zap,
   Shield,
@@ -19,7 +19,8 @@ import {
   Users,
   ExternalLink,
   MapPin,
-  Clock
+  Clock,
+  Linkedin
 } from "lucide-react";
 import Image from "next/image";
 
@@ -108,65 +109,197 @@ const ConsoleSystem = () => {
   );
 };
 
+interface ApiEvent {
+  id: string;
+  lumaUrl: string;
+  title: string;
+  description?: string;
+  startAt: string;
+  endAt?: string;
+  timezone: string;
+  location?: string;
+  imageUrl?: string;
+  type: string;
+  addedAt: string;
+}
+
+interface DisplayEvent {
+  title: string;
+  type: string;
+  date: string;
+  time: string;
+  ago: string;
+  lumaUrl?: string;
+  imageUrl?: string;
+}
+
+function formatEventDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function formatEventTime(startAt: string, endAt?: string): string {
+  const start = new Date(startAt);
+  const startTime = start.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+
+  if (endAt) {
+    const end = new Date(endAt);
+    const endTime = end.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+    return `${startTime}-${endTime}`;
+  }
+  return startTime;
+}
+
+function getRelativeTime(dateStr: string): string {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays < 0) {
+    const futureDays = Math.abs(diffDays);
+    if (futureDays === 0) return "Today";
+    if (futureDays === 1) return "Tomorrow";
+    if (futureDays < 7) return `In ${futureDays} days`;
+    if (futureDays < 30) return `In ${Math.floor(futureDays / 7)} weeks`;
+    return `In ${Math.floor(futureDays / 30)} months`;
+  }
+
+  if (diffDays === 0) return "Today";
+  if (diffDays === 1) return "Yesterday";
+  if (diffDays < 7) return `${diffDays} days ago`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
+  return "Over 1 year ago";
+}
+
+function convertApiEventToDisplay(event: ApiEvent): DisplayEvent {
+  // Get image URL - it can be a string or array
+  let imageUrl: string | undefined;
+  if (event.imageUrl) {
+    imageUrl = Array.isArray(event.imageUrl) ? event.imageUrl[0] : event.imageUrl;
+  }
+
+  return {
+    title: event.title,
+    type: event.type,
+    date: formatEventDate(event.startAt),
+    time: formatEventTime(event.startAt, event.endAt),
+    ago: getRelativeTime(event.startAt),
+    lumaUrl: event.lumaUrl,
+    imageUrl,
+  };
+}
+
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAllPastEvents, setShowAllPastEvents] = useState(false);
+  const [upcomingEvents, setUpcomingEvents] = useState<DisplayEvent[]>([]);
+  const [pastEvents, setPastEvents] = useState<DisplayEvent[]>([]);
+  const [eventsLoading, setEventsLoading] = useState(true);
 
-  const pastEvents = [
-    { title: "ConvergeAI Summit - Rethinking AI: Challenging the Status Quo", type: "Summit", date: "Thu, Oct 23rd, 2025", time: "9am-5pm", ago: "3 months ago" },
-    { title: "The AI Collective Seattle X Pioneer Square Labs | Technical AI Roundtable", type: "Roundtable", date: "Wed, Sep 24th, 2025", time: "6-9pm", ago: "4 months ago" },
-    { title: "The AI Collective Seattle | Make.com - Let's Build and Automate", type: "Workshop", date: "Mon, Dec 15th, 2025", time: "5-9pm", ago: "2 months ago" },
-    { title: "Why We Invested: VC × Founder Case Studies", type: "Forum", date: "Wed, Dec 3rd, 2025", time: "5:30-7:30pm", ago: "2 months ago" },
-    { title: "The AI Collective Seattle x AI Student Collective UW | Why We Invested: VC × Founder Case Studies", type: "Forum", date: "Tue, Dec 2nd, 2025", time: "5:30-7:30pm", ago: "2 months ago" },
-    { title: "AISC @ UW Demo Day Batch 02 | The AI Collective Seattle", type: "Demo Night", date: "Thu, Nov 20th, 2025", time: "6:30-8:30pm", ago: "2 months ago" },
-    { title: "The AI Collective Seattle x Innomat AI | The Robotic AI Revolution", type: "Meetup", date: "Thu, Nov 13th, 2025", time: "5-7pm", ago: "3 months ago" },
-    { title: "AI Collective Seattle X Vercept: Madrona IA Summit Roundtable 2025", type: "Forum", date: "Tue, Sep 30th, 2025", time: "3-5pm", ago: "4 months ago" },
-    { title: "Windsurf Open Build powered by The AI Collective", type: "Workshop", date: "Wed, Aug 27th, 2025", time: "5-7:30pm", ago: "5 months ago" },
-    { title: "Scoop & Scale: Ice Cream Social for Founders & Funders 🍦", type: "Meetup", date: "Mon, Jul 28th, 2025", time: "8:30-9:30pm", ago: "6 months ago" },
-    { title: "Zero to Product: Building with 100% AI", type: "Workshop", date: "Fri, Jul 25th, 2025", time: "1-3:30pm", ago: "6 months ago" },
-    { title: "Seattle Demo Day - ROAM", type: "Demo Night", date: "Tue, May 27th, 2025", time: "6-9pm", ago: "8 months ago" },
-    { title: "Demos & Discussions: 🧠GenAI Collective x Madrona Ventures", type: "Demo Night", date: "Thu, Jan 30th, 2025", time: "4:30-7pm", ago: "12 months ago" },
-    { title: "GenAI Collective x Madrona ☔ Seattle Frontier Technologies Forum", type: "Forum", date: "Tue, Oct 1st, 2024", time: "3:30-5:30pm", ago: "Over 1 year ago" },
-  ];
+  // Fetch events from API
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        const response = await fetch("/api/events");
+        const data = await response.json();
+        const events: ApiEvent[] = data.events || [];
 
-  const visibleEvents = showAllPastEvents ? pastEvents : pastEvents.slice(0, 3);
+        const now = new Date();
+        const upcoming: DisplayEvent[] = [];
+        const past: DisplayEvent[] = [];
+
+        events.forEach((event) => {
+          const eventDate = new Date(event.startAt);
+          const displayEvent = convertApiEventToDisplay(event);
+
+          if (eventDate > now) {
+            upcoming.push(displayEvent);
+          } else {
+            past.push(displayEvent);
+          }
+        });
+
+        // Sort upcoming by date ascending (soonest first)
+        upcoming.sort(
+          (a, b) =>
+            new Date(a.date).getTime() - new Date(b.date).getTime()
+        );
+
+        // Sort past by date descending (most recent first)
+        past.sort(
+          (a, b) =>
+            new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+
+        setUpcomingEvents(upcoming);
+        setPastEvents(past);
+      } catch (error) {
+        console.error("Failed to fetch events:", error);
+      } finally {
+        setEventsLoading(false);
+      }
+    }
+
+    fetchEvents();
+  }, []);
+
+  const visiblePastEvents = showAllPastEvents ? pastEvents : pastEvents.slice(0, 3);
 
   const team = [
     {
       name: "Bhola Chhetri",
       role: "SEATTLE CHAPTER LEAD",
       bio: "Bhola is a Solutions Architect at Broadcom and the founder of CropTop. He's deeply passionate about go-to-market initiatives for businesses and individuals. Outside of work, Bhola loves cars, events, and traveling.",
-      img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200"
+      img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/bhola@aicollective.com.jpeg",
+      linkedin: "https://www.linkedin.com/in/bhola-chhetri/"
     },
     {
       name: "Michael A. Agustin",
       role: "HEAD OF GROWTH",
-      bio: "Michael Agustin has nearly 3 decades for experience building technical ecosystems across multiple parts of the world, for the IGDA, Apple, Malaysia (MaGIC), and VRARA. He’s raised over $30M from investors across 3 ventures. Michael previously worked at Apple on macOS’ Platform Experience team and built the 1st no-code solution for mobile, reaching 150M players per month by the time he vested. He recently co-founded Curie, focused on Commerce World Models for Physical AI.",
-      img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200"
+      bio: "Michael Agustin has nearly 3 decades for experience building technical ecosystems across multiple parts of the world, for the IGDA, Apple, Malaysia (MaGIC), and VRARA. He's raised over $30M from investors across 3 ventures. Michael previously worked at Apple on macOS' Platform Experience team and built the 1st no-code solution for mobile, reaching 150M players per month by the time he vested. He recently co-founded Curie, focused on Commerce World Models for Physical AI.",
+      img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/michael-a.-agustin-ea4.jpeg",
+      linkedin: "https://www.linkedin.com/in/michaelagustin/"
     },
     {
       name: "Ajita Ananth",
       role: "EVENTS LEAD",
       bio: "Ajita K Ananth is a Staff Technical Program Manager at Google where she leads engineering programs within Google Maps. Prior to Google, she led major product and technical initiatives at Coinbase and DocuSign. She thrives on empowering teams to tackle challenging engineering problems, and shipping products that improve people's lives. Outside of work, she loves trying new restaurants, and traveling to new countries.",
-      img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200"
+      img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/ajita-ananth-b65.JPG",
+      linkedin: "https://www.linkedin.com/in/ajita-ananth-47559531/"
     },
     {
       name: "Samridh Bhattacharjee",
       role: "GROWTH/COMMUNITY ORGANIZER",
-      bio: "Samridh is an AI Product Manager at Mircosoft AI and the co-founder of Claimrunner. He’s deeply passionate about advancing the human condition through AI and helping others however he can. Outside of work, Samridh enjoys golf, tennis, and DJ’ing 🎧",
-      img: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=200"
+      bio: "Samridh is an AI Product Manager at Mircosoft AI and the co-founder of Claimrunner. He's deeply passionate about advancing the human condition through AI and helping others however he can. Outside of work, Samridh enjoys golf, tennis, and DJ'ing.",
+      img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/samridhb@aicollective.com.jpg",
+      linkedin: "https://www.linkedin.com/in/samridhb/"
     },
     {
       name: "Gurucharan Lingamallu",
       role: "NEWS/MEDIA CURATOR",
-      bio: "Guru is a Computer Science student at the University of Washington focused on AI, systems, and human-centered technology. He’s interested in how tools shape memory, agency, and ownership, and focuses on building systems grounded in trust.",
-      img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=200"
+      bio: "Guru is a Computer Science student at the University of Washington focused on AI, systems, and human-centered technology. He's interested in how tools shape memory, agency, and ownership, and focuses on building systems grounded in trust.",
+      img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/gurucharan-lingamallu-062.png",
+      linkedin: "https://www.linkedin.com/in/gurul/"
     },
     {
       name: "Cyndi Song",
       role: "SEATTLE CHAPTER ORGANIZER",
       bio: "Cyndi is a Product Strategist and Chief of Staff at Google Cloud. Beyond her day job, she is deeply embedded in the Seattle startup ecosystem as the Chapter Lead for 12 Scrappy Founders, where she connects entrepreneurs to support their startup journeys. Driven by a passion for human-centered AI, she spends her downtime at hackathons prototyping new products, with a recent focus on voice agents. When she isn't building, she loves aerial yoga and dancing.",
-      img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200"
+      img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/cyndi-song-9ab.jpeg",
+      linkedin: "https://www.linkedin.com/in/sixuancyndsong/"
     }
   ];
 
@@ -187,7 +320,7 @@ export default function Home() {
             <span className="font-bold tracking-widest uppercase text-sm font-mono">AIC_SEA</span>
           </div>
           <div className="hidden xl:flex gap-8 border-l border-white/10 pl-12">
-            {["About Us", "Chapters", "Events", "Get Involved", "Partnerships"].map(item => (
+            {["About Us", "Events", "Get Involved", "Partnerships"].map(item => (
               <a key={item} href={`#${item.toLowerCase().replace(" ", "-")}`} className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">
                 {item}
               </a>
@@ -223,7 +356,7 @@ export default function Home() {
             <button className="absolute top-8 right-8 text-accent" onClick={() => setIsMenuOpen(false)}>
               <X size={32} />
             </button>
-            {["About Us", "Chapters", "Events", "Get Involved", "Partnerships"].map(item => (
+            {["About Us", "Events", "Get Involved", "Partnerships"].map(item => (
               <a key={item} href={`#${item.toLowerCase().replace(" ", "-")}`} onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">
                 {item}
               </a>
@@ -306,12 +439,67 @@ export default function Home() {
             </button>
           </div>
 
-          <div className="border border-white/10 bg-[#0c0a09] p-12 text-center relative overflow-hidden group">
-            <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <Calendar className="w-12 h-12 text-accent/20 mx-auto mb-6" />
-            <p className="text-secondary font-mono text-sm tracking-widest mb-2">NO UPCOMING EVENTS AT THIS TIME.</p>
-            <p className="text-white/40 text-[10px] font-mono">CHECK BACK SOON FOR UPDATES.</p>
-          </div>
+          {eventsLoading ? (
+            <div className="border border-white/10 bg-[#0c0a09] p-12 text-center">
+              <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+              <p className="text-secondary font-mono text-sm tracking-widest">LOADING EVENTS...</p>
+            </div>
+          ) : upcomingEvents.length === 0 ? (
+            <div className="border border-white/10 bg-[#0c0a09] p-12 text-center relative overflow-hidden group">
+              <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <Calendar className="w-12 h-12 text-accent/20 mx-auto mb-6" />
+              <p className="text-secondary font-mono text-sm tracking-widest mb-2">NO UPCOMING EVENTS AT THIS TIME.</p>
+              <p className="text-white/40 text-[10px] font-mono">CHECK BACK SOON FOR UPDATES.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {upcomingEvents.map((event, i) => (
+                <motion.a
+                  href={event.lumaUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  layout
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  key={`upcoming-${i}`}
+                  className="group border border-accent/30 bg-accent/5 hover:border-accent transition-all flex flex-col h-full overflow-hidden"
+                >
+                  {event.imageUrl && (
+                    <div className="relative w-full aspect-[16/9] overflow-hidden">
+                      <Image
+                        src={event.imageUrl}
+                        alt={event.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-60" />
+                    </div>
+                  )}
+                  <div className="p-8 flex flex-col flex-grow">
+                    <div className="flex justify-between items-start mb-6">
+                      <span className="text-[8px] font-mono border border-accent/40 text-accent px-2 py-1 uppercase tracking-widest">
+                        {event.type}
+                      </span>
+                      <span className="text-[9px] font-mono text-accent">{event.ago}</span>
+                    </div>
+                    <h3 className="text-lg font-serif italic leading-snug mb-8 group-hover:text-accent transition-colors flex-grow">
+                      {event.title}
+                    </h3>
+                    <div className="pt-6 border-t border-accent/20 space-y-2">
+                      <div className="flex items-center gap-3 text-secondary font-mono text-[9px]">
+                        <Calendar size={10} className="text-accent/60" />
+                        {event.date}
+                      </div>
+                      <div className="flex items-center gap-3 text-secondary font-mono text-[9px]">
+                        <Clock size={10} className="text-accent/60" />
+                        {event.time}
+                      </div>
+                    </div>
+                  </div>
+                </motion.a>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -322,46 +510,77 @@ export default function Home() {
           <h2 className="text-5xl font-serif italic">Past Events.</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {visibleEvents.map((event, i) => (
-            <motion.div 
-              layout
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              key={event.title} 
-              className="group border border-white/5 bg-white/[0.02] p-8 hover:border-accent/30 transition-all flex flex-col h-full"
-            >
-              <div className="flex justify-between items-start mb-6">
-                <span className="text-[8px] font-mono border border-accent/20 text-accent px-2 py-1 uppercase tracking-widest">
-                  {event.type}
-                </span>
-                <span className="text-[9px] font-mono text-secondary">{event.ago}</span>
+        {eventsLoading ? (
+          <div className="text-center py-12">
+            <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-secondary font-mono text-sm tracking-widest">LOADING ARCHIVES...</p>
+          </div>
+        ) : pastEvents.length === 0 ? (
+          <div className="border border-white/10 bg-[#0c0a09] p-12 text-center">
+            <p className="text-secondary font-mono text-sm tracking-widest">NO PAST EVENTS IN ARCHIVE.</p>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {visiblePastEvents.map((event, i) => (
+                <motion.a
+                  href={event.lumaUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  layout
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  key={`past-${i}`}
+                  className="group border border-white/5 bg-white/[0.02] hover:border-accent/30 transition-all flex flex-col h-full overflow-hidden"
+                >
+                  {event.imageUrl && (
+                    <div className="relative w-full aspect-[16/9] overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
+                      <Image
+                        src={event.imageUrl}
+                        alt={event.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-70" />
+                    </div>
+                  )}
+                  <div className="p-8 flex flex-col flex-grow">
+                    <div className="flex justify-between items-start mb-6">
+                      <span className="text-[8px] font-mono border border-accent/20 text-accent px-2 py-1 uppercase tracking-widest">
+                        {event.type}
+                      </span>
+                      <span className="text-[9px] font-mono text-secondary">{event.ago}</span>
+                    </div>
+                    <h3 className="text-lg font-serif italic leading-snug mb-8 group-hover:text-accent transition-colors flex-grow">
+                      {event.title}
+                    </h3>
+                    <div className="pt-6 border-t border-white/5 space-y-2">
+                      <div className="flex items-center gap-3 text-secondary font-mono text-[9px]">
+                        <Calendar size={10} className="text-accent/40" />
+                        {event.date}
+                      </div>
+                      <div className="flex items-center gap-3 text-secondary font-mono text-[9px]">
+                        <Clock size={10} className="text-accent/40" />
+                        {event.time}
+                      </div>
+                    </div>
+                  </div>
+                </motion.a>
+              ))}
+            </div>
+
+            {pastEvents.length > 3 && (
+              <div className="mt-12 text-center">
+                <button
+                  onClick={() => setShowAllPastEvents(!showAllPastEvents)}
+                  className="text-[10px] font-mono uppercase tracking-[0.3em] text-secondary hover:text-white transition-colors border-b border-white/10 pb-1"
+                >
+                  {showAllPastEvents ? "View Less_Archives" : "View More_Archives"}
+                </button>
               </div>
-              <h3 className="text-lg font-serif italic leading-snug mb-8 group-hover:text-accent transition-colors flex-grow">
-                {event.title}
-              </h3>
-              <div className="pt-6 border-t border-white/5 space-y-2">
-                <div className="flex items-center gap-3 text-secondary font-mono text-[9px]">
-                  <Calendar size={10} className="text-accent/40" />
-                  {event.date}
-                </div>
-                <div className="flex items-center gap-3 text-secondary font-mono text-[9px]">
-                  <Clock size={10} className="text-accent/40" />
-                  {event.time}
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-        
-        <div className="mt-12 text-center">
-          <button 
-            onClick={() => setShowAllPastEvents(!showAllPastEvents)}
-            className="text-[10px] font-mono uppercase tracking-[0.3em] text-secondary hover:text-white transition-colors border-b border-white/10 pb-1"
-          >
-            {showAllPastEvents ? "View Less_Archives" : "View More_Archives"}
-          </button>
-        </div>
+            )}
+          </>
+        )}
       </section>
 
       {/* Team Section */}
@@ -376,18 +595,35 @@ export default function Home() {
             {team.map((member, i) => (
               <div key={i} className="bg-[#0c0a09] p-10 flex flex-col group relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-24 h-24 bg-accent/5 -mr-12 -mt-12 rotate-45 group-hover:bg-accent/10 transition-colors" />
-                <div className="mb-8 relative w-16 h-16 grayscale group-hover:grayscale-0 transition-all duration-500">
-                  <div className="absolute inset-0 border border-accent/20 -m-1 group-hover:m-0 transition-all" />
+                <div className="mb-8 relative w-16 h-16 grayscale group-hover:grayscale-0 transition-all duration-500 rounded-full overflow-hidden">
+                  <div className="absolute inset-0 border border-accent/20 -m-1 group-hover:m-0 transition-all rounded-full" />
                   <Image src={member.img} alt={member.name} width={64} height={64} className="object-cover w-full h-full" />
                 </div>
-                <h3 className="text-2xl font-serif italic mb-2">{member.name}</h3>
+                <div className="flex items-center gap-2 mb-2">
+                  <h3 className="text-2xl font-serif italic">{member.name}</h3>
+                  <a
+                    href={member.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-secondary hover:text-accent transition-colors"
+                  >
+                    <Linkedin size={16} />
+                  </a>
+                </div>
                 <Mono className="text-accent/60 mb-6 block text-[9px]">{member.role}</Mono>
                 <p className="text-secondary text-sm leading-relaxed font-light">
                   {member.bio}
                 </p>
                 <div className="mt-auto pt-10 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
                   <Mono className="text-[8px]">PROFILE_00{i+1}</Mono>
-                  <ArrowUpRight size={14} className="text-secondary group-hover:text-accent" />
+                  <a
+                    href={member.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-secondary group-hover:text-accent transition-colors"
+                  >
+                    <ArrowUpRight size={14} />
+                  </a>
                 </div>
               </div>
             ))}
@@ -540,14 +776,7 @@ export default function Home() {
             
             <div className="space-y-6">
               <Mono className="text-white block mb-4">Navigation</Mono>
-              {["About Us", "Community", "Institute", "Partnerships", "Chapters"].map(link => (
-                <a key={link} href="#" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">{link}</a>
-              ))}
-            </div>
-
-            <div className="space-y-6">
-              <Mono className="text-white block mb-4">Chapters</Mono>
-              {["San Francisco", "New York City", "Washington DC", "Seattle", "Chicago"].map(link => (
+              {["About Us", "Community", "Institute", "Partnerships"].map(link => (
                 <a key={link} href="#" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">{link}</a>
               ))}
             </div>
