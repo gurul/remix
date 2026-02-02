@@ -46,10 +46,10 @@ const Globe = () => {
       height: 600 * 2,
       phi: 0,
       theta: 0,
-      dark: 0.2,
-      diffuse: 1.2,
+      dark: 0,
+      diffuse: 1.8,
       mapSamples: 16000,
-      mapBrightness: 12,
+      mapBrightness: 25,
       baseColor: GLOBE_AMBER,
       markerColor: GLOBE_AMBER,
       glowColor: GLOBE_AMBER,
@@ -64,7 +64,7 @@ const Globe = () => {
   }, []);
 
   return (
-    <div className="relative w-full aspect-square max-w-[600px] mx-auto opacity-70 transition-all duration-1000">
+    <div className="relative w-full aspect-square max-w-[600px] mx-auto opacity-100 transition-all duration-1000">
       <canvas
         ref={canvasRef}
         style={{ width: "100%", height: "100%", maxWidth: "100%", aspectRatio: "1" }}
