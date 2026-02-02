@@ -393,7 +393,7 @@ export default function Home() {
             </p>
             <div className="flex flex-wrap gap-6">
               <a 
-                href="https://www.aicollective.com/chapters/seattle"
+                href="https://docs.google.com/forms/d/e/1FAIpQLScmUC8KSPhafE_8FZBUs2pNPJVkJkRl-E9eE2cE5b34RQ3BTQ/viewform?usp=header"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex items-center gap-4 bg-white/5 border border-white/10 px-8 py-5 hover:bg-white hover:text-black transition-all"
