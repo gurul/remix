@@ -56,7 +56,7 @@ const Globe = () => {
       markers: [],
       onRender: (state) => {
         state.phi = phi;
-        phi += 0.003;
+        phi += 0.0012;
       },
     });
 
