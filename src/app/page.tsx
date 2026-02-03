@@ -778,17 +778,20 @@ export default function Home() {
               href="https://docs.google.com/forms/d/e/1FAIpQLSexvCAcYFJASap0tDcu29esoWj-56x87gcoUKj0HQfQ9GbczA/viewform?usp=header"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-[#0c0a09] p-10 flex flex-col group relative overflow-hidden border border-transparent hover:border-accent/20 transition-colors"
+              className="bg-accent p-10 flex flex-col group relative overflow-hidden border border-transparent hover:border-black/20 transition-colors text-black"
             >
-              <div className="absolute top-0 right-0 w-24 h-24 bg-accent/5 -mr-12 -mt-12 rotate-45 group-hover:bg-accent/10 transition-colors" />
-              <h3 className="text-2xl font-serif italic mb-2">You?</h3>
-              <Mono className="text-accent/60 mb-6 block text-[9px]">JOIN_THE_TEAM</Mono>
-              <p className="text-secondary text-sm leading-relaxed font-light mb-6">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-black/5 -mr-12 -mt-12 rotate-45 group-hover:bg-black/10 transition-colors" />
+              <h3 className="text-4xl font-serif italic mb-2">You?</h3>
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/70 mb-6 block">JOIN_THE_TEAM</span>
+              <p className="text-black/80 text-base leading-relaxed font-light mb-8">
                 We&apos;re always looking for volunteers to help organize events and shape the future of AI in Seattle.
               </p>
-              <div className="mt-auto pt-10 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
-                <Mono className="text-[8px]">PROFILE_OPEN</Mono>
-                <ArrowUpRight size={14} className="text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              <div className="mt-auto pt-6 flex flex-col gap-4">
+                <span className="inline-flex items-center justify-center gap-2 w-full py-4 px-6 bg-black text-white text-sm font-mono font-bold uppercase tracking-[0.2em] border-2 border-black group-hover:bg-white group-hover:text-black transition-colors">
+                  Apply to volunteer
+                  <ArrowUpRight size={18} />
+                </span>
+                <span className="font-mono text-[8px] uppercase tracking-widest text-black/50">PROFILE_OPEN</span>
               </div>
             </a>
           </div>
@@ -803,18 +806,14 @@ export default function Home() {
         </div>
         
         <div className="px-6 md:px-12 max-w-[1400px] mx-auto text-center relative z-10">
-          <Mono className="text-black/60 mb-8 block tracking-[0.5em]">Network_Expansion_Protocol</Mono>
-          <h2 className="text-6xl md:text-8xl font-serif italic mb-12 tracking-tighter">Join Our Team.</h2>
-          <p className="text-xl max-w-2xl mx-auto mb-16 leading-relaxed">
-            Get involved with our chapter! We're always looking for passionate volunteers to help organize events and shape the future of AI in our community.
-          </p>
+          <h2 className="text-6xl md:text-8xl font-serif italic mb-12 tracking-tighter">Join the global collective.</h2>
           <a 
-            href="https://docs.google.com/forms/d/e/1FAIpQLSexvCAcYFJASap0tDcu29esoWj-56x87gcoUKj0HQfQ9GbczA/viewform?usp=header"
+            href="https://www.aicollective.com/"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block bg-black text-white px-12 py-6 text-xs font-mono font-bold uppercase tracking-[0.4em] hover:bg-white hover:text-black transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,0.15)]"
           >
-            Apply_To_Volunteer
+            ＼(＾O＾)／
           </a>
         </div>
       </section>
