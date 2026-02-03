@@ -311,6 +311,20 @@ export default function Home() {
       bio: "Cyndi is a Product Strategist and Chief of Staff at Google Cloud. Beyond her day job, she is deeply embedded in the Seattle startup ecosystem as the Chapter Lead for 12 Scrappy Founders, where she connects entrepreneurs to support their startup journeys. Driven by a passion for human-centered AI, she spends her downtime at hackathons prototyping new products, with a recent focus on voice agents. When she isn't building, she loves aerial yoga and dancing.",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/cyndi-song-9ab.jpeg",
       linkedin: "https://www.linkedin.com/in/sixuancyndsong/"
+    },
+    {
+      name: "Abe Thomas",
+      role: "CHAPTER ADVISOR",
+      bio: "Abe is a seasoned technology executive with deep experience in product strategy, digital marketing, business intelligence, go-to-market execution, and business operations. He has held leadership roles at companies including Microsoft, eBay, and IBM, as well as startups and smaller organizations. Outside of work, Abe enjoys traveling, volunteering, mentoring, cooking, hiking, and engaging in thoughtful discussions about technology.",
+      img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/abe-thomas.jpeg",
+      linkedin: "https://www.linkedin.com/in/abethomas01/"
+    },
+    {
+      name: "Rachel Kloepfer",
+      role: "INSTITUTIONAL LEAD",
+      bio: "Rachel is a Private Investments Analyst at Multi-Family Office Lenora Capital. She is a prior award-winning investigative journalist passionate about deep research and investing in great teams, and believes in bridging the gap between founders and funders through community. Outside of work, Rachel is a Global Shaper with the World Economic Forum and loves cooking, running, and writing.",
+      img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/rachel-kloepfer.jpeg",
+      linkedin: "https://www.linkedin.com/in/rachelkloepfer/"
     }
   ];
 
@@ -758,6 +772,25 @@ export default function Home() {
                 </div>
               </div>
             ))}
+            {/* Join the team CTA card */}
+            <a
+              key="cta"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSexvCAcYFJASap0tDcu29esoWj-56x87gcoUKj0HQfQ9GbczA/viewform?usp=header"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#0c0a09] p-10 flex flex-col group relative overflow-hidden border border-transparent hover:border-accent/20 transition-colors"
+            >
+              <div className="absolute top-0 right-0 w-24 h-24 bg-accent/5 -mr-12 -mt-12 rotate-45 group-hover:bg-accent/10 transition-colors" />
+              <h3 className="text-2xl font-serif italic mb-2">You?</h3>
+              <Mono className="text-accent/60 mb-6 block text-[9px]">JOIN_THE_TEAM</Mono>
+              <p className="text-secondary text-sm leading-relaxed font-light mb-6">
+                We&apos;re always looking for volunteers to help organize events and shape the future of AI in Seattle.
+              </p>
+              <div className="mt-auto pt-10 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
+                <Mono className="text-[8px]">PROFILE_OPEN</Mono>
+                <ArrowUpRight size={14} className="text-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </div>
+            </a>
           </div>
         </div>
       </section>
