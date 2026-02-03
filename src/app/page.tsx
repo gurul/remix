@@ -30,7 +30,8 @@ const Mono = ({ children, className = "" }: { children: React.ReactNode; classNa
   </span>
 );
 
-const GLOBE_AMBER = [245 / 255, 158 / 255, 11 / 255] as [number, number, number];
+// Accent orange for globe (matches #ff7a1a)
+const GLOBE_AMBER = [255 / 255, 122 / 255, 26 / 255] as [number, number, number];
 
 const Globe = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -45,10 +46,10 @@ const Globe = () => {
       height: 600 * 2,
       phi: 0,
       theta: 0,
-      dark: 0.2,
-      diffuse: 1.2,
+      dark: 0,
+      diffuse: 1.8,
       mapSamples: 16000,
-      mapBrightness: 12,
+      mapBrightness: 25,
       baseColor: GLOBE_AMBER,
       markerColor: GLOBE_AMBER,
       glowColor: GLOBE_AMBER,
@@ -63,11 +64,21 @@ const Globe = () => {
   }, []);
 
   return (
-    <div className="relative w-full aspect-square max-w-[600px] mx-auto opacity-70 transition-all duration-1000">
+    <div className="relative w-full aspect-square max-w-[600px] mx-auto opacity-100 transition-all duration-1000">
       <canvas
         ref={canvasRef}
-        style={{ width: '100%', height: '100%', maxWidth: '100%', aspectRatio: '1' }}
+        style={{ width: "100%", height: "100%", maxWidth: "100%", aspectRatio: "1" }}
       />
+      {/* Overlay logo on top of globe */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <Image
+          src="/Untitled_design.png"
+          alt="AI Collective mark"
+          width={360}
+          height={360}
+          className="opacity-100 mix-blend-screen"
+        />
+      </div>
     </div>
   );
 };
@@ -334,7 +345,7 @@ export default function Home() {
           </div>
           <button 
             onClick={() => window.parent.postMessage({ type: "OPEN_EXTERNAL_URL", data: { url: "https://tally.so/r/n0r0xR" } }, "*")}
-            className="bg-accent text-black px-5 py-2 text-[9px] font-mono font-bold hover:bg-white transition-all uppercase tracking-[0.2em] shadow-[3px_3px_0px_0px_rgba(245,158,11,0.2)]"
+            className="bg-accent text-black px-5 py-2 text-[9px] font-mono font-bold hover:bg-white transition-all uppercase tracking-[0.2em] shadow-[3px_3px_0px_0px_rgba(255,122,26,0.2)]"
           >
             Apply_Member
           </button>
@@ -371,7 +382,7 @@ export default function Home() {
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-8 h-px bg-accent/50" />
-              <Mono className="text-accent">Seattle Chapter_04</Mono>
+              <Mono className="text-accent">Seattle Chapter</Mono>
             </div>
             <h1 className="text-6xl md:text-[7rem] font-serif leading-[0.9] tracking-tighter mb-10">
               The AI<br />
@@ -381,17 +392,24 @@ export default function Home() {
               Join our vibrant AI community in Seattle! Connect with local pioneers and innovators shaping the future of AI through <span className="text-white">meaningful gatherings</span> and collaborative exploration.
             </p>
             <div className="flex flex-wrap gap-6">
-              <button 
-                onClick={() => window.parent.postMessage({ type: "OPEN_EXTERNAL_URL", data: { url: "https://tally.so/r/n0r0xR" } }, "*")}
+              <a 
+                href="https://docs.google.com/forms/d/e/1FAIpQLScmUC8KSPhafE_8FZBUs2pNPJVkJkRl-E9eE2cE5b34RQ3BTQ/viewform?usp=header"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group flex items-center gap-4 bg-white/5 border border-white/10 px-8 py-5 hover:bg-white hover:text-black transition-all"
               >
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em] font-bold">Join Our Chapter</span>
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </button>
-              <button className="group flex items-center gap-4 border border-white/10 px-8 py-5 hover:border-accent transition-all">
+              </a>
+              <a 
+                href="https://docs.google.com/forms/d/e/1FAIpQLSelDyidSPMTyFagOEp7AYuRXH8-Wt8JgJqCwGnR_puhUScyJg/viewform?usp=header"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-4 border border-white/10 px-8 py-5 hover:border-accent transition-all"
+              >
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em]">Partner With Us</span>
                 <ExternalLink size={14} className="text-secondary group-hover:text-accent" />
-              </button>
+              </a>
             </div>
           </div>
           
@@ -500,6 +518,119 @@ export default function Home() {
               ))}
             </div>
           )}
+        </div>
+      </section>
+
+      {/* About Us / Launch Video */}
+      <section id="about-us" className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+          <div className="aspect-video w-full overflow-hidden border border-white/10 bg-white/5">
+            <iframe
+              src="https://www.youtube.com/embed/36i7pkaHqow?start=9"
+              title="About Us - AI Collective Seattle"
+              className="w-full h-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+          
+          <div className="space-y-10">
+            <div>
+              <Mono className="text-accent mb-6 block">Legacy_Manifesto</Mono>
+              <h2 className="text-5xl md:text-6xl font-serif italic mb-8">About Us.</h2>
+              <p className="text-lg text-secondary leading-relaxed">
+                The AI Collective is a non-profit, grassroots community uniting <span className="text-white">150,000+ pioneers</span> – founders, researchers, operators, and investors – exploring the frontier of AI.
+              </p>
+            </div>
+            <p className="text-secondary leading-relaxed font-light">
+              From its humble beginnings as an intimate gathering in a cozy San Francisco apartment, we've blossomed into a vibrant global community built on the belief that the most meaningful connections are made when exploring a shared curiosity together.
+            </p>
+            <a 
+              href="https://www.aicollective.com/why"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.3em] text-accent border-b border-accent/20 pb-1 hover:border-accent transition-all"
+            >
+              Learn More About Our Mission <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Values & Why */}
+      <section className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/10 border border-white/10">
+          <div className="bg-[#0c0a09] p-16 border-b md:border-b-0 md:border-r border-white/10">
+            <Mono className="text-accent mb-8 block">Cultural_Directives</Mono>
+            <h2 className="text-5xl font-serif italic mb-8">Our Values.</h2>
+            <p className="text-secondary leading-relaxed mb-12 font-light">
+              Our community is built on three core values that guide everything we do. These values shape our events, research, and interactions, ensuring that we create a space where diverse voices are heard and meaningful progress is made.
+            </p>
+            <div className="space-y-6">
+              {["Trust & Integrity", "Radical Curiosity", "Human-Centered Innovation"].map((v, i) => (
+                <div key={i} className="flex items-center gap-4 group cursor-default">
+                  <div className="w-2 h-2 rounded-full bg-accent/40 group-hover:bg-accent transition-colors" />
+                  <span className="text-sm font-mono tracking-widest text-white/60 group-hover:text-white transition-colors">{v}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div className="bg-[#0c0a09] p-16">
+            <Mono className="text-accent mb-8 block">Foundational_Thesis</Mono>
+            <h2 className="text-5xl font-serif italic mb-8">Our Why.</h2>
+            <p className="text-secondary leading-relaxed mb-12 font-light">
+              We believe that the development of AI should be collaborative, transparent, and human-centered. Our mission is rooted in nine core beliefs about AI's trajectory and humanity's role in shaping it.
+            </p>
+            <p className="text-secondary leading-relaxed mb-10 italic">
+              "The future of AI will be shaped by the conversations happening today. By bringing together the brightest minds across disciplines, we ensure that this future is one where AI serves as a force for human flourishing."
+            </p>
+            <a 
+              href="https://www.aicollective.com/trust"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 text-[10px] font-mono uppercase tracking-[0.3em] text-white hover:text-accent transition-colors group"
+            >
+              Founding Perspective <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* How We Gather */}
+      <section className="py-32 bg-white/[0.01] border-y border-white/5 overflow-hidden">
+        <div className="px-6 md:px-12 max-w-[1400px] mx-auto">
+          <div className="flex flex-col lg:flex-row gap-20 items-end mb-24">
+            <div className="lg:w-1/2">
+              <Mono className="text-accent mb-6 block">Interaction_Framework</Mono>
+              <h2 className="text-6xl font-serif italic mb-8">How We Gather.</h2>
+              <p className="text-secondary text-lg leading-relaxed">
+                We bring our community together through diverse, intentional gatherings designed for deep connection and meaningful dialogue. From intimate living room meetups to large-scale demo nights, every event centers on <span className="text-white">thoughtful conversation</span> and shared exploration.
+              </p>
+            </div>
+            <div className="lg:w-1/2 lg:text-right pb-4">
+              <button className="bg-white/5 border border-white/10 px-8 py-5 text-[10px] font-mono uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all">
+                Explore Events Archive
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+              <div key={i} className="aspect-square bg-white/5 border border-white/5 relative grayscale hover:grayscale-0 transition-all duration-700 overflow-hidden group">
+                <Image 
+                  src={`https://images.unsplash.com/photo-${1515187029135 + i}?auto=format&fit=crop&q=80&w=600`} 
+                  alt={`Event ${i}`} 
+                  fill 
+                  className="object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-0 group-hover:opacity-80 transition-opacity" />
+                <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
+                  <Mono className="text-white text-[8px]">Event_Fragment_0{i}</Mono>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -631,109 +762,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About Us / Launch Video */}
-      <section id="about-us" className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-          <div className="aspect-video w-full overflow-hidden border border-white/10 bg-white/5">
-            <iframe
-              src="https://www.youtube.com/embed/36i7pkaHqow?start=9"
-              title="About Us - AI Collective Seattle"
-              className="w-full h-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-          
-          <div className="space-y-10">
-            <div>
-              <Mono className="text-accent mb-6 block">Legacy_Manifesto</Mono>
-              <h2 className="text-5xl md:text-6xl font-serif italic mb-8">About Us.</h2>
-              <p className="text-lg text-secondary leading-relaxed">
-                The AI Collective is a non-profit, grassroots community uniting <span className="text-white">150,000+ pioneers</span> – founders, researchers, operators, and investors – exploring the frontier of AI.
-              </p>
-            </div>
-            <p className="text-secondary leading-relaxed font-light">
-              From its humble beginnings as an intimate gathering in a cozy San Francisco apartment, we've blossomed into a vibrant global community built on the belief that the most meaningful connections are made when exploring a shared curiosity together.
-            </p>
-            <button className="group flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.3em] text-accent border-b border-accent/20 pb-1 hover:border-accent transition-all">
-              Learn More About Our Mission <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* How We Gather */}
-      <section className="py-32 bg-white/[0.01] border-y border-white/5 overflow-hidden">
-        <div className="px-6 md:px-12 max-w-[1400px] mx-auto">
-          <div className="flex flex-col lg:flex-row gap-20 items-end mb-24">
-            <div className="lg:w-1/2">
-              <Mono className="text-accent mb-6 block">Interaction_Framework</Mono>
-              <h2 className="text-6xl font-serif italic mb-8">How We Gather.</h2>
-              <p className="text-secondary text-lg leading-relaxed">
-                We bring our community together through diverse, intentional gatherings designed for deep connection and meaningful dialogue. From intimate living room meetups to large-scale demo nights, every event centers on <span className="text-white">thoughtful conversation</span> and shared exploration.
-              </p>
-            </div>
-            <div className="lg:w-1/2 lg:text-right pb-4">
-              <button className="bg-white/5 border border-white/10 px-8 py-5 text-[10px] font-mono uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all">
-                Explore Events Archive
-              </button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-              <div key={i} className="aspect-square bg-white/5 border border-white/5 relative grayscale hover:grayscale-0 transition-all duration-700 overflow-hidden group">
-                <Image 
-                  src={`https://images.unsplash.com/photo-${1515187029135 + i}?auto=format&fit=crop&q=80&w=600`} 
-                  alt={`Event ${i}`} 
-                  fill 
-                  className="object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" 
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-0 group-hover:opacity-80 transition-opacity" />
-                <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-                  <Mono className="text-white text-[8px]">Event_Fragment_0{i}</Mono>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Values & Why */}
-      <section className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/10 border border-white/10">
-          <div className="bg-[#0c0a09] p-16 border-b md:border-b-0 md:border-r border-white/10">
-            <Mono className="text-accent mb-8 block">Cultural_Directives</Mono>
-            <h2 className="text-5xl font-serif italic mb-8">Our Values.</h2>
-            <p className="text-secondary leading-relaxed mb-12 font-light">
-              Our community is built on three core values that guide everything we do. These values shape our events, research, and interactions, ensuring that we create a space where diverse voices are heard and meaningful progress is made.
-            </p>
-            <div className="space-y-6">
-              {["Trust & Integrity", "Radical Curiosity", "Human-Centered Innovation"].map((v, i) => (
-                <div key={i} className="flex items-center gap-4 group cursor-default">
-                  <div className="w-2 h-2 rounded-full bg-accent/40 group-hover:bg-accent transition-colors" />
-                  <span className="text-sm font-mono tracking-widest text-white/60 group-hover:text-white transition-colors">{v}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          <div className="bg-[#0c0a09] p-16">
-            <Mono className="text-accent mb-8 block">Foundational_Thesis</Mono>
-            <h2 className="text-5xl font-serif italic mb-8">Our Why.</h2>
-            <p className="text-secondary leading-relaxed mb-12 font-light">
-              We believe that the development of AI should be collaborative, transparent, and human-centered. Our mission is rooted in nine core beliefs about AI's trajectory and humanity's role in shaping it.
-            </p>
-            <p className="text-secondary leading-relaxed mb-10 italic">
-              "The future of AI will be shaped by the conversations happening today. By bringing together the brightest minds across disciplines, we ensure that this future is one where AI serves as a force for human flourishing."
-            </p>
-            <button className="flex items-center gap-4 text-[10px] font-mono uppercase tracking-[0.3em] text-white hover:text-accent transition-colors group">
-              Founding Perspective <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-            </button>
-          </div>
-        </div>
-      </section>
-
       {/* Join Section */}
       <section id="get-involved" className="py-40 bg-accent text-black relative overflow-hidden">
         <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none">
@@ -747,12 +775,14 @@ export default function Home() {
           <p className="text-xl max-w-2xl mx-auto mb-16 leading-relaxed">
             Get involved with our chapter! We're always looking for passionate volunteers to help organize events and shape the future of AI in our community.
           </p>
-          <button 
-            onClick={() => window.parent.postMessage({ type: "OPEN_EXTERNAL_URL", data: { url: "https://tally.so/r/n0r0xR" } }, "*")}
-            className="bg-black text-white px-12 py-6 text-xs font-mono font-bold uppercase tracking-[0.4em] hover:bg-white hover:text-black transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,0.15)]"
+          <a 
+            href="https://docs.google.com/forms/d/e/1FAIpQLSexvCAcYFJASap0tDcu29esoWj-56x87gcoUKj0HQfQ9GbczA/viewform?usp=header"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-black text-white px-12 py-6 text-xs font-mono font-bold uppercase tracking-[0.4em] hover:bg-white hover:text-black transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,0.15)]"
           >
             Apply_To_Volunteer
-          </button>
+          </a>
         </div>
       </section>
 

@@ -10,7 +10,8 @@
   
   --color-background: #0c0a09;
   --color-foreground: #fafaf9;
-  --color-accent: #f59e0b;
+  /* Seattle orange theme accent taken from provided swatch (~#ff7a1a) */
+  --color-accent: #ff7a1a;
   --color-secondary: #a8a29e;
   --color-muted: #1c1917;
   --color-border: #292524;
@@ -47,6 +48,6 @@
 }
 
 .grid-bg {
-  background-image: radial-gradient(circle at 1px 1px, rgba(245, 158, 11, 0.05) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 122, 26, 0.05) 1px, transparent 0);
   background-size: 24px 24px;
 }
