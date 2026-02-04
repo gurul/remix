@@ -607,7 +607,7 @@ export default function Home() {
             </div>
             <div className="lg:w-1/2 lg:text-right pb-4">
               <button className="bg-white/5 border border-white/10 px-8 py-5 text-[10px] font-mono uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all">
-                Explore Our Newsletter
+                Explore Our Archive
               </button>
             </div>
           </div>
