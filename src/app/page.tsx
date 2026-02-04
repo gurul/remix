@@ -448,7 +448,7 @@ export default function Home() {
               href="https://www.aicollective.com/events"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[10px] font-mono uppercase tracking-widest text-secondary hover:text-accent transition-colors flex items-center gap-2 group"
+              className="inline-flex items-center gap-4 border border-white/10 px-8 py-5 text-[10px] font-mono uppercase tracking-[0.3em] text-secondary hover:text-accent hover:border-accent transition-all group"
             >
               See Global Events <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
             </a>
@@ -521,7 +521,7 @@ export default function Home() {
       {/* About Us / Launch Video */}
       <section id="about-us" className="pt-32 pb-16 px-6 md:px-12 max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-          <div className="aspect-video w-full overflow-hidden border border-white/10 bg-white/5">
+          <div className="order-2 lg:order-1 aspect-video w-full overflow-hidden border border-white/10 bg-white/5">
             <iframe
               src="https://www.youtube.com/embed/36i7pkaHqow?start=9"
               title="About Us - AI Collective Seattle"
@@ -531,7 +531,7 @@ export default function Home() {
             />
           </div>
           
-          <div className="space-y-10">
+          <div className="order-1 lg:order-2 space-y-10">
             <div>
               <Mono className="text-accent mb-6 block">Legacy_Manifesto</Mono>
               <h2 className="text-5xl md:text-6xl font-serif italic mb-8">About Us.</h2>
@@ -689,6 +689,17 @@ export default function Home() {
             </div>
           </div>
         </div>
+        <div className="mt-16 pt-8 border-t border-white/10">
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSelDyidSPMTyFagOEp7AYuRXH8-Wt8JgJqCwGnR_puhUScyJg/viewform"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-4 bg-accent text-black px-8 py-5 text-[10px] font-mono font-bold uppercase tracking-[0.3em] hover:bg-white transition-all border-2 border-accent"
+          >
+            Sponsor us
+            <ArrowUpRight size={14} />
+          </a>
+        </div>
       </section>
 
       {/* Team Section */}
@@ -791,7 +802,10 @@ export default function Home() {
               </div>
               <div className="space-y-6">
                 <Mono className="text-white block mb-4">Social</Mono>
-                <a href="https://www.instagram.com/aicseattle/" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Instagram</a>
+                <div className="flex flex-wrap gap-x-8 gap-y-2">
+                  <a href="https://www.instagram.com/aicseattle/" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Instagram</a>
+                  <a href="https://www.linkedin.com/company/aicollective/" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">LinkedIn</a>
+                </div>
               </div>
             </div>
             <p className="mt-16 pt-8 border-t border-white/5 text-[9px] font-mono text-secondary uppercase tracking-[0.3em]">
