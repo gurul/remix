@@ -272,7 +272,7 @@ export default function Home() {
   const team = [
     {
       name: "Bhola Chhetri",
-      role: "SEATTLE CHAPTER LEAD",
+      role: "CHAPTER LEAD",
       bio: "Bhola is a Solutions Architect at Broadcom and the founder of CropTop. He's deeply passionate about go-to-market initiatives for businesses and individuals. Outside of work, Bhola loves cars, events, and traveling.",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/bhola@aicollective.com.jpeg",
       linkedin: "https://www.linkedin.com/in/bhola-chhetri/"
@@ -301,13 +301,13 @@ export default function Home() {
     {
       name: "Gurucharan Lingamallu",
       role: "NEWS/MEDIA CURATOR",
-      bio: "Guru is a Computer Science student at the University of Washington focused on AI, systems, and human-centered technology. He's interested in how tools shape memory, agency, and ownership, and focuses on building systems grounded in trust.",
+      bio: "Guru is a Computer Science student at the University of Washington focused on human-centered technology. He's interested in how tools shape memory, agency, and ownership, and focuses on building systems grounded in trust.",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/gurucharan-lingamallu-062.png",
       linkedin: "https://www.linkedin.com/in/gurul/"
     },
     {
       name: "Cyndi Song",
-      role: "SEATTLE CHAPTER ORGANIZER",
+      role: "CHAPTER ORGANIZER",
       bio: "Cyndi is a Product Strategist and Chief of Staff at Google Cloud. Beyond her day job, she is deeply embedded in the Seattle startup ecosystem as the Chapter Lead for 12 Scrappy Founders, where she connects entrepreneurs to support their startup journeys. Driven by a passion for human-centered AI, she spends her downtime at hackathons prototyping new products, with a recent focus on voice agents. When she isn't building, she loves aerial yoga and dancing.",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/cyndi-song-9ab.jpeg",
       linkedin: "https://www.linkedin.com/in/sixuancyndsong/"
@@ -357,12 +357,14 @@ export default function Home() {
           <div className="hidden lg:block">
             <ConsoleSystem />
           </div>
-          <button 
-            onClick={() => window.parent.postMessage({ type: "OPEN_EXTERNAL_URL", data: { url: "https://tally.so/r/n0r0xR" } }, "*")}
-            className="bg-accent text-black px-5 py-2 text-[9px] font-mono font-bold hover:bg-white transition-all uppercase tracking-[0.2em] shadow-[3px_3px_0px_0px_rgba(255,122,26,0.2)]"
+          <a 
+            href="https://docs.google.com/forms/d/e/1FAIpQLScmUC8KSPhafE_8FZBUs2pNPJVkJkRl-E9eE2cE5b34RQ3BTQ/viewform"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-accent text-black px-5 py-2 text-[9px] font-mono font-bold hover:bg-white transition-all uppercase tracking-[0.2em] shadow-[3px_3px_0px_0px_rgba(255,122,26,0.2)] inline-block"
           >
             Apply_Member
-          </button>
+          </a>
           <button className="xl:hidden text-secondary" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -432,25 +434,17 @@ export default function Home() {
             <Globe />
             <div className="absolute bottom-4 left-4 p-6 border border-white/10 bg-background/60 backdrop-blur-md hidden md:block w-56">
               <div className="flex justify-between items-start mb-4">
-                <Mono className="text-accent/60 text-[8px]">Network_Pulse</Mono>
+                <Mono className="text-accent/60 text-[8px]">Active_Members</Mono>
                 <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
               </div>
               <div className="space-y-3">
-                <div className="h-1 bg-white/5 overflow-hidden">
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: "78%" }}
-                    transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
-                    className="h-full bg-accent"
-                  />
+                <div className="flex justify-between text-[8px] font-mono text-secondary">
+                  <span>GLOBAL_COUNT</span>
+                  <span className="text-white">150,000+</span>
                 </div>
                 <div className="flex justify-between text-[8px] font-mono text-secondary">
-                  <span>LATENCY</span>
-                  <span className="text-white">12.4ms</span>
-                </div>
-                <div className="flex justify-between text-[8px] font-mono text-secondary">
-                  <span>ACTIVE_NODES</span>
-                  <span className="text-white">1,402</span>
+                  <span>SEATTLE_COUNT</span>
+                  <span className="text-white">1,600+</span>
                 </div>
               </div>
             </div>
@@ -738,7 +732,13 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/10 border border-white/10">
             {team.map((member, i) => (
-              <div key={i} className="bg-[#0c0a09] p-10 flex flex-col group relative overflow-hidden">
+              <a
+                key={i}
+                href={member.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#0c0a09] p-10 flex flex-col group relative overflow-hidden block border border-transparent hover:border-accent/20 transition-colors"
+              >
                 <div className="absolute top-0 right-0 w-24 h-24 bg-accent/5 -mr-12 -mt-12 rotate-45 group-hover:bg-accent/10 transition-colors" />
                 <div className="mb-8 relative w-16 h-16 grayscale group-hover:grayscale-0 transition-all duration-500 rounded-full overflow-hidden">
                   <div className="absolute inset-0 border border-accent/20 -m-1 group-hover:m-0 transition-all rounded-full" />
@@ -746,14 +746,9 @@ export default function Home() {
                 </div>
                 <div className="flex items-center gap-2 mb-2">
                   <h3 className="text-2xl font-serif italic">{member.name}</h3>
-                  <a
-                    href={member.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-secondary hover:text-accent transition-colors"
-                  >
+                  <span className="text-secondary group-hover:text-accent transition-colors">
                     <Linkedin size={16} />
-                  </a>
+                  </span>
                 </div>
                 <Mono className="text-accent/60 mb-6 block text-[9px]">{member.role}</Mono>
                 <p className="text-secondary text-sm leading-relaxed font-light">
@@ -761,16 +756,11 @@ export default function Home() {
                 </p>
                 <div className="mt-auto pt-10 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
                   <Mono className="text-[8px]">PROFILE_00{i+1}</Mono>
-                  <a
-                    href={member.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-secondary group-hover:text-accent transition-colors"
-                  >
+                  <span className="text-secondary group-hover:text-accent transition-colors">
                     <ArrowUpRight size={14} />
-                  </a>
+                  </span>
                 </div>
-              </div>
+              </a>
             ))}
             {/* Join the team CTA card */}
             <a
@@ -781,17 +771,15 @@ export default function Home() {
               className="bg-accent p-10 flex flex-col group relative overflow-hidden border border-transparent hover:border-black/20 transition-colors text-black"
             >
               <div className="absolute top-0 right-0 w-24 h-24 bg-black/5 -mr-12 -mt-12 rotate-45 group-hover:bg-black/10 transition-colors" />
-              <h3 className="text-4xl font-serif italic mb-2">You?</h3>
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-black/70 mb-6 block">JOIN_THE_TEAM</span>
-              <p className="text-black/80 text-base leading-relaxed font-light mb-8">
+              <h3 className="text-5xl md:text-6xl font-serif italic mb-6 text-black">You?</h3>
+              <p className="text-black text-lg leading-relaxed font-normal mb-8">
                 We&apos;re always looking for volunteers to help organize events and shape the future of AI in Seattle.
               </p>
-              <div className="mt-auto pt-6 flex flex-col gap-4">
-                <span className="inline-flex items-center justify-center gap-2 w-full py-4 px-6 bg-black text-white text-sm font-mono font-bold uppercase tracking-[0.2em] border-2 border-black group-hover:bg-white group-hover:text-black transition-colors">
+              <div className="mt-auto pt-6">
+                <span className="inline-flex items-center justify-center gap-2 w-full py-4 px-6 bg-black text-white text-base font-mono font-bold uppercase tracking-[0.2em] border-2 border-black group-hover:bg-white group-hover:text-black transition-colors">
                   Apply to volunteer
                   <ArrowUpRight size={18} />
                 </span>
-                <span className="font-mono text-[8px] uppercase tracking-widest text-black/50">PROFILE_OPEN</span>
               </div>
             </a>
           </div>
@@ -821,51 +809,15 @@ export default function Home() {
       {/* Footer */}
       <footer className="pt-32 pb-16 px-6 md:px-12 bg-[#0c0a09] border-t border-white/5">
         <div className="max-w-[1400px] mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-16 mb-24">
-            <div className="col-span-2 space-y-8">
-              <div className="font-serif italic text-3xl font-bold tracking-tighter">AIC.</div>
-              <p className="text-secondary text-sm max-w-xs leading-relaxed">
-                Exploring the frontier of intelligence through meaningful connection and collaborative research.
-              </p>
-              <div className="flex gap-4">
-                {["Slack", "LinkedIn", "Twitter", "YouTube"].map((social) => (
-                  <button key={social} className="w-10 h-10 border border-white/10 flex items-center justify-center hover:border-accent hover:text-accent transition-all">
-                    <span className="text-[10px] font-mono uppercase">{social[0]}</span>
-                  </button>
-                ))}
+          <div className="space-y-6">
+            <Mono className="text-white block mb-4">Legal</Mono>
+            <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-2 w-full">
+              <div className="flex flex-wrap gap-x-8 gap-y-2">
+                <a href="https://www.aicollective.com/files/Code%20of%20Conduct%20~%20The%20AI%20Collective.pdf" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Code of Conduct</a>
+                <a href="https://www.aicollective.com/files/Data%20Privacy%20and%20Use%20Policy%20~%20The%20AI%20Collective.pdf" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Privacy Policy</a>
+                <a href="https://www.aicollective.com/press" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Press Kit</a>
               </div>
-            </div>
-            
-            <div className="space-y-6">
-              <Mono className="text-white block mb-4">Navigation</Mono>
-              {["About Us", "Community", "Institute", "Partnerships"].map(link => (
-                <a key={link} href="#" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">{link}</a>
-              ))}
-            </div>
-
-            <div className="space-y-6">
-              <Mono className="text-white block mb-4">Get Involved</Mono>
-              {["Join Community", "Attend Event", "Local Team", "Start Chapter", "Global Roles"].map(link => (
-                <a key={link} href="#" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">{link}</a>
-              ))}
-            </div>
-
-            <div className="space-y-6">
-              <Mono className="text-white block mb-4">Legal</Mono>
-              {["Code of Conduct", "Privacy Policy", "Press Kit", "Team Login"].map(link => (
-                <a key={link} href="#" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">{link}</a>
-              ))}
-            </div>
-          </div>
-          
-          <div className="pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-12">
-            <div className="text-[9px] font-mono text-secondary uppercase tracking-[0.3em]">
-              © 2026 THE AI COLLECTIVE. MADE WITHIN <span className="text-accent">❤</span> AND AROUND THE WORLD.
-            </div>
-            <div className="flex gap-8 text-[9px] font-mono text-secondary/40 uppercase tracking-[0.2em]">
-              <span>EST. SF_2023</span>
-              <span>VER_4.2.0_SEA</span>
-              <span className="text-white/20">47.6062° N, 122.3321° W</span>
+              <a href="https://www.instagram.com/aicseattle/" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest shrink-0">Instagram</a>
             </div>
           </div>
         </div>
