@@ -377,7 +377,7 @@ export default function Home() {
       </AnimatePresence>
 
       {/* Hero Section */}
-      <section id="partnerships" className="relative pt-32 pb-16 px-6 md:px-12 max-w-[1400px] mx-auto min-h-[90vh] flex flex-col justify-center">
+      <section className="relative pt-32 pb-16 px-6 md:px-12 max-w-[1400px] mx-auto min-h-[90vh] flex flex-col justify-center">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-8">
@@ -637,7 +637,7 @@ export default function Home() {
       </section>
 
       {/* Thank You to Our Sponsors & Partners */}
-      <section className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto border-t border-white/5">
+      <section id="partnerships" className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto border-t border-white/5">
         <div className="mb-16">
           <Mono className="text-accent mb-6 block">Our_Friends</Mono>
           <h2 className="text-5xl md:text-6xl font-serif italic mb-6">Thank You to Our Sponsors & Partners.</h2>
@@ -681,7 +681,7 @@ export default function Home() {
                   "Oracle",
                   "Roam",
                 ].map((name) => (
-                  <li key={name} className="text-secondary font-mono text-xs tracking-widest uppercase hover:text-white transition-colors">
+                  <li key={name} className="text-white font-mono text-xs tracking-widest uppercase">
                     {name}
                   </li>
                 ))}
@@ -733,6 +733,7 @@ export default function Home() {
             ))}
             {/* Join the team CTA card */}
             <a
+              id="get-involved"
               key="cta"
               href="https://docs.google.com/forms/d/e/1FAIpQLSexvCAcYFJASap0tDcu29esoWj-56x87gcoUKj0HQfQ9GbczA/viewform?usp=header"
               target="_blank"
@@ -756,7 +757,7 @@ export default function Home() {
       </section>
 
       {/* Join Section */}
-      <section id="get-involved" className="py-40 bg-accent text-black relative overflow-hidden">
+      <section id="join-collective" className="py-40 bg-accent text-black relative overflow-hidden">
         <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none">
           <div className="absolute top-0 right-0 w-[800px] h-[800px] border border-black/20 rounded-full -mr-96 -mt-96" />
           <div className="absolute top-0 right-0 w-[600px] h-[600px] border border-black/20 rounded-full -mr-64 -mt-64" />
