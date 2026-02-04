@@ -403,7 +403,7 @@ export default function Home() {
               <span className="italic text-accent">Collective.</span>
             </h1>
             <p className="text-xl md:text-2xl text-secondary font-light max-w-lg leading-relaxed mb-12 border-l border-accent/20 pl-8">
-              Join our vibrant AI community in Seattle! Connect with local pioneers and innovators shaping the future of AI through <span className="text-white">meaningful gatherings</span> and collaborative exploration.
+              Connect with local pioneers and innovators shaping the future of AI through <span className="text-white">meaningful gatherings</span> and collaborative exploration.
             </p>
             <div className="flex flex-wrap gap-6">
               <a 
