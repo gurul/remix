@@ -345,11 +345,10 @@ export default function Home() {
             <span className="font-bold tracking-widest uppercase text-sm font-mono">AIC_SEA</span>
           </div>
           <div className="hidden xl:flex gap-8 border-l border-white/10 pl-12">
-            {["About Us", "Events", "Get Involved", "Partnerships"].map(item => (
-              <a key={item} href={`#${item.toLowerCase().replace(" ", "-")}`} className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">
-                {item}
-              </a>
-            ))}
+            <a href="#about-us" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">About Us</a>
+            <a href="#events" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">Events</a>
+            <a href="#get-involved" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">Get Involved</a>
+            <a href="#partnerships" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">Partnerships</a>
           </div>
         </div>
         
@@ -383,17 +382,16 @@ export default function Home() {
             <button className="absolute top-8 right-8 text-accent" onClick={() => setIsMenuOpen(false)}>
               <X size={32} />
             </button>
-            {["About Us", "Events", "Get Involved", "Partnerships"].map(item => (
-              <a key={item} href={`#${item.toLowerCase().replace(" ", "-")}`} onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">
-                {item}
-              </a>
-            ))}
+            <a href="#about-us" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">About Us</a>
+            <a href="#events" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">Events</a>
+            <a href="#get-involved" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">Get Involved</a>
+            <a href="#partnerships" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">Partnerships</a>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-16 px-6 md:px-12 max-w-[1400px] mx-auto min-h-[90vh] flex flex-col justify-center">
+      <section id="partnerships" className="relative pt-32 pb-16 px-6 md:px-12 max-w-[1400px] mx-auto min-h-[90vh] flex flex-col justify-center">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-8">
@@ -618,7 +616,7 @@ export default function Home() {
             </div>
             <div className="lg:w-1/2 lg:text-right pb-4">
               <button className="bg-white/5 border border-white/10 px-8 py-5 text-[10px] font-mono uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all">
-                Explore Events Archive
+                Explore Our Newsletter
               </button>
             </div>
           </div>
@@ -726,7 +724,7 @@ export default function Home() {
       <section className="py-32 bg-white/[0.02] border-y border-white/5">
         <div className="px-6 md:px-12 max-w-[1400px] mx-auto">
           <div className="max-w-3xl mb-24">
-            <Mono className="text-accent mb-6 block underline underline-offset-8 decoration-accent/20">The_Human_Layer</Mono>
+            <Mono className="text-accent mb-6 block">The_Human_Layer</Mono>
             <h2 className="text-6xl md:text-7xl font-serif italic mb-8">Meet the Seattle Team.</h2>
           </div>
 
