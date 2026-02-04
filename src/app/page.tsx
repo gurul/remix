@@ -64,7 +64,7 @@ const Globe = () => {
   }, []);
 
   return (
-    <div className="relative w-full aspect-square max-w-[600px] mx-auto opacity-100 transition-all duration-1000">
+    <div className="relative w-full aspect-square max-w-[600px] mx-auto opacity-100 transition-all duration-1000 hidden md:block">
       <canvas
         ref={canvasRef}
         style={{ width: "100%", height: "100%", maxWidth: "100%", aspectRatio: "1" }}
