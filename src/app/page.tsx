@@ -528,7 +528,7 @@ export default function Home() {
       </section>
 
       {/* About Us / Launch Video */}
-      <section id="about-us" className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto">
+      <section id="about-us" className="pt-32 pb-16 px-6 md:px-12 max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
           <div className="aspect-video w-full overflow-hidden border border-white/10 bg-white/5">
             <iframe
@@ -564,7 +564,7 @@ export default function Home() {
       </section>
 
       {/* Values & Why */}
-      <section className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto">
+      <section className="pt-16 pb-32 px-6 md:px-12 max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/10 border border-white/10">
           <div className="bg-[#0c0a09] p-16 border-b md:border-b-0 md:border-r border-white/10">
             <Mono className="text-accent mb-8 block">Cultural_Directives</Mono>
