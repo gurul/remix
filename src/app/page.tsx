@@ -821,6 +821,19 @@ export default function Home() {
               <a href="https://www.instagram.com/aicseattle/" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Instagram</a>
             </div>
           </div>
+          <p className="mt-16 pt-8 border-t border-white/5 text-[9px] font-mono text-secondary uppercase tracking-[0.3em]">
+            Made with <span className="text-accent">❤</span> in Seattle
+          </p>
+          {process.env.NEXT_PUBLIC_LAST_UPDATED && (
+            <p className="mt-4 text-[9px] font-mono text-secondary/70 uppercase tracking-[0.2em]">
+              Last updated:{" "}
+              {new Date(process.env.NEXT_PUBLIC_LAST_UPDATED).toLocaleString("en-US", {
+                dateStyle: "medium",
+                timeStyle: "short",
+                timeZone: "America/Los_Angeles",
+              })}
+            </p>
+          )}
         </div>
       </footer>
     </main>

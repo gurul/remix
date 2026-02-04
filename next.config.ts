@@ -1,6 +1,17 @@
 import type { NextConfig } from "next";
+import { execSync } from "child_process";
+
+let lastCommitDate = "";
+try {
+  lastCommitDate = execSync("git log -1 --format=%cI", { encoding: "utf-8" }).trim();
+} catch {
+  // no git or not a repo
+}
 
 const nextConfig: NextConfig = {
+  env: {
+    NEXT_PUBLIC_LAST_UPDATED: lastCommitDate,
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "**" },
