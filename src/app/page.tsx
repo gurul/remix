@@ -302,14 +302,14 @@ export default function Home() {
       name: "Abe Thomas",
       role: "CHAPTER ADVISOR",
       bio: "Abe is a seasoned technology executive with deep experience in product strategy, digital marketing, business intelligence, go-to-market execution, and business operations. He has held leadership roles at companies including Microsoft, eBay, and IBM, as well as startups and smaller organizations. Outside of work, Abe enjoys traveling, volunteering, mentoring, cooking, hiking, and engaging in thoughtful discussions about technology.",
-      img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/abe-thomas.jpeg",
+      img: "/abe-thomas.png",
       linkedin: "https://www.linkedin.com/in/abethomas01/"
     },
     {
       name: "Rachel Kloepfer",
       role: "INSTITUTIONAL LEAD",
       bio: "Rachel is a Private Investments Analyst at Multi-Family Office Lenora Capital. She is a prior award-winning investigative journalist passionate about deep research and investing in great teams, and believes in bridging the gap between founders and funders through community. Outside of work, Rachel is a Global Shaper with the World Economic Forum and loves cooking, running, and writing.",
-      img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/rachel-kloepfer.jpeg",
+      img: "/rachel-kloepfer.png",
       linkedin: "https://www.linkedin.com/in/rachelkloepfer/"
     }
   ];
