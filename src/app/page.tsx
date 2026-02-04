@@ -215,9 +215,7 @@ function convertApiEventToDisplay(event: ApiEvent): DisplayEvent {
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showAllPastEvents, setShowAllPastEvents] = useState(false);
   const [upcomingEvents, setUpcomingEvents] = useState<DisplayEvent[]>([]);
-  const [pastEvents, setPastEvents] = useState<DisplayEvent[]>([]);
   const [eventsLoading, setEventsLoading] = useState(true);
 
   // Fetch events from API
@@ -230,7 +228,6 @@ export default function Home() {
 
         const now = new Date();
         const upcoming: DisplayEvent[] = [];
-        const past: DisplayEvent[] = [];
 
         events.forEach((event) => {
           const eventDate = new Date(event.startAt);
@@ -238,8 +235,6 @@ export default function Home() {
 
           if (eventDate > now) {
             upcoming.push(displayEvent);
-          } else {
-            past.push(displayEvent);
           }
         });
 
@@ -249,14 +244,7 @@ export default function Home() {
             new Date(a.date).getTime() - new Date(b.date).getTime()
         );
 
-        // Sort past by date descending (most recent first)
-        past.sort(
-          (a, b) =>
-            new Date(b.date).getTime() - new Date(a.date).getTime()
-        );
-
         setUpcomingEvents(upcoming);
-        setPastEvents(past);
       } catch (error) {
         console.error("Failed to fetch events:", error);
       } finally {
@@ -266,8 +254,6 @@ export default function Home() {
 
     fetchEvents();
   }, []);
-
-  const visiblePastEvents = showAllPastEvents ? pastEvents : pastEvents.slice(0, 3);
 
   const team = [
     {
@@ -645,84 +631,59 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Past Events */}
-      <section className="py-24 px-6 md:px-12 max-w-[1400px] mx-auto">
+      {/* Thank You to Our Sponsors & Partners */}
+      <section className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto border-t border-white/5">
         <div className="mb-16">
-          <Mono className="text-secondary/40 mb-4 block">Archive_Log</Mono>
-          <h2 className="text-5xl font-serif italic">Past Events.</h2>
+          <Mono className="text-accent mb-6 block">Acknowledgments</Mono>
+          <h2 className="text-5xl md:text-6xl font-serif italic mb-6">Thank You to Our Sponsors & Partners.</h2>
+          <p className="text-secondary text-lg leading-relaxed max-w-2xl">
+            We are grateful for the continued support of our mission and community. These organizations help make our events, research, and gatherings possible.
+          </p>
         </div>
-
-        {eventsLoading ? (
-          <div className="text-center py-12">
-            <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-secondary font-mono text-sm tracking-widest">LOADING ARCHIVES...</p>
-          </div>
-        ) : pastEvents.length === 0 ? (
-          <div className="border border-white/10 bg-[#0c0a09] p-12 text-center">
-            <p className="text-secondary font-mono text-sm tracking-widest">NO PAST EVENTS IN ARCHIVE.</p>
-          </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {visiblePastEvents.map((event, i) => (
-                <motion.a
-                  href={event.lumaUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  key={`past-${i}`}
-                  className="group border border-white/5 bg-white/[0.02] hover:border-accent/30 transition-all flex flex-col h-full overflow-hidden"
-                >
-                  {event.imageUrl && (
-                    <div className="relative w-full aspect-[16/9] overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
-                      <Image
-                        src={event.imageUrl}
-                        alt={event.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-70" />
-                    </div>
-                  )}
-                  <div className="p-8 flex flex-col flex-grow">
-                    <div className="flex justify-between items-start mb-6">
-                      <span className="text-[8px] font-mono border border-accent/20 text-accent px-2 py-1 uppercase tracking-widest">
-                        {event.type}
-                      </span>
-                      <span className="text-[9px] font-mono text-secondary">{event.ago}</span>
-                    </div>
-                    <h3 className="text-lg font-serif italic leading-snug mb-8 group-hover:text-accent transition-colors flex-grow">
-                      {event.title}
-                    </h3>
-                    <div className="pt-6 border-t border-white/5 space-y-2">
-                      <div className="flex items-center gap-3 text-secondary font-mono text-[9px]">
-                        <Calendar size={10} className="text-accent/40" />
-                        {event.date}
-                      </div>
-                      <div className="flex items-center gap-3 text-secondary font-mono text-[9px]">
-                        <Clock size={10} className="text-accent/40" />
-                        {event.time}
-                      </div>
-                    </div>
-                  </div>
-                </motion.a>
-              ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+          <div className="space-y-8">
+            <div>
+              <Mono className="text-accent/80 text-[9px] mb-4 block">Premier Partners</Mono>
+              <ul className="space-y-3">
+                {["Silicon Valley Bank", "Madrona", "Windsurf", "Fenwick & West LLP"].map((name) => (
+                  <li key={name} className="text-white font-mono text-sm tracking-widest uppercase">
+                    {name}
+                  </li>
+                ))}
+              </ul>
             </div>
-
-            {pastEvents.length > 3 && (
-              <div className="mt-12 text-center">
-                <button
-                  onClick={() => setShowAllPastEvents(!showAllPastEvents)}
-                  className="text-[10px] font-mono uppercase tracking-[0.3em] text-secondary hover:text-white transition-colors border-b border-white/10 pb-1"
-                >
-                  {showAllPastEvents ? "View Less_Archives" : "View More_Archives"}
-                </button>
-              </div>
-            )}
-          </>
-        )}
+          </div>
+          <div className="space-y-8">
+            <div>
+              <Mono className="text-accent/80 text-[9px] mb-4 block">Strategic Partners</Mono>
+              <ul className="flex flex-wrap gap-x-6 gap-y-3">
+                {[
+                  "Meta",
+                  "Anthropic",
+                  "Andreessen Horowitz",
+                  "Microsoft",
+                  "Norwest Venture Partners",
+                  "Lovable",
+                  "Mercury",
+                  "Linux Foundation",
+                  "Product Hunt",
+                  "Stanford Law School",
+                  "TED AI",
+                  "GitHub",
+                  "Fidelity",
+                  "Amazon Web Services",
+                  "Notion",
+                  "Oracle",
+                  "Roam",
+                ].map((name) => (
+                  <li key={name} className="text-secondary font-mono text-xs tracking-widest uppercase hover:text-white transition-colors">
+                    {name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Team Section */}
