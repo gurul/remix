@@ -792,7 +792,7 @@ export default function Home() {
         </div>
         
         <div className="px-6 md:px-12 max-w-[1400px] mx-auto text-center relative z-10">
-          <h2 className="text-6xl md:text-8xl font-serif italic mb-12 tracking-tighter">Join the global collective.</h2>
+          <h2 className="text-6xl md:text-8xl font-serif italic mb-12 tracking-tighter">Explore the global collective.</h2>
           <a 
             href="https://www.aicollective.com/"
             target="_blank"
