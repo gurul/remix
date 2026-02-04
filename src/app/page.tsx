@@ -807,15 +807,18 @@ export default function Home() {
       {/* Footer */}
       <footer className="pt-32 pb-16 px-6 md:px-12 bg-[#0c0a09] border-t border-white/5">
         <div className="max-w-[1400px] mx-auto">
-          <div className="space-y-6">
-            <Mono className="text-white block mb-4">Legal</Mono>
-            <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-2 w-full">
+          <div className="flex flex-wrap gap-16">
+            <div className="space-y-6">
+              <Mono className="text-white block mb-4">Legal</Mono>
               <div className="flex flex-wrap gap-x-8 gap-y-2">
                 <a href="https://www.aicollective.com/files/Code%20of%20Conduct%20~%20The%20AI%20Collective.pdf" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Code of Conduct</a>
                 <a href="https://www.aicollective.com/files/Data%20Privacy%20and%20Use%20Policy%20~%20The%20AI%20Collective.pdf" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Privacy Policy</a>
                 <a href="https://www.aicollective.com/press" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Press Kit</a>
               </div>
-              <a href="https://www.instagram.com/aicseattle/" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest shrink-0">Instagram</a>
+            </div>
+            <div className="space-y-6">
+              <Mono className="text-white block mb-4">Social</Mono>
+              <a href="https://www.instagram.com/aicseattle/" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Instagram</a>
             </div>
           </div>
         </div>
