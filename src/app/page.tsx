@@ -458,9 +458,14 @@ export default function Home() {
               <Mono className="text-accent mb-4 block">Schedule_Interface</Mono>
               <h2 className="text-5xl md:text-6xl font-serif italic">Upcoming Events.</h2>
             </div>
-            <button className="text-[10px] font-mono uppercase tracking-widest text-secondary hover:text-accent transition-colors flex items-center gap-2 group">
-              See All Events <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-            </button>
+            <a
+              href="https://www.aicollective.com/events"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[10px] font-mono uppercase tracking-widest text-secondary hover:text-accent transition-colors flex items-center gap-2 group"
+            >
+              See Global Events <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+            </a>
           </div>
 
           {eventsLoading ? (
