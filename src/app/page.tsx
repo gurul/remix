@@ -806,34 +806,45 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="pt-32 pb-16 px-6 md:px-12 bg-[#0c0a09] border-t border-white/5">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="flex flex-wrap gap-16">
-            <div className="space-y-6">
-              <Mono className="text-white block mb-4">Legal</Mono>
-              <div className="flex flex-wrap gap-x-8 gap-y-2">
-                <a href="https://www.aicollective.com/files/Code%20of%20Conduct%20~%20The%20AI%20Collective.pdf" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Code of Conduct</a>
-                <a href="https://www.aicollective.com/files/Data%20Privacy%20and%20Use%20Policy%20~%20The%20AI%20Collective.pdf" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Privacy Policy</a>
-                <a href="https://www.aicollective.com/press" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Press Kit</a>
+        <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row lg:justify-between lg:items-start gap-12">
+          <div>
+            <div className="flex flex-wrap gap-16">
+              <div className="space-y-6">
+                <Mono className="text-white block mb-4">Legal</Mono>
+                <div className="flex flex-wrap gap-x-8 gap-y-2">
+                  <a href="https://www.aicollective.com/files/Code%20of%20Conduct%20~%20The%20AI%20Collective.pdf" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Code of Conduct</a>
+                  <a href="https://www.aicollective.com/files/Data%20Privacy%20and%20Use%20Policy%20~%20The%20AI%20Collective.pdf" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Privacy Policy</a>
+                  <a href="https://www.aicollective.com/press" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Press Kit</a>
+                </div>
+              </div>
+              <div className="space-y-6">
+                <Mono className="text-white block mb-4">Social</Mono>
+                <a href="https://www.instagram.com/aicseattle/" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Instagram</a>
               </div>
             </div>
-            <div className="space-y-6">
-              <Mono className="text-white block mb-4">Social</Mono>
-              <a href="https://www.instagram.com/aicseattle/" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Instagram</a>
-            </div>
-          </div>
-          <p className="mt-16 pt-8 border-t border-white/5 text-[9px] font-mono text-secondary uppercase tracking-[0.3em]">
-            Made with <span className="text-accent">❤</span> in Seattle
-          </p>
-          {process.env.NEXT_PUBLIC_LAST_UPDATED && (
-            <p className="mt-4 text-[9px] font-mono text-secondary/70 uppercase tracking-[0.2em]">
-              Last updated:{" "}
-              {new Date(process.env.NEXT_PUBLIC_LAST_UPDATED).toLocaleString("en-US", {
-                dateStyle: "medium",
-                timeStyle: "short",
-                timeZone: "America/Los_Angeles",
-              })}
+            <p className="mt-16 pt-8 border-t border-white/5 text-[9px] font-mono text-secondary uppercase tracking-[0.3em]">
+              Made with <span className="text-accent">❤</span> in Seattle
             </p>
-          )}
+            {process.env.NEXT_PUBLIC_LAST_UPDATED && (
+              <p className="mt-4 text-[9px] font-mono text-secondary/70 uppercase tracking-[0.2em]">
+                Last updated:{" "}
+                {new Date(process.env.NEXT_PUBLIC_LAST_UPDATED).toLocaleString("en-US", {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                  timeZone: "America/Los_Angeles",
+                })}
+              </p>
+            )}
+          </div>
+          <div className="hidden lg:flex lg:justify-center lg:items-center lg:w-[200px] shrink-0">
+            <Image
+              src="/logo-footer.png"
+              alt="The AI Collective"
+              width={200}
+              height={200}
+              className="w-[200px] h-auto object-contain"
+            />
+          </div>
         </div>
       </footer>
     </main>
