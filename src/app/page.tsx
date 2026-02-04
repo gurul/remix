@@ -382,7 +382,7 @@ export default function Home() {
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-8 h-px bg-accent/50" />
-              <Mono className="text-accent">Seattle Chapter</Mono>
+              <Mono className="text-accent">Seattle_Chapter</Mono>
             </div>
             <h1 className="text-6xl md:text-[7rem] font-serif leading-[0.9] tracking-tighter mb-10">
               The AI<br />
@@ -639,7 +639,7 @@ export default function Home() {
       {/* Thank You to Our Sponsors & Partners */}
       <section className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto border-t border-white/5">
         <div className="mb-16">
-          <Mono className="text-accent mb-6 block">Acknowledgments</Mono>
+          <Mono className="text-accent mb-6 block">Our_Friends</Mono>
           <h2 className="text-5xl md:text-6xl font-serif italic mb-6">Thank You to Our Sponsors & Partners.</h2>
           <p className="text-secondary text-lg leading-relaxed max-w-2xl">
             We are grateful for the continued support of our mission and community. These organizations help make our events, research, and gatherings possible.
