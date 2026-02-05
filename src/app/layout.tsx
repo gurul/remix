@@ -18,7 +18,7 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AIC_SEA | About Us, Events, Get Involved, Partnerships",
+  title: "AISEA",
   description: "The AI Collective Seattle. About Us, Events, Get Involved, Partnerships.",
   icons: [
     { rel: "icon", url: "/icon.png", type: "image/png" },
