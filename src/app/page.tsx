@@ -17,7 +17,6 @@ import {
   X,
   Calendar,
   Users,
-  ExternalLink,
   MapPin,
   Clock,
   Linkedin
@@ -56,7 +55,7 @@ const Globe = () => {
       markers: [],
       onRender: (state) => {
         state.phi = phi;
-        phi += 0.003;
+        phi += 0.0012;
       },
     });
 
@@ -64,7 +63,7 @@ const Globe = () => {
   }, []);
 
   return (
-    <div className="relative w-full aspect-square max-w-[600px] mx-auto opacity-100 transition-all duration-1000">
+    <div className="relative w-full aspect-square max-w-[600px] mx-auto opacity-100 transition-all duration-1000 hidden md:block">
       <canvas
         ref={canvasRef}
         style={{ width: "100%", height: "100%", maxWidth: "100%", aspectRatio: "1" }}
@@ -215,9 +214,7 @@ function convertApiEventToDisplay(event: ApiEvent): DisplayEvent {
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showAllPastEvents, setShowAllPastEvents] = useState(false);
   const [upcomingEvents, setUpcomingEvents] = useState<DisplayEvent[]>([]);
-  const [pastEvents, setPastEvents] = useState<DisplayEvent[]>([]);
   const [eventsLoading, setEventsLoading] = useState(true);
 
   // Fetch events from API
@@ -230,7 +227,6 @@ export default function Home() {
 
         const now = new Date();
         const upcoming: DisplayEvent[] = [];
-        const past: DisplayEvent[] = [];
 
         events.forEach((event) => {
           const eventDate = new Date(event.startAt);
@@ -238,8 +234,6 @@ export default function Home() {
 
           if (eventDate > now) {
             upcoming.push(displayEvent);
-          } else {
-            past.push(displayEvent);
           }
         });
 
@@ -249,14 +243,7 @@ export default function Home() {
             new Date(a.date).getTime() - new Date(b.date).getTime()
         );
 
-        // Sort past by date descending (most recent first)
-        past.sort(
-          (a, b) =>
-            new Date(b.date).getTime() - new Date(a.date).getTime()
-        );
-
         setUpcomingEvents(upcoming);
-        setPastEvents(past);
       } catch (error) {
         console.error("Failed to fetch events:", error);
       } finally {
@@ -267,12 +254,10 @@ export default function Home() {
     fetchEvents();
   }, []);
 
-  const visiblePastEvents = showAllPastEvents ? pastEvents : pastEvents.slice(0, 3);
-
   const team = [
     {
       name: "Bhola Chhetri",
-      role: "SEATTLE CHAPTER LEAD",
+      role: "CHAPTER LEAD",
       bio: "Bhola is a Solutions Architect at Broadcom and the founder of CropTop. He's deeply passionate about go-to-market initiatives for businesses and individuals. Outside of work, Bhola loves cars, events, and traveling.",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/bhola@aicollective.com.jpeg",
       linkedin: "https://www.linkedin.com/in/bhola-chhetri/"
@@ -301,16 +286,37 @@ export default function Home() {
     {
       name: "Gurucharan Lingamallu",
       role: "NEWS/MEDIA CURATOR",
-      bio: "Guru is a Computer Science student at the University of Washington focused on AI, systems, and human-centered technology. He's interested in how tools shape memory, agency, and ownership, and focuses on building systems grounded in trust.",
+      bio: "Guru is a Computer Science student at the University of Washington focused on human-centered technology. He's interested in how tools shape memory, agency, and ownership, and focuses on building systems grounded in trust.",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/gurucharan-lingamallu-062.png",
       linkedin: "https://www.linkedin.com/in/gurul/"
     },
     {
       name: "Cyndi Song",
-      role: "SEATTLE CHAPTER ORGANIZER",
+      role: "CHAPTER ORGANIZER",
       bio: "Cyndi is a Product Strategist and Chief of Staff at Google Cloud. Beyond her day job, she is deeply embedded in the Seattle startup ecosystem as the Chapter Lead for 12 Scrappy Founders, where she connects entrepreneurs to support their startup journeys. Driven by a passion for human-centered AI, she spends her downtime at hackathons prototyping new products, with a recent focus on voice agents. When she isn't building, she loves aerial yoga and dancing.",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/cyndi-song-9ab.jpeg",
       linkedin: "https://www.linkedin.com/in/sixuancyndsong/"
+    },
+    {
+      name: "Abe Thomas",
+      role: "CHAPTER ADVISOR",
+      bio: "Abe is a seasoned technology executive with deep experience in product strategy, digital marketing, business intelligence, go-to-market execution, and business operations. He has held leadership roles at companies including Microsoft, eBay, and IBM, as well as startups and smaller organizations. Outside of work, Abe enjoys traveling, volunteering, mentoring, cooking, hiking, and engaging in thoughtful discussions about technology.",
+      img: "/abe-thomas.png",
+      linkedin: "https://www.linkedin.com/in/abethomas01/"
+    },
+    {
+      name: "Rachel Kloepfer",
+      role: "INSTITUTIONAL LEAD",
+      bio: "Rachel is a Private Investments Analyst at Multi-Family Office Lenora Capital. She is a prior award-winning investigative journalist passionate about deep research and investing in great teams, and believes in bridging the gap between founders and funders through community. Outside of work, Rachel is a Global Shaper with the World Economic Forum and loves cooking, running, and writing.",
+      img: "/rachel-kloepfer.png",
+      linkedin: "https://www.linkedin.com/in/rachelkloepfer/"
+    },
+    {
+      name: "Keshav Ummat",
+      role: "STRATEGY LEAD",
+      bio: "Keshav is an Enterprise Account Executive at Glean, where he leads tech sales for customers in the PNW. Prior to Glean, he worked at AWS for 6 years and was also part of the founding team at Intently AI. He's deeply passionate about public speaking and community building, and was also raised here in Seattle! Outside of work, Keshav enjoys tennis, new food experiences and traveling the world!",
+      img: "/keshav.png",
+      linkedin: "https://www.linkedin.com/in/keshav-ummat-8418b4106/"
     }
   ];
 
@@ -331,11 +337,10 @@ export default function Home() {
             <span className="font-bold tracking-widest uppercase text-sm font-mono">AIC_SEA</span>
           </div>
           <div className="hidden xl:flex gap-8 border-l border-white/10 pl-12">
-            {["About Us", "Events", "Get Involved", "Partnerships"].map(item => (
-              <a key={item} href={`#${item.toLowerCase().replace(" ", "-")}`} className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">
-                {item}
-              </a>
-            ))}
+            <a href="#about-us" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">About Us</a>
+            <a href="#events" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">Events</a>
+            <a href="#get-involved" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">Get Involved</a>
+            <a href="#partnerships" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">Partnerships</a>
           </div>
         </div>
         
@@ -343,12 +348,15 @@ export default function Home() {
           <div className="hidden lg:block">
             <ConsoleSystem />
           </div>
-          <button 
-            onClick={() => window.parent.postMessage({ type: "OPEN_EXTERNAL_URL", data: { url: "https://tally.so/r/n0r0xR" } }, "*")}
-            className="bg-accent text-black px-5 py-2 text-[9px] font-mono font-bold hover:bg-white transition-all uppercase tracking-[0.2em] shadow-[3px_3px_0px_0px_rgba(255,122,26,0.2)]"
+          <a 
+            href="https://docs.google.com/forms/d/e/1FAIpQLScmUC8KSPhafE_8FZBUs2pNPJVkJkRl-E9eE2cE5b34RQ3BTQ/viewform"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-accent text-black px-5 py-2 text-[9px] font-mono font-bold hover:bg-white transition-all uppercase tracking-[0.2em] shadow-[3px_3px_0px_0px_rgba(255,122,26,0.2)] group"
           >
             Apply_Member
-          </button>
+            <ArrowUpRight size={12} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          </a>
           <button className="xl:hidden text-secondary" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -367,11 +375,10 @@ export default function Home() {
             <button className="absolute top-8 right-8 text-accent" onClick={() => setIsMenuOpen(false)}>
               <X size={32} />
             </button>
-            {["About Us", "Events", "Get Involved", "Partnerships"].map(item => (
-              <a key={item} href={`#${item.toLowerCase().replace(" ", "-")}`} onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">
-                {item}
-              </a>
-            ))}
+            <a href="#about-us" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">About Us</a>
+            <a href="#events" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">Events</a>
+            <a href="#get-involved" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">Get Involved</a>
+            <a href="#partnerships" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">Partnerships</a>
           </motion.div>
         )}
       </AnimatePresence>
@@ -382,33 +389,33 @@ export default function Home() {
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-8 h-px bg-accent/50" />
-              <Mono className="text-accent">Seattle Chapter</Mono>
+              <Mono className="text-accent">Seattle_Chapter</Mono>
             </div>
             <h1 className="text-6xl md:text-[7rem] font-serif leading-[0.9] tracking-tighter mb-10">
               The AI<br />
               <span className="italic text-accent">Collective.</span>
             </h1>
             <p className="text-xl md:text-2xl text-secondary font-light max-w-lg leading-relaxed mb-12 border-l border-accent/20 pl-8">
-              Join our vibrant AI community in Seattle! Connect with local pioneers and innovators shaping the future of AI through <span className="text-white">meaningful gatherings</span> and collaborative exploration.
+              Connect with local pioneers and innovators shaping the future of AI through <span className="text-white">meaningful gatherings</span> and collaborative exploration.
             </p>
             <div className="flex flex-wrap gap-6">
               <a 
                 href="https://docs.google.com/forms/d/e/1FAIpQLScmUC8KSPhafE_8FZBUs2pNPJVkJkRl-E9eE2cE5b34RQ3BTQ/viewform?usp=header"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-4 bg-white/5 border border-white/10 px-8 py-5 hover:bg-white hover:text-black transition-all"
+                className="group flex items-center gap-4 bg-accent text-black border border-accent px-8 py-5 hover:bg-white hover:text-black hover:border-white transition-all"
               >
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em] font-bold">Join Our Chapter</span>
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
               <a 
                 href="https://docs.google.com/forms/d/e/1FAIpQLSelDyidSPMTyFagOEp7AYuRXH8-Wt8JgJqCwGnR_puhUScyJg/viewform?usp=header"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-4 border border-white/10 px-8 py-5 hover:border-accent transition-all"
+                className="group flex items-center gap-4 bg-accent text-black border border-accent px-8 py-5 hover:bg-white hover:text-black hover:border-white transition-all"
               >
-                <span className="font-mono text-[10px] uppercase tracking-[0.3em]">Partner With Us</span>
-                <ExternalLink size={14} className="text-secondary group-hover:text-accent" />
+                <span className="font-mono text-[10px] uppercase tracking-[0.3em] font-bold">Partner With Us</span>
+                <ArrowUpRight size={14} className="text-black group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
             </div>
           </div>
@@ -418,25 +425,17 @@ export default function Home() {
             <Globe />
             <div className="absolute bottom-4 left-4 p-6 border border-white/10 bg-background/60 backdrop-blur-md hidden md:block w-56">
               <div className="flex justify-between items-start mb-4">
-                <Mono className="text-accent/60 text-[8px]">Network_Pulse</Mono>
+                <Mono className="text-accent/60 text-[8px]">Active_Members</Mono>
                 <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
               </div>
               <div className="space-y-3">
-                <div className="h-1 bg-white/5 overflow-hidden">
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: "78%" }}
-                    transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
-                    className="h-full bg-accent"
-                  />
+                <div className="flex justify-between text-[8px] font-mono text-secondary">
+                  <span>GLOBAL_COUNT</span>
+                  <span className="text-white">150,000+</span>
                 </div>
                 <div className="flex justify-between text-[8px] font-mono text-secondary">
-                  <span>LATENCY</span>
-                  <span className="text-white">12.4ms</span>
-                </div>
-                <div className="flex justify-between text-[8px] font-mono text-secondary">
-                  <span>ACTIVE_NODES</span>
-                  <span className="text-white">1,402</span>
+                  <span>SEATTLE_COUNT</span>
+                  <span className="text-white">1,600+</span>
                 </div>
               </div>
             </div>
@@ -452,9 +451,14 @@ export default function Home() {
               <Mono className="text-accent mb-4 block">Schedule_Interface</Mono>
               <h2 className="text-5xl md:text-6xl font-serif italic">Upcoming Events.</h2>
             </div>
-            <button className="text-[10px] font-mono uppercase tracking-widest text-secondary hover:text-accent transition-colors flex items-center gap-2 group">
-              See All Events <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-            </button>
+            <a
+              href="https://www.aicollective.com/events"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-4 bg-accent text-black border border-accent px-8 py-5 text-[10px] font-mono font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-black hover:border-white transition-all group"
+            >
+              See Global Events <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </a>
           </div>
 
           {eventsLoading ? (
@@ -522,9 +526,9 @@ export default function Home() {
       </section>
 
       {/* About Us / Launch Video */}
-      <section id="about-us" className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto">
+      <section id="about-us" className="pt-32 pb-16 px-6 md:px-12 max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-          <div className="aspect-video w-full overflow-hidden border border-white/10 bg-white/5">
+          <div className="order-2 lg:order-1 aspect-video w-full overflow-hidden border border-white/10 bg-white/5">
             <iframe
               src="https://www.youtube.com/embed/36i7pkaHqow?start=9"
               title="About Us - AI Collective Seattle"
@@ -534,7 +538,7 @@ export default function Home() {
             />
           </div>
           
-          <div className="space-y-10">
+          <div className="order-1 lg:order-2 space-y-10">
             <div>
               <Mono className="text-accent mb-6 block">Legacy_Manifesto</Mono>
               <h2 className="text-5xl md:text-6xl font-serif italic mb-8">About Us.</h2>
@@ -558,7 +562,7 @@ export default function Home() {
       </section>
 
       {/* Values & Why */}
-      <section className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto">
+      <section className="pt-16 pb-32 px-6 md:px-12 max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/10 border border-white/10">
           <div className="bg-[#0c0a09] p-16 border-b md:border-b-0 md:border-r border-white/10">
             <Mono className="text-accent mb-8 block">Cultural_Directives</Mono>
@@ -589,7 +593,7 @@ export default function Home() {
               href="https://www.aicollective.com/trust"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-4 text-[10px] font-mono uppercase tracking-[0.3em] text-white hover:text-accent transition-colors group"
+              className="flex items-center gap-4 text-[10px] font-mono uppercase tracking-[0.3em] text-accent border-b border-accent pb-1 hover:border-accent/80 transition-colors group"
             >
               Founding Perspective <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
             </a>
@@ -609,24 +613,35 @@ export default function Home() {
               </p>
             </div>
             <div className="lg:w-1/2 lg:text-right pb-4">
-              <button className="bg-white/5 border border-white/10 px-8 py-5 text-[10px] font-mono uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all">
-                Explore Events Archive
-              </button>
+              <a
+                href="https://luma.com/user/aicollective"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-4 bg-accent text-black border border-accent px-8 py-5 text-[10px] font-mono font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-black hover:border-white transition-all group"
+              >
+                Explore Our Archive
+                <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </a>
             </div>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-              <div key={i} className="aspect-square bg-white/5 border border-white/5 relative grayscale hover:grayscale-0 transition-all duration-700 overflow-hidden group">
+            {[
+              { src: "/gather-1.png", alt: "Community gathering with hands raised" },
+              { src: "/gather-2.png", alt: "Casual work session with food and laptops" },
+              { src: "/gather-3.png", alt: "Fireside chat panel discussion" },
+              { src: "/gather-4.png", alt: "Large event space with tables and presentations" }
+            ].map((image, i) => (
+              <div key={i} className="aspect-square bg-white/5 border border-white/5 relative overflow-hidden group">
                 <Image 
-                  src={`https://images.unsplash.com/photo-${1515187029135 + i}?auto=format&fit=crop&q=80&w=600`} 
-                  alt={`Event ${i}`} 
+                  src={image.src} 
+                  alt={image.alt} 
                   fill 
-                  className="object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" 
+                  className="object-cover group-hover:scale-110 transition-all duration-1000" 
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-0 group-hover:opacity-80 transition-opacity" />
                 <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-                  <Mono className="text-white text-[8px]">Event_Fragment_0{i}</Mono>
+                  <Mono className="text-white text-[8px]">Event_Fragment_0{i+1}</Mono>
                 </div>
               </div>
             ))}
@@ -634,112 +649,99 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Past Events */}
-      <section className="py-24 px-6 md:px-12 max-w-[1400px] mx-auto">
+      {/* Thank You to Our Sponsors & Partners */}
+      <section id="partnerships" className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto border-t border-white/5">
         <div className="mb-16">
-          <Mono className="text-secondary/40 mb-4 block">Archive_Log</Mono>
-          <h2 className="text-5xl font-serif italic">Past Events.</h2>
+          <Mono className="text-accent mb-6 block">Close_Friends</Mono>
+          <h2 className="text-5xl md:text-6xl font-serif italic mb-6">Thank You to Our Sponsors & Partners.</h2>
+          <p className="text-secondary text-lg leading-relaxed max-w-2xl">
+            We are grateful for the continued support of our mission and community. These organizations help make our events, research, and gatherings possible.
+          </p>
         </div>
-
-        {eventsLoading ? (
-          <div className="text-center py-12">
-            <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-secondary font-mono text-sm tracking-widest">LOADING ARCHIVES...</p>
-          </div>
-        ) : pastEvents.length === 0 ? (
-          <div className="border border-white/10 bg-[#0c0a09] p-12 text-center">
-            <p className="text-secondary font-mono text-sm tracking-widest">NO PAST EVENTS IN ARCHIVE.</p>
-          </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {visiblePastEvents.map((event, i) => (
-                <motion.a
-                  href={event.lumaUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  key={`past-${i}`}
-                  className="group border border-white/5 bg-white/[0.02] hover:border-accent/30 transition-all flex flex-col h-full overflow-hidden"
-                >
-                  {event.imageUrl && (
-                    <div className="relative w-full aspect-[16/9] overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
-                      <Image
-                        src={event.imageUrl}
-                        alt={event.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-70" />
-                    </div>
-                  )}
-                  <div className="p-8 flex flex-col flex-grow">
-                    <div className="flex justify-between items-start mb-6">
-                      <span className="text-[8px] font-mono border border-accent/20 text-accent px-2 py-1 uppercase tracking-widest">
-                        {event.type}
-                      </span>
-                      <span className="text-[9px] font-mono text-secondary">{event.ago}</span>
-                    </div>
-                    <h3 className="text-lg font-serif italic leading-snug mb-8 group-hover:text-accent transition-colors flex-grow">
-                      {event.title}
-                    </h3>
-                    <div className="pt-6 border-t border-white/5 space-y-2">
-                      <div className="flex items-center gap-3 text-secondary font-mono text-[9px]">
-                        <Calendar size={10} className="text-accent/40" />
-                        {event.date}
-                      </div>
-                      <div className="flex items-center gap-3 text-secondary font-mono text-[9px]">
-                        <Clock size={10} className="text-accent/40" />
-                        {event.time}
-                      </div>
-                    </div>
-                  </div>
-                </motion.a>
-              ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+          <div className="space-y-8">
+            <div>
+              <Mono className="text-accent/80 text-[9px] mb-4 block">Premier Partners</Mono>
+              <ul className="space-y-3">
+                {["Silicon Valley Bank", "Madrona", "Windsurf", "Fenwick & West LLP"].map((name) => (
+                  <li key={name} className="text-white font-mono text-sm tracking-widest uppercase">
+                    {name}
+                  </li>
+                ))}
+              </ul>
             </div>
-
-            {pastEvents.length > 3 && (
-              <div className="mt-12 text-center">
-                <button
-                  onClick={() => setShowAllPastEvents(!showAllPastEvents)}
-                  className="text-[10px] font-mono uppercase tracking-[0.3em] text-secondary hover:text-white transition-colors border-b border-white/10 pb-1"
-                >
-                  {showAllPastEvents ? "View Less_Archives" : "View More_Archives"}
-                </button>
-              </div>
-            )}
-          </>
-        )}
+          </div>
+          <div className="space-y-8">
+            <div>
+              <Mono className="text-accent/80 text-[9px] mb-4 block">Strategic Partners</Mono>
+              <ul className="flex flex-wrap gap-x-6 gap-y-3">
+                {[
+                  "Meta",
+                  "Anthropic",
+                  "Andreessen Horowitz",
+                  "Microsoft",
+                  "Norwest Venture Partners",
+                  "Lovable",
+                  "Mercury",
+                  "Linux Foundation",
+                  "Product Hunt",
+                  "Stanford Law School",
+                  "TED AI",
+                  "GitHub",
+                  "Fidelity",
+                  "Amazon Web Services",
+                  "Notion",
+                  "Oracle",
+                  "Roam",
+                ].map((name) => (
+                  <li key={name} className="text-white font-mono text-xs tracking-widest uppercase">
+                    {name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div className="mt-16 pt-8 border-t border-white/10">
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSelDyidSPMTyFagOEp7AYuRXH8-Wt8JgJqCwGnR_puhUScyJg/viewform"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-4 bg-accent text-black px-8 py-5 text-[10px] font-mono font-bold uppercase tracking-[0.3em] hover:bg-white transition-all border-2 border-accent group"
+          >
+            Sponsor us
+            <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          </a>
+        </div>
       </section>
 
       {/* Team Section */}
       <section className="py-32 bg-white/[0.02] border-y border-white/5">
         <div className="px-6 md:px-12 max-w-[1400px] mx-auto">
           <div className="max-w-3xl mb-24">
-            <Mono className="text-accent mb-6 block underline underline-offset-8 decoration-accent/20">The_Human_Layer</Mono>
+            <Mono className="text-accent mb-6 block">The_Human_Layer</Mono>
             <h2 className="text-6xl md:text-7xl font-serif italic mb-8">Meet the Seattle Team.</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/10 border border-white/10">
             {team.map((member, i) => (
-              <div key={i} className="bg-[#0c0a09] p-10 flex flex-col group relative overflow-hidden">
+              <a
+                key={i}
+                href={member.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#0c0a09] p-10 flex flex-col group relative overflow-hidden block border border-transparent hover:border-accent/20 transition-colors"
+              >
                 <div className="absolute top-0 right-0 w-24 h-24 bg-accent/5 -mr-12 -mt-12 rotate-45 group-hover:bg-accent/10 transition-colors" />
-                <div className="mb-8 relative w-16 h-16 grayscale group-hover:grayscale-0 transition-all duration-500 rounded-full overflow-hidden">
+                <div className="mb-8 relative w-16 h-16 rounded-full overflow-hidden">
                   <div className="absolute inset-0 border border-accent/20 -m-1 group-hover:m-0 transition-all rounded-full" />
                   <Image src={member.img} alt={member.name} width={64} height={64} className="object-cover w-full h-full" />
                 </div>
                 <div className="flex items-center gap-2 mb-2">
                   <h3 className="text-2xl font-serif italic">{member.name}</h3>
-                  <a
-                    href={member.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-secondary hover:text-accent transition-colors"
-                  >
+                  <span className="text-secondary group-hover:text-accent transition-colors">
                     <Linkedin size={16} />
-                  </a>
+                  </span>
                 </div>
                 <Mono className="text-accent/60 mb-6 block text-[9px]">{member.role}</Mono>
                 <p className="text-secondary text-sm leading-relaxed font-light">
@@ -747,94 +749,101 @@ export default function Home() {
                 </p>
                 <div className="mt-auto pt-10 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
                   <Mono className="text-[8px]">PROFILE_00{i+1}</Mono>
-                  <a
-                    href={member.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-secondary group-hover:text-accent transition-colors"
-                  >
+                  <span className="text-secondary group-hover:text-accent transition-colors">
                     <ArrowUpRight size={14} />
-                  </a>
+                  </span>
                 </div>
-              </div>
+              </a>
             ))}
+            {/* Join the team CTA card */}
+            <a
+              id="get-involved"
+              key="cta"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSexvCAcYFJASap0tDcu29esoWj-56x87gcoUKj0HQfQ9GbczA/viewform?usp=header"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="col-span-full bg-accent p-10 flex flex-col items-center text-center group relative overflow-hidden border border-transparent hover:border-black/20 transition-colors text-black"
+            >
+              <div className="absolute top-0 right-0 w-24 h-24 bg-black/5 -mr-12 -mt-12 rotate-45 group-hover:bg-black/10 transition-colors" />
+              <h3 className="text-5xl md:text-6xl font-serif italic mb-6 text-black">You?</h3>
+              <p className="text-black text-lg leading-relaxed font-normal mb-8 max-w-xl">
+                We&apos;re always looking for volunteers to help organize events and shape the future of AI in Seattle.
+              </p>
+              <div className="mt-auto pt-6">
+                <span className="inline-flex items-center justify-center gap-2 py-4 px-6 bg-black text-white text-base font-mono font-bold uppercase tracking-[0.2em] border-2 border-black group-hover:bg-white group-hover:text-black transition-colors">
+                  Apply to volunteer
+                  <ArrowUpRight size={18} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </span>
+              </div>
+            </a>
           </div>
         </div>
       </section>
 
       {/* Join Section */}
-      <section id="get-involved" className="py-40 bg-accent text-black relative overflow-hidden">
+      <section id="join-collective" className="py-40 bg-accent text-black relative overflow-hidden">
         <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none">
           <div className="absolute top-0 right-0 w-[800px] h-[800px] border border-black/20 rounded-full -mr-96 -mt-96" />
           <div className="absolute top-0 right-0 w-[600px] h-[600px] border border-black/20 rounded-full -mr-64 -mt-64" />
         </div>
         
         <div className="px-6 md:px-12 max-w-[1400px] mx-auto text-center relative z-10">
-          <Mono className="text-black/60 mb-8 block tracking-[0.5em]">Network_Expansion_Protocol</Mono>
-          <h2 className="text-6xl md:text-8xl font-serif italic mb-12 tracking-tighter">Join Our Team.</h2>
-          <p className="text-xl max-w-2xl mx-auto mb-16 leading-relaxed">
-            Get involved with our chapter! We're always looking for passionate volunteers to help organize events and shape the future of AI in our community.
-          </p>
+          <h2 className="text-6xl md:text-8xl font-serif italic mb-12 tracking-tighter">Explore the global collective.</h2>
           <a 
-            href="https://docs.google.com/forms/d/e/1FAIpQLSexvCAcYFJASap0tDcu29esoWj-56x87gcoUKj0HQfQ9GbczA/viewform?usp=header"
+            href="https://www.aicollective.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-black text-white px-12 py-6 text-xs font-mono font-bold uppercase tracking-[0.4em] hover:bg-white hover:text-black transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,0.15)]"
+            className="inline-flex items-center gap-4 bg-black text-white px-12 py-6 text-xs font-mono font-bold uppercase tracking-[0.4em] border-2 border-black hover:bg-white hover:text-black transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,0.15)] group"
           >
-            Apply_To_Volunteer
+            ＼(＾O＾)／
+            <ArrowUpRight size={18} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </a>
         </div>
       </section>
 
       {/* Footer */}
       <footer className="pt-32 pb-16 px-6 md:px-12 bg-[#0c0a09] border-t border-white/5">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-16 mb-24">
-            <div className="col-span-2 space-y-8">
-              <div className="font-serif italic text-3xl font-bold tracking-tighter">AIC.</div>
-              <p className="text-secondary text-sm max-w-xs leading-relaxed">
-                Exploring the frontier of intelligence through meaningful connection and collaborative research.
-              </p>
-              <div className="flex gap-4">
-                {["Slack", "LinkedIn", "Twitter", "YouTube"].map((social) => (
-                  <button key={social} className="w-10 h-10 border border-white/10 flex items-center justify-center hover:border-accent hover:text-accent transition-all">
-                    <span className="text-[10px] font-mono uppercase">{social[0]}</span>
-                  </button>
-                ))}
+        <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row lg:justify-between lg:items-start gap-12">
+          <div>
+            <div className="flex flex-wrap gap-16">
+              <div className="space-y-6">
+                <Mono className="text-white block mb-4">Legal</Mono>
+                <div className="flex flex-wrap gap-x-8 gap-y-2">
+                  <a href="https://www.aicollective.com/files/Code%20of%20Conduct%20~%20The%20AI%20Collective.pdf" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Code of Conduct</a>
+                  <a href="https://www.aicollective.com/files/Data%20Privacy%20and%20Use%20Policy%20~%20The%20AI%20Collective.pdf" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Privacy Policy</a>
+                  <a href="https://www.aicollective.com/press" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Press Kit</a>
+                </div>
+              </div>
+              <div className="space-y-6">
+                <Mono className="text-white block mb-4">Social</Mono>
+                <div className="flex flex-wrap gap-x-8 gap-y-2">
+                  <a href="https://www.instagram.com/aicseattle/" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Instagram</a>
+                  <a href="https://www.linkedin.com/company/aicollective/" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">LinkedIn</a>
+                </div>
               </div>
             </div>
-            
-            <div className="space-y-6">
-              <Mono className="text-white block mb-4">Navigation</Mono>
-              {["About Us", "Community", "Institute", "Partnerships"].map(link => (
-                <a key={link} href="#" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">{link}</a>
-              ))}
-            </div>
-
-            <div className="space-y-6">
-              <Mono className="text-white block mb-4">Get Involved</Mono>
-              {["Join Community", "Attend Event", "Local Team", "Start Chapter", "Global Roles"].map(link => (
-                <a key={link} href="#" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">{link}</a>
-              ))}
-            </div>
-
-            <div className="space-y-6">
-              <Mono className="text-white block mb-4">Legal</Mono>
-              {["Code of Conduct", "Privacy Policy", "Press Kit", "Team Login"].map(link => (
-                <a key={link} href="#" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">{link}</a>
-              ))}
-            </div>
+            <p className="mt-16 pt-8 border-t border-white/5 text-[9px] font-mono text-secondary uppercase tracking-[0.3em]">
+              Made with <span className="text-accent">❤</span> in Seattle
+            </p>
+            {process.env.NEXT_PUBLIC_LAST_UPDATED && (
+              <p className="mt-4 text-[9px] font-mono text-secondary/70 uppercase tracking-[0.2em]">
+                Last updated:{" "}
+                {new Date(process.env.NEXT_PUBLIC_LAST_UPDATED).toLocaleString("en-US", {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                  timeZone: "America/Los_Angeles",
+                })}
+              </p>
+            )}
           </div>
-          
-          <div className="pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-12">
-            <div className="text-[9px] font-mono text-secondary uppercase tracking-[0.3em]">
-              © 2026 THE AI COLLECTIVE. MADE WITHIN <span className="text-accent">❤</span> AND AROUND THE WORLD.
-            </div>
-            <div className="flex gap-8 text-[9px] font-mono text-secondary/40 uppercase tracking-[0.2em]">
-              <span>EST. SF_2023</span>
-              <span>VER_4.2.0_SEA</span>
-              <span className="text-white/20">47.6062° N, 122.3321° W</span>
-            </div>
+          <div className="hidden lg:flex lg:justify-center lg:items-center lg:w-[200px] shrink-0">
+            <Image
+              src="/logo-footer.png"
+              alt="The AI Collective"
+              width={200}
+              height={200}
+              className="w-[200px] h-auto object-contain"
+            />
           </div>
         </div>
       </footer>

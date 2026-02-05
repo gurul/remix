@@ -18,8 +18,8 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Collective Seattle | The Frontier is Shared",
-  description: "The AI Collective turns builders into connected founders. Seattle's premier AI community.",
+  title: "AIC_SEA | About Us, Events, Get Involved, Partnerships",
+  description: "The AI Collective Seattle. About Us, Events, Get Involved, Partnerships.",
 };
 
 export default function RootLayout({
