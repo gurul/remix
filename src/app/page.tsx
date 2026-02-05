@@ -647,7 +647,7 @@ export default function Home() {
       {/* Thank You to Our Sponsors & Partners */}
       <section id="partnerships" className="py-32 px-6 md:px-12 max-w-[1400px] mx-auto border-t border-white/5">
         <div className="mb-16">
-          <Mono className="text-accent mb-6 block">Our_Friends</Mono>
+          <Mono className="text-accent mb-6 block">Close_Friends</Mono>
           <h2 className="text-5xl md:text-6xl font-serif italic mb-6">Thank You to Our Sponsors & Partners.</h2>
           <p className="text-secondary text-lg leading-relaxed max-w-2xl">
             We are grateful for the continued support of our mission and community. These organizations help make our events, research, and gatherings possible.
