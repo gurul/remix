@@ -17,7 +17,6 @@ import {
   X,
   Calendar,
   Users,
-  ExternalLink,
   MapPin,
   Clock,
   Linkedin
@@ -311,6 +310,13 @@ export default function Home() {
       bio: "Rachel is a Private Investments Analyst at Multi-Family Office Lenora Capital. She is a prior award-winning investigative journalist passionate about deep research and investing in great teams, and believes in bridging the gap between founders and funders through community. Outside of work, Rachel is a Global Shaper with the World Economic Forum and loves cooking, running, and writing.",
       img: "/rachel-kloepfer.png",
       linkedin: "https://www.linkedin.com/in/rachelkloepfer/"
+    },
+    {
+      name: "Keshav Ummat",
+      role: "STRATEGY LEAD",
+      bio: "Keshav is an Enterprise Account Executive at Glean, where he leads tech sales for customers in the PNW. Prior to Glean, he worked at AWS for 6 years and was also part of the founding team at Intently AI. He's deeply passionate about public speaking and community building, and was also raised here in Seattle! Outside of work, Keshav enjoys tennis, new food experiences and traveling the world!",
+      img: "/keshav.png",
+      linkedin: "https://www.linkedin.com/in/keshav-ummat-8418b4106/"
     }
   ];
 
@@ -346,9 +352,10 @@ export default function Home() {
             href="https://docs.google.com/forms/d/e/1FAIpQLScmUC8KSPhafE_8FZBUs2pNPJVkJkRl-E9eE2cE5b34RQ3BTQ/viewform"
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-accent text-black px-5 py-2 text-[9px] font-mono font-bold hover:bg-white transition-all uppercase tracking-[0.2em] shadow-[3px_3px_0px_0px_rgba(255,122,26,0.2)] inline-block"
+            className="inline-flex items-center gap-2 bg-accent text-black px-5 py-2 text-[9px] font-mono font-bold hover:bg-white transition-all uppercase tracking-[0.2em] shadow-[3px_3px_0px_0px_rgba(255,122,26,0.2)] group"
           >
             Apply_Member
+            <ArrowUpRight size={12} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </a>
           <button className="xl:hidden text-secondary" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -396,19 +403,19 @@ export default function Home() {
                 href="https://docs.google.com/forms/d/e/1FAIpQLScmUC8KSPhafE_8FZBUs2pNPJVkJkRl-E9eE2cE5b34RQ3BTQ/viewform?usp=header"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-4 bg-white/5 border border-white/10 px-8 py-5 hover:bg-white hover:text-black transition-all"
+                className="group flex items-center gap-4 bg-accent text-black border border-accent px-8 py-5 hover:bg-white hover:text-black hover:border-white transition-all"
               >
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em] font-bold">Join Our Chapter</span>
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
               <a 
                 href="https://docs.google.com/forms/d/e/1FAIpQLSelDyidSPMTyFagOEp7AYuRXH8-Wt8JgJqCwGnR_puhUScyJg/viewform?usp=header"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-4 border border-white/10 px-8 py-5 hover:border-accent transition-all"
+                className="group flex items-center gap-4 bg-accent text-black border border-accent px-8 py-5 hover:bg-white hover:text-black hover:border-white transition-all"
               >
-                <span className="font-mono text-[10px] uppercase tracking-[0.3em]">Partner With Us</span>
-                <ExternalLink size={14} className="text-secondary group-hover:text-accent" />
+                <span className="font-mono text-[10px] uppercase tracking-[0.3em] font-bold">Partner With Us</span>
+                <ArrowUpRight size={14} className="text-black group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
             </div>
           </div>
@@ -448,9 +455,9 @@ export default function Home() {
               href="https://www.aicollective.com/events"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-4 border border-white/10 px-8 py-5 text-[10px] font-mono uppercase tracking-[0.3em] text-secondary hover:text-accent hover:border-accent transition-all group"
+              className="inline-flex items-center gap-4 bg-accent text-black border border-accent px-8 py-5 text-[10px] font-mono font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-black hover:border-white transition-all group"
             >
-              See Global Events <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+              See Global Events <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </a>
           </div>
 
@@ -610,9 +617,10 @@ export default function Home() {
                 href="https://luma.com/user/aicollective"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block bg-white/5 border border-white/10 px-8 py-5 text-[10px] font-mono uppercase tracking-[0.3em] hover:bg-white hover:text-black transition-all"
+                className="inline-flex items-center gap-4 bg-accent text-black border border-accent px-8 py-5 text-[10px] font-mono font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-black hover:border-white transition-all group"
               >
                 Explore Our Archive
+                <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
             </div>
           </div>
@@ -694,10 +702,10 @@ export default function Home() {
             href="https://docs.google.com/forms/d/e/1FAIpQLSelDyidSPMTyFagOEp7AYuRXH8-Wt8JgJqCwGnR_puhUScyJg/viewform"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-4 bg-accent text-black px-8 py-5 text-[10px] font-mono font-bold uppercase tracking-[0.3em] hover:bg-white transition-all border-2 border-accent"
+            className="inline-flex items-center gap-4 bg-accent text-black px-8 py-5 text-[10px] font-mono font-bold uppercase tracking-[0.3em] hover:bg-white transition-all border-2 border-accent group"
           >
             Sponsor us
-            <ArrowUpRight size={14} />
+            <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </a>
         </div>
       </section>
@@ -749,17 +757,17 @@ export default function Home() {
               href="https://docs.google.com/forms/d/e/1FAIpQLSexvCAcYFJASap0tDcu29esoWj-56x87gcoUKj0HQfQ9GbczA/viewform?usp=header"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-accent p-10 flex flex-col group relative overflow-hidden border border-transparent hover:border-black/20 transition-colors text-black"
+              className="col-span-full bg-accent p-10 flex flex-col items-center text-center group relative overflow-hidden border border-transparent hover:border-black/20 transition-colors text-black"
             >
               <div className="absolute top-0 right-0 w-24 h-24 bg-black/5 -mr-12 -mt-12 rotate-45 group-hover:bg-black/10 transition-colors" />
               <h3 className="text-5xl md:text-6xl font-serif italic mb-6 text-black">You?</h3>
-              <p className="text-black text-lg leading-relaxed font-normal mb-8">
+              <p className="text-black text-lg leading-relaxed font-normal mb-8 max-w-xl">
                 We&apos;re always looking for volunteers to help organize events and shape the future of AI in Seattle.
               </p>
               <div className="mt-auto pt-6">
-                <span className="inline-flex items-center justify-center gap-2 w-full py-4 px-6 bg-black text-white text-base font-mono font-bold uppercase tracking-[0.2em] border-2 border-black group-hover:bg-white group-hover:text-black transition-colors">
+                <span className="inline-flex items-center justify-center gap-2 py-4 px-6 bg-black text-white text-base font-mono font-bold uppercase tracking-[0.2em] border-2 border-black group-hover:bg-white group-hover:text-black transition-colors">
                   Apply to volunteer
-                  <ArrowUpRight size={18} />
+                  <ArrowUpRight size={18} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </span>
               </div>
             </a>
@@ -780,9 +788,10 @@ export default function Home() {
             href="https://www.aicollective.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-black text-white px-12 py-6 text-xs font-mono font-bold uppercase tracking-[0.4em] hover:bg-white hover:text-black transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,0.15)]"
+            className="inline-flex items-center gap-4 bg-black text-white px-12 py-6 text-xs font-mono font-bold uppercase tracking-[0.4em] border-2 border-black hover:bg-white hover:text-black transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,0.15)] group"
           >
             ＼(＾O＾)／
+            <ArrowUpRight size={18} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </a>
         </div>
       </section>
