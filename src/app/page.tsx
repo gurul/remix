@@ -593,7 +593,7 @@ export default function Home() {
               href="https://www.aicollective.com/trust"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-4 text-[10px] font-mono uppercase tracking-[0.3em] text-white hover:text-accent transition-colors group"
+              className="flex items-center gap-4 text-[10px] font-mono uppercase tracking-[0.3em] text-accent border-b border-accent pb-1 hover:border-accent/80 transition-colors group"
             >
               Founding Perspective <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
             </a>
