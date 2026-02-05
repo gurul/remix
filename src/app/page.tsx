@@ -334,7 +334,7 @@ export default function Home() {
         <div className="flex items-center gap-12">
           <div className="font-serif italic text-xl tracking-tighter flex items-center gap-2 group cursor-pointer">
             <div className="w-4 h-4 bg-accent rotate-45 transition-transform group-hover:rotate-[135deg]" />
-            <span className="font-bold tracking-widest uppercase text-sm font-mono">AIC_SEA</span>
+            <span className="font-bold tracking-widest uppercase text-sm font-mono">AISEA</span>
           </div>
           <div className="hidden xl:flex gap-8 border-l border-white/10 pl-12">
             <a href="#about-us" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">About Us</a>
