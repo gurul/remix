@@ -626,17 +626,22 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-              <div key={i} className="aspect-square bg-white/5 border border-white/5 relative grayscale hover:grayscale-0 transition-all duration-700 overflow-hidden group">
+            {[
+              { src: "/gather-1.png", alt: "Community gathering with hands raised" },
+              { src: "/gather-2.png", alt: "Casual work session with food and laptops" },
+              { src: "/gather-3.png", alt: "Fireside chat panel discussion" },
+              { src: "/gather-4.png", alt: "Large event space with tables and presentations" }
+            ].map((image, i) => (
+              <div key={i} className="aspect-square bg-white/5 border border-white/5 relative overflow-hidden group">
                 <Image 
-                  src={`https://images.unsplash.com/photo-${1515187029135 + i}?auto=format&fit=crop&q=80&w=600`} 
-                  alt={`Event ${i}`} 
+                  src={image.src} 
+                  alt={image.alt} 
                   fill 
-                  className="object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000" 
+                  className="object-cover group-hover:scale-110 transition-all duration-1000" 
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-0 group-hover:opacity-80 transition-opacity" />
                 <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-                  <Mono className="text-white text-[8px]">Event_Fragment_0{i}</Mono>
+                  <Mono className="text-white text-[8px]">Event_Fragment_0{i+1}</Mono>
                 </div>
               </div>
             ))}
@@ -728,7 +733,7 @@ export default function Home() {
                 className="bg-[#0c0a09] p-10 flex flex-col group relative overflow-hidden block border border-transparent hover:border-accent/20 transition-colors"
               >
                 <div className="absolute top-0 right-0 w-24 h-24 bg-accent/5 -mr-12 -mt-12 rotate-45 group-hover:bg-accent/10 transition-colors" />
-                <div className="mb-8 relative w-16 h-16 grayscale group-hover:grayscale-0 transition-all duration-500 rounded-full overflow-hidden">
+                <div className="mb-8 relative w-16 h-16 rounded-full overflow-hidden">
                   <div className="absolute inset-0 border border-accent/20 -m-1 group-hover:m-0 transition-all rounded-full" />
                   <Image src={member.img} alt={member.name} width={64} height={64} className="object-cover w-full h-full" />
                 </div>
