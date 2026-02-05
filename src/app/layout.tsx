@@ -20,6 +20,9 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "AIC_SEA | About Us, Events, Get Involved, Partnerships",
   description: "The AI Collective Seattle. About Us, Events, Get Involved, Partnerships.",
+  icons: {
+    icon: "/icon.png",
+  },
 };
 
 export default function RootLayout({
