@@ -285,7 +285,7 @@ export default function Home() {
     },
     {
       name: "Gurucharan Lingamallu",
-      role: "NEWS/MEDIA CURATOR",
+      role: "TECHNICAL/NEWS LEAD",
       bio: "Guru is a Computer Science student at the University of Washington focused on human-centered technology. He's interested in how tools shape memory, agency, and ownership, and focuses on building systems grounded in trust.",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/gurucharan-lingamallu-062.png",
       linkedin: "https://www.linkedin.com/in/gurul/"
