@@ -566,7 +566,7 @@ export default function Home() {
                 </p>
               ) : (
                 <>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+                  <div className="flex flex-nowrap gap-4 overflow-x-auto overflow-y-hidden pb-2 -mx-6 px-6 md:mx-0 md:px-0 md:grid md:grid-cols-3 md:gap-8 md:overflow-visible scrollbar-hide snap-x snap-mandatory w-full">
                     <AnimatePresence mode="wait">
                       {pastEventsSlice.map((event, i) => (
                         <motion.a
@@ -578,10 +578,10 @@ export default function Home() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
                           transition={{ duration: 0.2 }}
-                          className="group border border-white/20 bg-white/[0.07] hover:border-accent/30 transition-all flex flex-col overflow-hidden w-full h-[440px] min-h-[440px]"
+                          className="group border border-white/20 bg-white/[0.07] hover:border-accent/30 transition-all flex flex-col overflow-hidden flex-shrink-0 w-[280px] min-w-[280px] h-[380px] min-h-[380px] snap-center md:w-full md:min-w-0 md:h-[440px] md:min-h-[440px]"
                         >
                           {event.imageUrl ? (
-                            <div className="relative w-full h-[180px] min-h-[180px] shrink-0 overflow-hidden bg-white/5">
+                            <div className="relative w-full h-[140px] min-h-[140px] md:h-[180px] md:min-h-[180px] shrink-0 overflow-hidden bg-white/5">
                               <Image
                                 src={event.imageUrl}
                                 alt={event.title}
@@ -591,7 +591,7 @@ export default function Home() {
                               <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-60" />
                             </div>
                           ) : (
-                            <div className="w-full h-[180px] min-h-[180px] shrink-0 bg-white/5" />
+                            <div className="w-full h-[140px] min-h-[140px] md:h-[180px] md:min-h-[180px] shrink-0 bg-white/5" />
                           )}
                           <div className="p-6 flex flex-col flex-grow min-h-0 overflow-hidden">
                             <div className="flex justify-between items-start gap-2 mb-3 shrink-0">
