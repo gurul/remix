@@ -1,6 +1,19 @@
 import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
+import { Redis } from "@upstash/redis";
+
+const EVENTS_KEY = "aic-events";
+
+function getRedis(): Redis | null {
+  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+    return new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    });
+  }
+  return null;
+}
 
 export interface Event {
   id: string;
@@ -40,7 +53,7 @@ interface LumaEventData {
 
 const EVENTS_FILE = path.join(process.cwd(), "src/data/events.json");
 
-async function readEvents(): Promise<EventsData> {
+async function readEventsFromFile(): Promise<EventsData> {
   try {
     const data = await fs.readFile(EVENTS_FILE, "utf-8");
     return JSON.parse(data);
@@ -49,7 +62,39 @@ async function readEvents(): Promise<EventsData> {
   }
 }
 
+async function readEvents(): Promise<EventsData> {
+  const redis = getRedis();
+  if (redis) {
+    try {
+      const stored = await redis.get<EventsData>(EVENTS_KEY);
+      if (stored && typeof stored === "object" && Array.isArray(stored.events)) {
+        return stored;
+      }
+    } catch {
+      // fall back to file
+    }
+    const fileData = await readEventsFromFile();
+    try {
+      await redis.set(EVENTS_KEY, fileData);
+    } catch {
+      // ignore seed failure
+    }
+    return fileData;
+  }
+  return readEventsFromFile();
+}
+
 async function writeEvents(data: EventsData): Promise<void> {
+  const redis = getRedis();
+  if (redis) {
+    try {
+      await redis.set(EVENTS_KEY, data);
+      return;
+    } catch (err) {
+      console.error("Redis set failed:", err);
+      throw err;
+    }
+  }
   await fs.writeFile(EVENTS_FILE, JSON.stringify(data, null, 2));
 }
 
@@ -246,7 +291,21 @@ export async function POST(request: Request) {
     }
 
     data.events.push(newEvent);
-    await writeEvents(data);
+    try {
+      await writeEvents(data);
+    } catch (writeErr) {
+      const code = writeErr && typeof writeErr === "object" && "code" in writeErr ? (writeErr as NodeJS.ErrnoException).code : "";
+      if (code === "EROFS" || (typeof (writeErr as Error).message === "string" && (writeErr as Error).message.includes("read-only file system"))) {
+        return NextResponse.json(
+          {
+            error:
+              "Adding events isn’t available in this environment (read-only). Add events by editing src/data/events.json and redeploying, or run the app locally (e.g. npm run dev) to use this form.",
+          },
+          { status: 503 }
+        );
+      }
+      throw writeErr;
+    }
     return NextResponse.json(newEvent, { status: 201 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
@@ -275,7 +334,21 @@ export async function DELETE(request: Request) {
     if (data.events.length === initialLength) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
-    await writeEvents(data);
+    try {
+      await writeEvents(data);
+    } catch (writeErr) {
+      const code = writeErr && typeof writeErr === "object" && "code" in writeErr ? (writeErr as NodeJS.ErrnoException).code : "";
+      if (code === "EROFS" || (typeof (writeErr as Error).message === "string" && (writeErr as Error).message.includes("read-only file system"))) {
+        return NextResponse.json(
+          {
+            error:
+              "Deleting events isn’t available in this environment (read-only). Edit src/data/events.json and redeploy, or run the app locally.",
+          },
+          { status: 503 }
+        );
+      }
+      throw writeErr;
+    }
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting event:", error);
