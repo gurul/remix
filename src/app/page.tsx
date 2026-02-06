@@ -613,6 +613,12 @@ export default function Home() {
                       </a>
                     ))}
                   </div>
+                  {pastEvents.length > 1 && (
+                    <p className="md:hidden mt-3 text-center text-[10px] font-mono text-secondary uppercase tracking-widest flex items-center justify-center gap-1.5">
+                      <span>Swipe for more</span>
+                      <ChevronRight size={12} className="opacity-70" aria-hidden />
+                    </p>
+                  )}
                   {/* Desktop: 3 at a time with Next/Prev */}
                   <div className="hidden md:block">
                     <div className="grid grid-cols-3 gap-8 w-full">
