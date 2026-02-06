@@ -217,6 +217,29 @@ export default function Home() {
   const [upcomingEvents, setUpcomingEvents] = useState<DisplayEvent[]>([]);
   const [pastEvents, setPastEvents] = useState<DisplayEvent[]>([]);
   const [eventsLoading, setEventsLoading] = useState(true);
+  const pastEventsScrollRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll past events row (infinite loop, requestAnimationFrame for smooth motion)
+  useEffect(() => {
+    if (pastEvents.length === 0) return;
+    const el = pastEventsScrollRef.current;
+    if (!el) return;
+    const pixelsPerSecond = 36;
+    let rafId = 0;
+    let lastTime = performance.now();
+    const tick = (now: number) => {
+      const dt = (now - lastTime) / 1000;
+      lastTime = now;
+      el.scrollLeft += pixelsPerSecond * dt;
+      const half = el.scrollWidth / 2;
+      if (el.scrollLeft >= half - 1) {
+        el.scrollLeft = 0;
+      }
+      rafId = requestAnimationFrame(tick);
+    };
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+  }, [pastEvents.length]);
 
   // Fetch events from API
   useEffect(() => {
@@ -331,7 +354,7 @@ export default function Home() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#0c0a09] text-[#fafaf9] selection:bg-accent/30 selection:text-accent relative overflow-x-hidden">
+    <main className="min-h-screen bg-[#0c0a09] text-[#fafaf9] selection:bg-accent/30 selection:text-accent relative">
       <div className="grain" />
       <div className="grid-bg fixed inset-0 pointer-events-none" />
 
@@ -545,52 +568,59 @@ export default function Home() {
                   No past events to show yet.
                 </p>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {pastEvents.map((event, i) => (
-                    <motion.a
-                      href={event.lumaUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      layout
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      key={`past-${i}`}
-                      className="group border border-white/20 bg-white/[0.07] hover:border-accent/30 transition-all flex flex-col h-full overflow-hidden"
-                    >
-                      {event.imageUrl && (
-                        <div className="relative w-full aspect-[16/9] overflow-hidden">
-                          <Image
-                            src={event.imageUrl}
-                            alt={event.title}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-60" />
-                        </div>
-                      )}
-                      <div className="p-8 flex flex-col flex-grow">
-                        <div className="flex justify-between items-start mb-6">
-                          <span className="text-[8px] font-mono border border-accent/40 text-accent px-2 py-1 uppercase tracking-widest">
-                            {event.type}
-                          </span>
-                          <span className="text-[9px] font-mono text-secondary">{event.ago}</span>
-                        </div>
-                        <h3 className="text-lg font-serif italic leading-snug mb-8 group-hover:text-accent transition-colors flex-grow text-white">
-                          {event.title}
-                        </h3>
-                        <div className="pt-6 border-t border-white/10 space-y-2">
-                          <div className="flex items-center gap-3 text-secondary font-mono text-[9px]">
-                            <Calendar size={10} className="text-accent/60" />
-                            {event.date}
+                <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
+                  <div
+                    ref={pastEventsScrollRef}
+                    className="w-full min-w-0 flex items-stretch gap-6 overflow-x-auto overflow-y-hidden py-2 pb-4 scrollbar-hide pl-6 md:pl-12 pr-6 md:pr-12"
+                  >
+                    {[...pastEvents, ...pastEvents].map((event, i) => (
+                      <motion.a
+                        href={event.lumaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        layout
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        key={`past-${i}`}
+                        className="group border border-white/20 bg-white/[0.07] hover:border-accent/30 transition-all flex flex-col overflow-hidden flex-shrink-0 w-[300px] min-w-[300px] max-w-[300px] h-[380px] min-h-[380px] max-h-[380px] snap-start"
+                      >
+                        {event.imageUrl ? (
+                          <div className="relative w-full h-[140px] min-h-[140px] shrink-0 overflow-hidden bg-white/5">
+                            <Image
+                              src={event.imageUrl}
+                              alt={event.title}
+                              fill
+                              className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-60" />
                           </div>
-                          <div className="flex items-center gap-3 text-secondary font-mono text-[9px]">
-                            <Clock size={10} className="text-accent/60" />
-                            {event.time}
+                        ) : (
+                          <div className="w-full h-[140px] min-h-[140px] shrink-0 bg-white/5" />
+                        )}
+                        <div className="p-6 flex flex-col flex-grow min-h-0 overflow-hidden">
+                          <div className="flex justify-between items-start gap-2 mb-3 shrink-0">
+                            <span className="text-[8px] font-mono border border-accent/40 text-accent px-2 py-0.5 uppercase tracking-widest">
+                              {event.type}
+                            </span>
+                            <span className="text-[9px] font-mono text-secondary shrink-0">{event.ago}</span>
+                          </div>
+                          <h3 className="text-base font-serif italic leading-snug mb-4 group-hover:text-accent transition-colors text-white line-clamp-2 shrink-0">
+                            {event.title}
+                          </h3>
+                          <div className="pt-4 mt-auto border-t border-white/10 space-y-1 shrink-0">
+                            <div className="flex items-center gap-2 text-secondary font-mono text-[9px]">
+                              <Calendar size={10} className="text-accent/60 shrink-0" />
+                              {event.date}
+                            </div>
+                            <div className="flex items-center gap-2 text-secondary font-mono text-[9px]">
+                              <Clock size={10} className="text-accent/60 shrink-0" />
+                              {event.time}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </motion.a>
-                  ))}
+                      </motion.a>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>

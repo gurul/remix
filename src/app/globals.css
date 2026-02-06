@@ -51,3 +51,12 @@
   background-image: radial-gradient(circle at 1px 1px, rgba(255, 122, 26, 0.05) 1px, transparent 0);
   background-size: 24px 24px;
 }
+
+/* Hide scrollbar while keeping scroll behavior */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
