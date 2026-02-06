@@ -32,6 +32,9 @@ const Mono = ({ children, className = "" }: { children: React.ReactNode; classNa
 // Accent orange for globe (matches #ff7a1a)
 const GLOBE_AMBER = [255 / 255, 122 / 255, 26 / 255] as [number, number, number];
 
+// Shared animation speed: event cards px/s and globe rotation use this (globe rad/frame = SPEED * 0.00004)
+const ANIMATION_SPEED = 36;
+
 const Globe = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -55,7 +58,7 @@ const Globe = () => {
       markers: [],
       onRender: (state) => {
         state.phi = phi;
-        phi += 0.0012;
+        phi -= ANIMATION_SPEED * 0.00004; /* clockwise, same rate as event cards */
       },
     });
 
@@ -225,7 +228,7 @@ export default function Home() {
     const el = pastEventsScrollRef.current;
     if (!el) return;
     let rafId = 0;
-    const pixelsPerSecond = 36;
+    const pixelsPerSecond = ANIMATION_SPEED;
     let lastTime = performance.now();
     const tick = (now: number) => {
       const dt = (now - lastTime) / 1000;
