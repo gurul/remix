@@ -219,21 +219,23 @@ export default function Home() {
   const [eventsLoading, setEventsLoading] = useState(true);
   const pastEventsScrollRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll past events row (infinite loop, requestAnimationFrame for smooth motion)
+  // Auto-scroll past events row (infinite loop); skip scroll on narrow viewports so touch works
   useEffect(() => {
     if (pastEvents.length === 0) return;
     const el = pastEventsScrollRef.current;
     if (!el) return;
-    const pixelsPerSecond = 36;
     let rafId = 0;
+    const pixelsPerSecond = 36;
     let lastTime = performance.now();
     const tick = (now: number) => {
       const dt = (now - lastTime) / 1000;
       lastTime = now;
-      el.scrollLeft += pixelsPerSecond * dt;
-      const half = el.scrollWidth / 2;
-      if (el.scrollLeft >= half - 1) {
-        el.scrollLeft = 0;
+      if (typeof window !== "undefined" && window.innerWidth >= 768) {
+        el.scrollLeft += pixelsPerSecond * dt;
+        const half = el.scrollWidth / 2;
+        if (el.scrollLeft >= half - 1) {
+          el.scrollLeft = 0;
+        }
       }
       rafId = requestAnimationFrame(tick);
     };
@@ -354,7 +356,7 @@ export default function Home() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#0c0a09] text-[#fafaf9] selection:bg-accent/30 selection:text-accent relative">
+    <main className="min-h-screen bg-[#0c0a09] text-[#fafaf9] selection:bg-accent/30 selection:text-accent relative overflow-x-hidden">
       <div className="grain" />
       <div className="grid-bg fixed inset-0 pointer-events-none" />
 
@@ -571,7 +573,7 @@ export default function Home() {
                 <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
                   <div
                     ref={pastEventsScrollRef}
-                    className="w-full min-w-0 flex items-stretch gap-6 overflow-x-auto overflow-y-hidden py-2 pb-4 scrollbar-hide pl-6 md:pl-12 pr-6 md:pr-12"
+                    className="w-full min-w-0 flex items-stretch gap-6 overflow-x-auto overflow-y-hidden py-2 pb-4 scrollbar-hide pl-6 md:pl-12 pr-6 md:pr-12 touch-pan-x"
                   >
                     {[...pastEvents, ...pastEvents].map((event, i) => (
                       <motion.a
