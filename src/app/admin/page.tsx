@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Trash2, Plus, ExternalLink, Calendar, Loader2 } from "lucide-react";
+import { Trash2, Plus, ExternalLink, Calendar, Loader2, Lock } from "lucide-react";
+
+const ADMIN_AUTH_KEY = "admin_authed";
 
 interface Event {
   id: string;
@@ -28,6 +30,11 @@ const EVENT_TYPES = [
 ] as const;
 
 export default function AdminPage() {
+  const [authenticated, setAuthenticated] = useState<boolean | null>(null);
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+
   const [events, setEvents] = useState<Event[]>([]);
   const [lumaUrl, setLumaUrl] = useState("");
   const [eventType, setEventType] = useState<string>("Other");
@@ -35,10 +42,40 @@ export default function AdminPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Fetch events on mount
+  // Check session on mount (client-only)
   useEffect(() => {
-    fetchEvents();
+    setAuthenticated(typeof window !== "undefined" && localStorage.getItem(ADMIN_AUTH_KEY) === "1");
   }, []);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginLoading(true);
+    setLoginError("");
+    try {
+      const res = await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setLoginError(data.error || "Invalid password");
+        return;
+      }
+      if (typeof window !== "undefined") localStorage.setItem(ADMIN_AUTH_KEY, "1");
+      setAuthenticated(true);
+      setPassword("");
+    } catch {
+      setLoginError("Something went wrong");
+    } finally {
+      setLoginLoading(false);
+    }
+  };
+
+  // Fetch events on mount (only when authenticated)
+  useEffect(() => {
+    if (authenticated) fetchEvents();
+  }, [authenticated]);
 
   const fetchEvents = async () => {
     try {
@@ -125,6 +162,65 @@ export default function AdminPage() {
     if (aUpcoming !== bUpcoming) return aUpcoming ? -1 : 1;
     return new Date(b.startAt).getTime() - new Date(a.startAt).getTime();
   });
+
+  // Still checking session
+  if (authenticated === null) {
+    return (
+      <main className="min-h-screen bg-[#0c0a09] text-[#fafaf9] flex items-center justify-center p-8">
+        <Loader2 className="animate-spin text-[#f59e0b]" size={32} />
+      </main>
+    );
+  }
+
+  // Login form
+  if (!authenticated) {
+    return (
+      <main className="min-h-screen bg-[#0c0a09] text-[#fafaf9] flex items-center justify-center p-8">
+        <div className="w-full max-w-sm">
+          <div className="bg-white/5 border border-white/10 p-8">
+            <div className="flex items-center gap-3 mb-6">
+              <Lock className="text-[#f59e0b]" size={28} />
+              <h1 className="text-2xl font-serif italic">Admin</h1>
+            </div>
+            <p className="text-[#a8a29e] font-mono text-xs uppercase tracking-widest mb-6">
+              Enter password to continue
+            </p>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                required
+                autoFocus
+                className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white placeholder-white/30 font-mono text-sm focus:border-[#f59e0b] focus:outline-none"
+              />
+              {loginError && (
+                <p className="text-red-400 text-xs font-mono">{loginError}</p>
+              )}
+              <button
+                type="submit"
+                disabled={loginLoading}
+                className="w-full bg-[#f59e0b] text-black py-3 text-xs font-mono font-bold uppercase tracking-widest hover:bg-white transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {loginLoading ? (
+                  <Loader2 size={14} className="animate-spin" />
+                ) : (
+                  "Log in"
+                )}
+              </button>
+            </form>
+          </div>
+          <a
+            href="/"
+            className="block mt-6 text-center text-[#a8a29e] hover:text-[#f59e0b] font-mono text-xs uppercase tracking-widest transition-colors"
+          >
+            ← Back to Homepage
+          </a>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-[#0c0a09] text-[#fafaf9] p-8">
