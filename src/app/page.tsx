@@ -566,59 +566,108 @@ export default function Home() {
                 </p>
               ) : (
                 <>
-                  <div className="flex flex-nowrap gap-4 overflow-x-auto overflow-y-hidden pb-2 -mx-6 px-6 md:mx-0 md:px-0 md:grid md:grid-cols-3 md:gap-8 md:overflow-visible scrollbar-hide snap-x snap-mandatory w-full">
-                    <AnimatePresence mode="wait">
-                      {pastEventsSlice.map((event, i) => (
-                        <motion.a
-                          href={event.lumaUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          key={`past-${pastEventsPage}-${i}`}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.2 }}
-                          className="group border border-white/20 bg-white/[0.07] hover:border-accent/30 transition-all flex flex-col overflow-hidden flex-shrink-0 w-[280px] min-w-[280px] h-[380px] min-h-[380px] snap-center md:w-full md:min-w-0 md:h-[440px] md:min-h-[440px]"
-                        >
-                          {event.imageUrl ? (
-                            <div className="relative w-full h-[140px] min-h-[140px] md:h-[180px] md:min-h-[180px] shrink-0 overflow-hidden bg-white/5">
-                              <Image
-                                src={event.imageUrl}
-                                alt={event.title}
-                                fill
-                                className="object-cover group-hover:scale-105 transition-transform duration-500"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-60" />
+                  {/* Mobile: all past events in one horizontal scroll, no buttons */}
+                  <div className="flex flex-nowrap gap-4 overflow-x-auto overflow-y-hidden pb-2 -mx-6 px-6 scrollbar-hide snap-x snap-mandatory w-full md:hidden">
+                    {pastEvents.map((event, i) => (
+                      <a
+                        href={event.lumaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        key={`past-mobile-${i}`}
+                        className="group border border-white/20 bg-white/[0.07] hover:border-accent/30 transition-all flex flex-col overflow-hidden flex-shrink-0 w-[280px] min-w-[280px] h-[380px] min-h-[380px] snap-center"
+                      >
+                        {event.imageUrl ? (
+                          <div className="relative w-full h-[140px] min-h-[140px] shrink-0 overflow-hidden bg-white/5">
+                            <Image
+                              src={event.imageUrl}
+                              alt={event.title}
+                              fill
+                              className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-60" />
+                          </div>
+                        ) : (
+                          <div className="w-full h-[140px] min-h-[140px] shrink-0 bg-white/5" />
+                        )}
+                        <div className="p-6 flex flex-col flex-grow min-h-0 overflow-hidden">
+                          <div className="flex justify-between items-start gap-2 mb-3 shrink-0">
+                            <span className="text-[8px] font-mono border border-accent/40 text-accent px-2 py-0.5 uppercase tracking-widest">
+                              {event.type}
+                            </span>
+                            <span className="text-[9px] font-mono text-secondary shrink-0">{event.ago}</span>
+                          </div>
+                          <h3 className="text-base font-serif italic leading-snug mb-4 group-hover:text-accent transition-colors text-white line-clamp-2 shrink-0">
+                            {event.title}
+                          </h3>
+                          <div className="pt-4 mt-auto border-t border-white/10 space-y-1 shrink-0">
+                            <div className="flex items-center gap-2 text-secondary font-mono text-[9px]">
+                              <Calendar size={10} className="text-accent/60 shrink-0" />
+                              {event.date}
                             </div>
-                          ) : (
-                            <div className="w-full h-[140px] min-h-[140px] md:h-[180px] md:min-h-[180px] shrink-0 bg-white/5" />
-                          )}
-                          <div className="p-6 flex flex-col flex-grow min-h-0 overflow-hidden">
-                            <div className="flex justify-between items-start gap-2 mb-3 shrink-0">
-                              <span className="text-[8px] font-mono border border-accent/40 text-accent px-2 py-0.5 uppercase tracking-widest">
-                                {event.type}
-                              </span>
-                              <span className="text-[9px] font-mono text-secondary shrink-0">{event.ago}</span>
-                            </div>
-                            <h3 className="text-base font-serif italic leading-snug mb-4 group-hover:text-accent transition-colors text-white line-clamp-2 shrink-0">
-                              {event.title}
-                            </h3>
-                            <div className="pt-4 mt-auto border-t border-white/10 space-y-1 shrink-0">
-                              <div className="flex items-center gap-2 text-secondary font-mono text-[9px]">
-                                <Calendar size={10} className="text-accent/60 shrink-0" />
-                                {event.date}
-                              </div>
-                              <div className="flex items-center gap-2 text-secondary font-mono text-[9px]">
-                                <Clock size={10} className="text-accent/60 shrink-0" />
-                                {event.time}
-                              </div>
+                            <div className="flex items-center gap-2 text-secondary font-mono text-[9px]">
+                              <Clock size={10} className="text-accent/60 shrink-0" />
+                              {event.time}
                             </div>
                           </div>
-                        </motion.a>
-                      ))}
-                    </AnimatePresence>
+                        </div>
+                      </a>
+                    ))}
                   </div>
-                  <div className="flex items-center justify-center gap-4 mt-8">
+                  {/* Desktop: 3 at a time with Next/Prev */}
+                  <div className="hidden md:block">
+                    <div className="grid grid-cols-3 gap-8 w-full">
+                      <AnimatePresence mode="wait">
+                        {pastEventsSlice.map((event, i) => (
+                          <motion.a
+                            href={event.lumaUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            key={`past-${pastEventsPage}-${i}`}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2 }}
+                            className="group border border-white/20 bg-white/[0.07] hover:border-accent/30 transition-all flex flex-col overflow-hidden w-full h-[440px] min-h-[440px]"
+                          >
+                            {event.imageUrl ? (
+                              <div className="relative w-full h-[180px] min-h-[180px] shrink-0 overflow-hidden bg-white/5">
+                                <Image
+                                  src={event.imageUrl}
+                                  alt={event.title}
+                                  fill
+                                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-60" />
+                              </div>
+                            ) : (
+                              <div className="w-full h-[180px] min-h-[180px] shrink-0 bg-white/5" />
+                            )}
+                            <div className="p-6 flex flex-col flex-grow min-h-0 overflow-hidden">
+                              <div className="flex justify-between items-start gap-2 mb-3 shrink-0">
+                                <span className="text-[8px] font-mono border border-accent/40 text-accent px-2 py-0.5 uppercase tracking-widest">
+                                  {event.type}
+                                </span>
+                                <span className="text-[9px] font-mono text-secondary shrink-0">{event.ago}</span>
+                              </div>
+                              <h3 className="text-base font-serif italic leading-snug mb-4 group-hover:text-accent transition-colors text-white line-clamp-2 shrink-0">
+                                {event.title}
+                              </h3>
+                              <div className="pt-4 mt-auto border-t border-white/10 space-y-1 shrink-0">
+                                <div className="flex items-center gap-2 text-secondary font-mono text-[9px]">
+                                  <Calendar size={10} className="text-accent/60 shrink-0" />
+                                  {event.date}
+                                </div>
+                                <div className="flex items-center gap-2 text-secondary font-mono text-[9px]">
+                                  <Clock size={10} className="text-accent/60 shrink-0" />
+                                  {event.time}
+                                </div>
+                              </div>
+                            </div>
+                          </motion.a>
+                        ))}
+                      </AnimatePresence>
+                    </div>
+                    <div className="flex items-center justify-center gap-4 mt-8">
                     <button
                       type="button"
                       onClick={() => setPastEventsPage((p) => Math.max(0, p - 1))}
@@ -647,6 +696,7 @@ export default function Home() {
                       Next
                       <ChevronRight size={14} />
                     </button>
+                    </div>
                   </div>
                 </>
               )}
