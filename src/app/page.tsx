@@ -564,7 +564,7 @@ export default function Home() {
           {/* Past Events - always show section when done loading */}
           {!eventsLoading && (
             <div id="past-events" className="mt-24 pt-16 border-t border-white/10">
-              <Mono className="text-accent mb-4 block">Archive</Mono>
+              <Mono className="text-accent mb-4 block">Explore_Archive</Mono>
               <h2 className="text-5xl md:text-6xl font-serif italic mb-10 text-white">
                 Past Events.
               </h2>
@@ -727,7 +727,7 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-4 bg-accent text-black border border-accent px-8 py-5 text-[10px] font-mono font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-black hover:border-white transition-all group"
               >
-                Explore Our Archive
+                Read Newsletter
                 <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
             </div>
