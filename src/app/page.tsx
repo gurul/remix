@@ -10,6 +10,7 @@ import {
   Database,
   Layers,
   ChevronRight,
+  ChevronLeft,
   Zap,
   Shield,
   Search,
@@ -34,6 +35,8 @@ const GLOBE_AMBER = [255 / 255, 122 / 255, 26 / 255] as [number, number, number]
 
 // Shared animation speed: event cards px/s and globe rotation use this (globe rad/frame = SPEED * 0.00004)
 const ANIMATION_SPEED = 36 * 0.6; // 60% of original
+
+const PAST_EVENTS_PAGE_SIZE = 3;
 
 const Globe = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -177,8 +180,14 @@ function formatEventTime(startAt: string, endAt?: string): string {
 function getRelativeTime(dateStr: string): string {
   const date = new Date(dateStr);
   const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  // Compare calendar days in local time so "yesterday 3 PM" shows "Yesterday" not "Today"
+  const toLocalDate = (d: Date) => {
+    const copy = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    return copy.getTime();
+  };
+  const dateDay = toLocalDate(date);
+  const todayStart = toLocalDate(now);
+  const diffDays = Math.round((todayStart - dateDay) / (1000 * 60 * 60 * 24));
 
   if (diffDays < 0) {
     const futureDays = Math.abs(diffDays);
@@ -220,31 +229,14 @@ export default function Home() {
   const [upcomingEvents, setUpcomingEvents] = useState<DisplayEvent[]>([]);
   const [pastEvents, setPastEvents] = useState<DisplayEvent[]>([]);
   const [eventsLoading, setEventsLoading] = useState(true);
-  const pastEventsScrollRef = useRef<HTMLDivElement>(null);
+  const [pastEventsPage, setPastEventsPage] = useState(0);
 
-  // Auto-scroll past events row (infinite loop); skip scroll on narrow viewports so touch works
-  useEffect(() => {
-    if (pastEvents.length === 0) return;
-    const el = pastEventsScrollRef.current;
-    if (!el) return;
-    let rafId = 0;
-    const pixelsPerSecond = ANIMATION_SPEED;
-    let lastTime = performance.now();
-    const tick = (now: number) => {
-      const dt = (now - lastTime) / 1000;
-      lastTime = now;
-      if (typeof window !== "undefined" && window.innerWidth >= 768) {
-        el.scrollLeft += pixelsPerSecond * dt;
-        const half = el.scrollWidth / 2;
-        if (el.scrollLeft >= half - 1) {
-          el.scrollLeft = 0;
-        }
-      }
-      rafId = requestAnimationFrame(tick);
-    };
-    rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
-  }, [pastEvents.length]);
+  const pastEventsSlice = pastEvents.slice(
+    pastEventsPage * PAST_EVENTS_PAGE_SIZE,
+    pastEventsPage * PAST_EVENTS_PAGE_SIZE + PAST_EVENTS_PAGE_SIZE
+  );
+  const hasNextPast = (pastEventsPage + 1) * PAST_EVENTS_PAGE_SIZE < pastEvents.length;
+  const hasPrevPast = pastEventsPage > 0;
 
   // Fetch events from API
   useEffect(() => {
@@ -561,7 +553,7 @@ export default function Home() {
             </div>
           )}
 
-          {/* Past Events - always show section when done loading */}
+          {/* Past Events - 3 at a time with Next/Prev */}
           {!eventsLoading && (
             <div id="past-events" className="mt-24 pt-16 border-t border-white/10">
               <Mono className="text-accent mb-4 block">Explore_Archive</Mono>
@@ -573,60 +565,90 @@ export default function Home() {
                   No past events to show yet.
                 </p>
               ) : (
-                <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
-                  <div
-                    ref={pastEventsScrollRef}
-                    className="w-full min-w-0 flex items-stretch gap-6 overflow-x-auto overflow-y-hidden py-2 pb-4 scrollbar-hide pl-6 md:pl-12 pr-6 md:pr-12 touch-pan-x"
-                  >
-                    {[...pastEvents, ...pastEvents].map((event, i) => (
-                      <motion.a
-                        href={event.lumaUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        layout
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        key={`past-${i}`}
-                        className="group border border-white/20 bg-white/[0.07] hover:border-accent/30 transition-all flex flex-col overflow-hidden flex-shrink-0 w-[300px] min-w-[300px] max-w-[300px] h-[380px] min-h-[380px] max-h-[380px] snap-start"
-                      >
-                        {event.imageUrl ? (
-                          <div className="relative w-full h-[140px] min-h-[140px] shrink-0 overflow-hidden bg-white/5">
-                            <Image
-                              src={event.imageUrl}
-                              alt={event.title}
-                              fill
-                              className="object-cover group-hover:scale-105 transition-transform duration-500"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-60" />
-                          </div>
-                        ) : (
-                          <div className="w-full h-[140px] min-h-[140px] shrink-0 bg-white/5" />
-                        )}
-                        <div className="p-6 flex flex-col flex-grow min-h-0 overflow-hidden">
-                          <div className="flex justify-between items-start gap-2 mb-3 shrink-0">
-                            <span className="text-[8px] font-mono border border-accent/40 text-accent px-2 py-0.5 uppercase tracking-widest">
-                              {event.type}
-                            </span>
-                            <span className="text-[9px] font-mono text-secondary shrink-0">{event.ago}</span>
-                          </div>
-                          <h3 className="text-base font-serif italic leading-snug mb-4 group-hover:text-accent transition-colors text-white line-clamp-2 shrink-0">
-                            {event.title}
-                          </h3>
-                          <div className="pt-4 mt-auto border-t border-white/10 space-y-1 shrink-0">
-                            <div className="flex items-center gap-2 text-secondary font-mono text-[9px]">
-                              <Calendar size={10} className="text-accent/60 shrink-0" />
-                              {event.date}
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+                    <AnimatePresence mode="wait">
+                      {pastEventsSlice.map((event, i) => (
+                        <motion.a
+                          href={event.lumaUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          key={`past-${pastEventsPage}-${i}`}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.2 }}
+                          className="group border border-white/20 bg-white/[0.07] hover:border-accent/30 transition-all flex flex-col overflow-hidden w-full h-[440px] min-h-[440px]"
+                        >
+                          {event.imageUrl ? (
+                            <div className="relative w-full h-[180px] min-h-[180px] shrink-0 overflow-hidden bg-white/5">
+                              <Image
+                                src={event.imageUrl}
+                                alt={event.title}
+                                fill
+                                className="object-cover group-hover:scale-105 transition-transform duration-500"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-60" />
                             </div>
-                            <div className="flex items-center gap-2 text-secondary font-mono text-[9px]">
-                              <Clock size={10} className="text-accent/60 shrink-0" />
-                              {event.time}
+                          ) : (
+                            <div className="w-full h-[180px] min-h-[180px] shrink-0 bg-white/5" />
+                          )}
+                          <div className="p-6 flex flex-col flex-grow min-h-0 overflow-hidden">
+                            <div className="flex justify-between items-start gap-2 mb-3 shrink-0">
+                              <span className="text-[8px] font-mono border border-accent/40 text-accent px-2 py-0.5 uppercase tracking-widest">
+                                {event.type}
+                              </span>
+                              <span className="text-[9px] font-mono text-secondary shrink-0">{event.ago}</span>
+                            </div>
+                            <h3 className="text-base font-serif italic leading-snug mb-4 group-hover:text-accent transition-colors text-white line-clamp-2 shrink-0">
+                              {event.title}
+                            </h3>
+                            <div className="pt-4 mt-auto border-t border-white/10 space-y-1 shrink-0">
+                              <div className="flex items-center gap-2 text-secondary font-mono text-[9px]">
+                                <Calendar size={10} className="text-accent/60 shrink-0" />
+                                {event.date}
+                              </div>
+                              <div className="flex items-center gap-2 text-secondary font-mono text-[9px]">
+                                <Clock size={10} className="text-accent/60 shrink-0" />
+                                {event.time}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </motion.a>
-                    ))}
+                        </motion.a>
+                      ))}
+                    </AnimatePresence>
                   </div>
-                </div>
+                  <div className="flex items-center justify-center gap-4 mt-8">
+                    <button
+                      type="button"
+                      onClick={() => setPastEventsPage((p) => Math.max(0, p - 1))}
+                      disabled={!hasPrevPast}
+                      className="font-mono text-[10px] uppercase tracking-widest text-accent hover:text-white disabled:opacity-40 disabled:pointer-events-none flex items-center gap-1 transition-colors"
+                      aria-label="Previous 3 past events"
+                    >
+                      <ChevronLeft size={14} />
+                      Previous
+                    </button>
+                    <span className="font-mono text-[9px] text-secondary uppercase tracking-widest">
+                      {pastEvents.length === 0
+                        ? "0 of 0"
+                        : `${pastEventsPage * PAST_EVENTS_PAGE_SIZE + 1}–${Math.min(
+                            pastEventsPage * PAST_EVENTS_PAGE_SIZE + pastEventsSlice.length,
+                            pastEvents.length
+                          )} of ${pastEvents.length}`}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setPastEventsPage((p) => p + 1)}
+                      disabled={!hasNextPast}
+                      className="font-mono text-[10px] uppercase tracking-widest text-accent hover:text-white disabled:opacity-40 disabled:pointer-events-none flex items-center gap-1 transition-colors"
+                      aria-label="Next 3 past events"
+                    >
+                      Next
+                      <ChevronRight size={14} />
+                    </button>
+                  </div>
+                </>
               )}
             </div>
           )}
