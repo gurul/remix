@@ -123,30 +123,46 @@ function parseEventData(html: string, url: string): LumaEventData {
 
 async function fetchLumaEvent(url: string): Promise<LumaEventData> {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 15000);
-  let fetchUrl = url;
-  if (url.includes("lu.ma/")) fetchUrl = url.replace("lu.ma/", "luma.com/");
+  const timeoutId = setTimeout(() => controller.abort(), 20000);
+
+  // Use URL as-is (luma.com or lu.ma) so we hit the same page the user sees
+  const fetchUrl = url.trim();
 
   try {
     const response = await fetch(fetchUrl, {
       headers: {
         "User-Agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        Accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
         "Accept-Language": "en-US,en;q=0.9",
         "Cache-Control": "no-cache",
+        Referer: "https://luma.com/",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "none",
+        "Upgrade-Insecure-Requests": "1",
       },
       signal: controller.signal,
       redirect: "follow",
     });
     clearTimeout(timeoutId);
-    if (!response.ok) throw new Error(`Failed to fetch Lu.ma page: ${response.status}`);
+
+    if (!response.ok) {
+      throw new Error(`Lu.ma returned ${response.status} ${response.statusText}`);
+    }
+
     const html = await response.text();
+    if (!html || html.length < 500) {
+      throw new Error("Lu.ma returned an empty or invalid page");
+    }
+
     return parseEventData(html, url);
   } catch (error) {
     clearTimeout(timeoutId);
-    if (error instanceof Error && error.name === "AbortError")
-      throw new Error("Request timed out after 15 seconds");
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error("Request timed out after 20 seconds");
+    }
     throw error;
   }
 }
@@ -168,8 +184,16 @@ export async function GET() {
 // POST - Add a new event (fetch from Lu.ma, save to JSON)
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { lumaUrl, type } = body as { lumaUrl?: string; type?: string };
+    let body: { lumaUrl?: string; type?: string };
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid request body. Expected JSON." },
+        { status: 400 }
+      );
+    }
+    const { lumaUrl, type } = body;
 
     if (!lumaUrl) {
       return NextResponse.json(
@@ -188,9 +212,10 @@ export async function POST(request: Request) {
     try {
       lumaData = await fetchLumaEvent(lumaUrl);
     } catch (err) {
+      const message = err instanceof Error ? err.message : "Unknown error";
       console.error("Error fetching Lu.ma event:", err);
       return NextResponse.json(
-        { error: "Failed to fetch event from Lu.ma. Please check the URL." },
+        { error: `Lu.ma fetch failed: ${message}. Check the URL or try again.` },
         { status: 400 }
       );
     }
@@ -224,9 +249,10 @@ export async function POST(request: Request) {
     await writeEvents(data);
     return NextResponse.json(newEvent, { status: 201 });
   } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
     console.error("Error adding event:", error);
     return NextResponse.json(
-      { error: "Failed to add event" },
+      { error: `Failed to add event: ${message}` },
       { status: 500 }
     );
   }
