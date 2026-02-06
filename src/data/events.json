@@ -29,6 +29,21 @@
       ],
       "type": "Forum",
       "addedAt": "2026-02-02T07:24:19.436Z"
+    },
+    {
+      "id": "548ef5ed-5374-4a5b-90eb-5ea9b441a4ee",
+      "lumaUrl": "https://luma.com/seattle-forum",
+      "title": "🧠 GenAI Collective x Madrona ☔ Seattle Frontier Technologies Forum",
+      "description": "We’re partnering with Madrona to bring the GenAI Collective to Seattle for the very first time!\nSeattle isn’t just a city; it’s a powerhouse of AI innovation, home to tech giants like Microsoft and Amazon that are pushing the boundaries of what’s possible with AI. With a vibrant mix of AI companies, research institutions, and top-tier talent, Seattle has become a key hub for AI. That’s why the GenAI Collective is so excited to launch here – join us as we launch the community that brings together the brightest minds across disciplines to shape the future of AI.\nWe welcome you to a beautiful downtown waterfront venue where we’ll be deep-diving on the following four topics:\nAI & the Physical World: Bridging Digital and Physical Applications\nScaling AI: Cloud Infrastructure and Enterprise Integration\nFrom Lab to Market: Accelerating AI Research to Real-World Deployment\nThe role of data: Balancing its Power with its Effective Use\nDuring this small, intimate forum, you’ll have the chance to meet with Seattle’s top emerging AI technologists and discuss the above topics in depth. In particular, we’ll be providing you with structured discussion materials and will encourage you to ideate on new ideas together.\nAs always, food, drink, engaging conversation, and incredible company will all be provided!\nFollowing the Forum, there will be a cocktail welcome reception from 5:00pm - 6:30pm for the 2024 Intelligent Applications Summit kick-off. This summit is sponsored by Madrona, AWS, Microsoft, and others. You can read more about the event and formally request an invite online. Due to space constraints, this Forum event does not guarantee admission to the 10/2 IA Summit, and only includes admission to the 10/1 cocktail welcome reception.\nPlease be advised: Unfortunately, space is very limited at these community events and we can not always accept everyone we would like to. If you are not accepted to this event, please keep applying! We appreciate your application tremendously and we are looking forward to seeing you at a future event very soon!\n\n\nThe GenAI Collective is a community of 20,000+ founders, researchers, operators, and investors representing the global forum for AI and technological progress. Through events, workshops, and online forums, members foster relationships and collaborate on challenging problems to define the future of technology.\nMadrona is a Seattle-based venture capital firm with nearly 30 years of experience investing in early-stage technology companies. Madrona partners with founders from day one, providing long-term support to build innovative, industry-leading businesses for the long run. The firm has more than $3 billion under management, and was an early investor in companies such as Amazon, Snowflake, UIPath, Rover, Redfin, and Smartsheet. Rooted in the Pacific Northwest, Madrona also backs companies across the country, focusing on sectors such as AI, intelligent applications, and life sciences.",
+      "startAt": "2024-10-01T15:30:00.000-07:00",
+      "endAt": "2024-10-01T17:30:00.000-07:00",
+      "timezone": "America/Los_Angeles",
+      "location": "Seattle, Washington",
+      "imageUrl": [
+        "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=2,anim=false,background=white,quality=75,width=500,height=500/event-covers/ay/310716e3-0373-4376-88a0-d12bccee9324"
+      ],
+      "type": "Forum",
+      "addedAt": "2026-02-06T01:45:33.846Z"
     }
   ]
 }

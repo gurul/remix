@@ -27,6 +27,17 @@ interface EventsData {
   events: Event[];
 }
 
+interface LumaEventData {
+  title: string;
+  description?: string;
+  startAt?: string;
+  endAt?: string;
+  timezone?: string;
+  location?: string;
+  imageUrl?: string;
+  lumaUrl: string;
+}
+
 const EVENTS_FILE = path.join(process.cwd(), "src/data/events.json");
 
 async function readEvents(): Promise<EventsData> {
@@ -35,6 +46,108 @@ async function readEvents(): Promise<EventsData> {
     return JSON.parse(data);
   } catch {
     return { events: [] };
+  }
+}
+
+async function writeEvents(data: EventsData): Promise<void> {
+  await fs.writeFile(EVENTS_FILE, JSON.stringify(data, null, 2));
+}
+
+function extractMetaContent(html: string, attribute: string): string {
+  const regex = new RegExp(
+    `<meta[^>]*${attribute}[^>]*content="([^"]*)"`,
+    "i"
+  );
+  const altRegex = new RegExp(
+    `<meta[^>]*content="([^"]*)"[^>]*${attribute}`,
+    "i"
+  );
+  const match = html.match(regex) || html.match(altRegex);
+  return match ? match[1] : "";
+}
+
+function parseEventData(html: string, url: string): LumaEventData {
+  const data: LumaEventData = {
+    title: "",
+    lumaUrl: url,
+  };
+
+  const ogTitle = extractMetaContent(html, 'property="og:title"');
+  const ogDescription = extractMetaContent(html, 'property="og:description"');
+  const ogImage = extractMetaContent(html, 'property="og:image"');
+  const metaTitle = extractMetaContent(html, 'name="title"');
+  const metaDescription = extractMetaContent(html, 'name="description"');
+
+  const jsonLdMatch = html.match(
+    /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/i
+  );
+
+  if (jsonLdMatch) {
+    try {
+      const jsonLd = JSON.parse(jsonLdMatch[1]);
+      const eventSchema = Array.isArray(jsonLd)
+        ? jsonLd.find((item: { "@type"?: string }) => item["@type"] === "Event")
+        : (jsonLd as { "@type"?: string })["@type"] === "Event"
+          ? jsonLd
+          : null;
+
+      if (eventSchema && typeof eventSchema === "object") {
+        const s = eventSchema as Record<string, unknown>;
+        data.title = (s.name as string) || data.title;
+        data.description = (s.description as string) || data.description;
+        data.startAt = (s.startDate as string) || data.startAt;
+        data.endAt = (s.endDate as string) || data.endAt;
+        data.imageUrl = (s.image as string) || data.imageUrl;
+        if (s.location) {
+          const loc = s.location as Record<string, unknown> | string;
+          if (typeof loc === "string") data.location = loc;
+          else if (loc && typeof loc === "object" && loc.name)
+            data.location = `${loc.name}${(loc as { address?: { streetAddress?: string } }).address?.streetAddress ? `, ${(loc as { address: { streetAddress: string } }).address.streetAddress}` : ""}`;
+        }
+      }
+    } catch {
+      // continue with meta tags
+    }
+  }
+
+  data.title = data.title || ogTitle || metaTitle || "Untitled Event";
+  data.description = data.description || ogDescription || metaDescription;
+  data.imageUrl = data.imageUrl || ogImage;
+  if (!data.startAt) {
+    const dateMatch = html.match(/datetime="([^"]+)"/i);
+    if (dateMatch) data.startAt = dateMatch[1];
+  }
+  data.timezone = data.timezone || "America/Los_Angeles";
+  return data;
+}
+
+async function fetchLumaEvent(url: string): Promise<LumaEventData> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
+  let fetchUrl = url;
+  if (url.includes("lu.ma/")) fetchUrl = url.replace("lu.ma/", "luma.com/");
+
+  try {
+    const response = await fetch(fetchUrl, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Cache-Control": "no-cache",
+      },
+      signal: controller.signal,
+      redirect: "follow",
+    });
+    clearTimeout(timeoutId);
+    if (!response.ok) throw new Error(`Failed to fetch Lu.ma page: ${response.status}`);
+    const html = await response.text();
+    return parseEventData(html, url);
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (error instanceof Error && error.name === "AbortError")
+      throw new Error("Request timed out after 15 seconds");
+    throw error;
   }
 }
 
@@ -47,6 +160,101 @@ export async function GET() {
     console.error("Error reading events:", error);
     return NextResponse.json(
       { error: "Failed to read events", events: [] },
+      { status: 500 }
+    );
+  }
+}
+
+// POST - Add a new event (fetch from Lu.ma, save to JSON)
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const { lumaUrl, type } = body as { lumaUrl?: string; type?: string };
+
+    if (!lumaUrl) {
+      return NextResponse.json(
+        { error: "Lu.ma URL is required" },
+        { status: 400 }
+      );
+    }
+    if (!lumaUrl.includes("lu.ma/") && !lumaUrl.includes("luma.com/")) {
+      return NextResponse.json(
+        { error: "Invalid Lu.ma URL. URL must be from lu.ma or luma.com" },
+        { status: 400 }
+      );
+    }
+
+    let lumaData: LumaEventData;
+    try {
+      lumaData = await fetchLumaEvent(lumaUrl);
+    } catch (err) {
+      console.error("Error fetching Lu.ma event:", err);
+      return NextResponse.json(
+        { error: "Failed to fetch event from Lu.ma. Please check the URL." },
+        { status: 400 }
+      );
+    }
+
+    const newEvent: Event = {
+      id: crypto.randomUUID(),
+      lumaUrl,
+      title: lumaData.title,
+      description: lumaData.description,
+      startAt: lumaData.startAt || new Date().toISOString(),
+      endAt: lumaData.endAt,
+      timezone: lumaData.timezone || "America/Los_Angeles",
+      location: lumaData.location,
+      imageUrl: lumaData.imageUrl,
+      type: (type as Event["type"]) || "Other",
+      addedAt: new Date().toISOString(),
+    };
+
+    const data = await readEvents();
+    const isDuplicate = data.events.some(
+      (e) => e.lumaUrl === lumaUrl || e.title === newEvent.title
+    );
+    if (isDuplicate) {
+      return NextResponse.json(
+        { error: "This event already exists" },
+        { status: 400 }
+      );
+    }
+
+    data.events.push(newEvent);
+    await writeEvents(data);
+    return NextResponse.json(newEvent, { status: 201 });
+  } catch (error) {
+    console.error("Error adding event:", error);
+    return NextResponse.json(
+      { error: "Failed to add event" },
+      { status: 500 }
+    );
+  }
+}
+
+// DELETE - Remove an event
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+    if (!id) {
+      return NextResponse.json(
+        { error: "Event ID is required" },
+        { status: 400 }
+      );
+    }
+    const data = await readEvents();
+    const initialLength = data.events.length;
+    data.events = data.events.filter((e) => e.id !== id);
+    if (data.events.length === initialLength) {
+      return NextResponse.json({ error: "Event not found" }, { status: 404 });
+    }
+    await writeEvents(data);
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Error deleting event:", error);
+    return NextResponse.json(
+      { error: "Failed to delete event" },
       { status: 500 }
     );
   }

@@ -100,7 +100,14 @@ export default function AdminPage() {
         body: JSON.stringify({ lumaUrl, type: eventType }),
       });
 
-      const data = await response.json();
+      const text = await response.text();
+      let data: { error?: string; title?: string };
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        setError("Server returned an invalid response. Try again.");
+        return;
+      }
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to add event");
