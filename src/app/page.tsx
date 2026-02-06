@@ -215,6 +215,7 @@ function convertApiEventToDisplay(event: ApiEvent): DisplayEvent {
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [upcomingEvents, setUpcomingEvents] = useState<DisplayEvent[]>([]);
+  const [pastEvents, setPastEvents] = useState<DisplayEvent[]>([]);
   const [eventsLoading, setEventsLoading] = useState(true);
 
   // Fetch events from API
@@ -227,6 +228,7 @@ export default function Home() {
 
         const now = new Date();
         const upcoming: DisplayEvent[] = [];
+        const pastWithTime: { displayEvent: DisplayEvent; startAt: string }[] = [];
 
         events.forEach((event) => {
           const eventDate = new Date(event.startAt);
@@ -234,6 +236,8 @@ export default function Home() {
 
           if (eventDate > now) {
             upcoming.push(displayEvent);
+          } else {
+            pastWithTime.push({ displayEvent, startAt: event.startAt });
           }
         });
 
@@ -243,7 +247,13 @@ export default function Home() {
             new Date(a.date).getTime() - new Date(b.date).getTime()
         );
 
+        // Sort past by date descending (most recent first)
+        pastWithTime.sort(
+          (a, b) => new Date(b.startAt).getTime() - new Date(a.startAt).getTime()
+        );
+
         setUpcomingEvents(upcoming);
+        setPastEvents(pastWithTime.map((p) => p.displayEvent));
       } catch (error) {
         console.error("Failed to fetch events:", error);
       } finally {
@@ -520,6 +530,69 @@ export default function Home() {
                   </div>
                 </motion.a>
               ))}
+            </div>
+          )}
+
+          {/* Past Events - always show section when done loading */}
+          {!eventsLoading && (
+            <div id="past-events" className="mt-24 pt-16 border-t border-white/10">
+              <Mono className="text-accent mb-4 block">Archive</Mono>
+              <h2 className="text-5xl md:text-6xl font-serif italic mb-10 text-white">
+                Past Events.
+              </h2>
+              {pastEvents.length === 0 ? (
+                <p className="text-secondary font-mono text-sm">
+                  No past events to show yet.
+                </p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {pastEvents.map((event, i) => (
+                    <motion.a
+                      href={event.lumaUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      layout
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      key={`past-${i}`}
+                      className="group border border-white/20 bg-white/[0.07] hover:border-accent/30 transition-all flex flex-col h-full overflow-hidden"
+                    >
+                      {event.imageUrl && (
+                        <div className="relative w-full aspect-[16/9] overflow-hidden">
+                          <Image
+                            src={event.imageUrl}
+                            alt={event.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] to-transparent opacity-60" />
+                        </div>
+                      )}
+                      <div className="p-8 flex flex-col flex-grow">
+                        <div className="flex justify-between items-start mb-6">
+                          <span className="text-[8px] font-mono border border-accent/40 text-accent px-2 py-1 uppercase tracking-widest">
+                            {event.type}
+                          </span>
+                          <span className="text-[9px] font-mono text-secondary">{event.ago}</span>
+                        </div>
+                        <h3 className="text-lg font-serif italic leading-snug mb-8 group-hover:text-accent transition-colors flex-grow text-white">
+                          {event.title}
+                        </h3>
+                        <div className="pt-6 border-t border-white/10 space-y-2">
+                          <div className="flex items-center gap-3 text-secondary font-mono text-[9px]">
+                            <Calendar size={10} className="text-accent/60" />
+                            {event.date}
+                          </div>
+                          <div className="flex items-center gap-3 text-secondary font-mono text-[9px]">
+                            <Clock size={10} className="text-accent/60" />
+                            {event.time}
+                          </div>
+                        </div>
+                      </div>
+                    </motion.a>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
