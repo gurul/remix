@@ -88,43 +88,6 @@ const Globe = () => {
   );
 };
 
-const CONSOLE_LOGS = [
-  "SYNCING_SEA_NODES",
-  "POLLING_COMMUNITY_METRICS",
-  "VERIFYING_PROTOCOL_V2",
-  "ENCRYPTING_SHARED_INTELLIGENCE",
-  "UPLOADING_EVENT_TELEMETRY",
-  "CONNECTION_ESTABLISHED",
-];
-
-const ConsoleSystem = () => {
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((i) => (i + 1) % CONSOLE_LOGS.length);
-    }, 2500);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="font-mono text-[9px] text-secondary/40 leading-none h-4 flex items-center overflow-hidden">
-      <AnimatePresence mode="wait">
-        <motion.div 
-          key={index}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          className="flex items-center gap-2"
-        >
-          <span className="w-1 h-1 bg-accent animate-pulse shrink-0" />
-          {CONSOLE_LOGS[index]}
-        </motion.div>
-      </AnimatePresence>
-    </div>
-  );
-};
-
 interface ApiEvent {
   id: string;
   lumaUrl: string;
@@ -367,17 +330,14 @@ export default function Home() {
             <span className="font-bold tracking-widest uppercase text-sm font-mono">AISEA</span>
           </div>
           <div className="hidden xl:flex gap-8 border-l border-white/10 pl-12">
-            <a href="#about-us" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">About Us</a>
             <a href="#events" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">Events</a>
-            <a href="#get-involved" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">Get Involved</a>
+            <a href="#about-us" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">About Us</a>
             <a href="#partnerships" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">Partnerships</a>
+            <a href="#get-involved" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">Get Involved</a>
           </div>
         </div>
         
         <div className="flex items-center gap-8">
-          <div className="hidden lg:block">
-            <ConsoleSystem />
-          </div>
           <a 
             href="https://docs.google.com/forms/d/e/1FAIpQLScmUC8KSPhafE_8FZBUs2pNPJVkJkRl-E9eE2cE5b34RQ3BTQ/viewform"
             target="_blank"
@@ -405,10 +365,10 @@ export default function Home() {
             <button className="absolute top-8 right-8 text-accent" onClick={() => setIsMenuOpen(false)}>
               <X size={32} />
             </button>
-            <a href="#about-us" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">About Us</a>
             <a href="#events" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">Events</a>
-            <a href="#get-involved" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">Get Involved</a>
+            <a href="#about-us" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">About Us</a>
             <a href="#partnerships" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">Partnerships</a>
+            <a href="#get-involved" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">Get Involved</a>
           </motion.div>
         )}
       </AnimatePresence>
