@@ -964,7 +964,7 @@ export default function Home() {
                 <Mono className="text-white block mb-4">Social</Mono>
                 <div className="flex flex-wrap gap-x-8 gap-y-2">
                   <a href="https://www.instagram.com/aicseattle/" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Instagram</a>
-                  <a href="https://www.linkedin.com/company/aicollective/" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">LinkedIn</a>
+                  <a href="https://www.linkedin.com/company/ai-collective-seattle/" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">LinkedIn</a>
                 </div>
               </div>
             </div>
