@@ -1,7 +1,8 @@
 "use client";
 
+import dynamic from "next/dynamic";
+import type { GlobeMethods } from "react-globe.gl";
 import { useEffect, useRef, useState } from "react";
-import createGlobe from "cobe";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
@@ -30,49 +31,68 @@ const Mono = ({ children, className = "" }: { children: React.ReactNode; classNa
   </span>
 );
 
-// Accent orange for globe (matches #ff7a1a)
-const GLOBE_AMBER = [255 / 255, 122 / 255, 26 / 255] as [number, number, number];
-
-// Shared animation speed: event cards px/s and globe rotation use this (globe rad/frame = SPEED * 0.00004)
+// Shared animation speed: event cards px/s
 const ANIMATION_SPEED = 36 * 0.6; // 60% of original
 
 const PAST_EVENTS_PAGE_SIZE = 3;
 
+const GLOBE_IMAGE_URL = "https://unpkg.com/three-globe@2.31.0/example/img/earth-day.jpg";
+
+const GlobeGl = dynamic(
+  () => import("react-globe.gl").then((mod) => mod.default),
+  { ssr: false }
+);
+
 const Globe = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const globeRef = useRef<GlobeMethods | undefined>(undefined);
+  const [dimensions, setDimensions] = useState({ width: 800, height: 800 });
+  const [globeReady, setGlobeReady] = useState(false);
 
   useEffect(() => {
-    let phi = 0;
-    if (!canvasRef.current) return;
-
-    const globe = createGlobe(canvasRef.current, {
-      devicePixelRatio: 2,
-      width: 600 * 2,
-      height: 600 * 2,
-      phi: 0,
-      theta: 0,
-      dark: 0,
-      diffuse: 1.8,
-      mapSamples: 16000,
-      mapBrightness: 25,
-      baseColor: GLOBE_AMBER,
-      markerColor: GLOBE_AMBER,
-      glowColor: GLOBE_AMBER,
-      markers: [],
-      onRender: (state) => {
-        state.phi = phi;
-        phi -= ANIMATION_SPEED * 0.00004; /* clockwise, same rate as event cards */
-      },
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver((entries) => {
+      const { width, height } = entries[0]?.contentRect ?? { width: 800, height: 800 };
+      setDimensions({ width: Math.round(width), height: Math.round(height) });
     });
-
-    return () => globe.destroy();
+    ro.observe(el);
+    return () => ro.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!globeReady) return;
+    const globe = globeRef.current;
+    if (!globe?.controls) return;
+    const controls = globe.controls();
+    controls.enableZoom = false;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = -1.2;
+    let raf = 0;
+    const tick = () => {
+      controls.update();
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [globeReady]);
+
   return (
-    <div className="relative w-full aspect-square max-w-[600px] mx-auto opacity-100 transition-all duration-1000 hidden md:block">
-      <canvas
-        ref={canvasRef}
-        style={{ width: "100%", height: "100%", maxWidth: "100%", aspectRatio: "1" }}
+    <div
+      ref={containerRef}
+      className="relative w-full aspect-square max-w-[800px] mx-auto opacity-100 transition-all duration-1000 hidden lg:block"
+    >
+      <GlobeGl
+        ref={globeRef}
+        width={dimensions.width}
+        height={dimensions.height}
+        globeImageUrl={GLOBE_IMAGE_URL}
+        backgroundColor="rgba(0,0,0,0)"
+        showAtmosphere={true}
+        atmosphereColor="#87ceeb"
+        atmosphereAltitude={0.15}
+        animateIn={false}
+        onGlobeReady={() => setGlobeReady(true)}
       />
       {/* Overlay logo on top of globe */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
@@ -375,7 +395,7 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-16 px-6 md:px-12 max-w-[1400px] mx-auto min-h-[90vh] flex flex-col justify-center">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_800px] gap-16 items-center">
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-8 h-px bg-accent/50" />
@@ -413,7 +433,7 @@ export default function Home() {
           <div className="relative flex justify-center items-center group">
             <div className="absolute inset-0 bg-radial-gradient from-accent/10 to-transparent blur-[120px] rounded-full opacity-50" />
             <Globe />
-            <div className="absolute bottom-4 left-4 p-6 border border-white/10 bg-background/60 backdrop-blur-md hidden md:block w-56">
+            <div className="absolute bottom-4 left-[9.25rem] p-6 border border-white/10 bg-background/60 backdrop-blur-md hidden md:block w-56">
               <div className="flex justify-between items-start mb-4">
                 <Mono className="text-accent/60 text-[8px]">Active_Members</Mono>
                 <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
@@ -421,7 +441,7 @@ export default function Home() {
               <div className="space-y-3">
                 <div className="flex justify-between text-[8px] font-mono text-secondary">
                   <span>GLOBAL_COUNT</span>
-                  <span className="text-white">150,000+</span>
+                  <span className="text-white">200,000+</span>
                 </div>
                 <div className="flex justify-between text-[8px] font-mono text-secondary">
                   <span>SEATTLE_COUNT</span>
@@ -689,7 +709,7 @@ export default function Home() {
               <Mono className="text-accent mb-6 block">Legacy_Manifesto</Mono>
               <h2 className="text-5xl md:text-6xl font-serif italic mb-8">About Us.</h2>
               <p className="text-lg text-secondary leading-relaxed">
-                The AI Collective is a non-profit, grassroots community uniting <span className="text-white">150,000+ pioneers</span> – founders, researchers, operators, and investors – exploring the frontier of AI.
+                The AI Collective is a non-profit, grassroots community uniting <span className="text-white">200,000+ pioneers</span> – founders, researchers, operators, and investors – exploring the frontier of AI.
               </p>
             </div>
             <p className="text-secondary leading-relaxed font-light">
@@ -964,7 +984,7 @@ export default function Home() {
                 <Mono className="text-white block mb-4">Social</Mono>
                 <div className="flex flex-wrap gap-x-8 gap-y-2">
                   <a href="https://www.instagram.com/aicseattle/" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">Instagram</a>
-                  <a href="https://www.linkedin.com/company/aicollective/" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">LinkedIn</a>
+                  <a href="https://www.linkedin.com/company/ai-collective-seattle/" target="_blank" rel="noopener noreferrer" className="block text-xs text-secondary hover:text-white transition-colors uppercase font-mono tracking-widest">LinkedIn</a>
                 </div>
               </div>
             </div>
