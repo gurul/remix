@@ -759,12 +759,12 @@ export default function Home() {
             </div>
             <div className="lg:w-1/2 lg:text-right pb-4">
               <a
-                href="https://luma.com/user/aicollective"
+                href="https://www.instagram.com/aicollective"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-4 bg-accent text-black border border-accent px-8 py-5 text-[10px] font-mono font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-black hover:border-white transition-all group"
               >
-                Read Newsletter
+                SEE OUR INSTAGRAM
                 <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
             </div>
