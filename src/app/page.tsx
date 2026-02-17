@@ -735,7 +735,7 @@ export default function Home() {
               "The future of AI will be shaped by the conversations happening today. By bringing together the brightest minds across disciplines, we ensure that this future is one where AI serves as a force for human flourishing."
             </p>
             <a 
-              href="https://www.aicollective.com/trust"
+              href="https://www.aicollective.com/why"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-4 text-[10px] font-mono font-normal uppercase tracking-[0.3em] text-accent hover:text-accent/90 transition-colors group"
