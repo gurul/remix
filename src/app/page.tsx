@@ -808,7 +808,7 @@ export default function Home() {
             <div>
               <Mono className="text-accent/80 text-[9px] mb-4 block">Premier Partners</Mono>
               <ul className="space-y-3">
-                {["Silicon Valley Bank", "Madrona", "Windsurf", "Fenwick & West LLP"].map((name) => (
+                {["Silicon Valley Bank", "Madrona", "Fenwick & West LLP"].map((name) => (
                   <li key={name} className="text-white font-mono text-sm tracking-widest uppercase">
                     {name}
                   </li>
@@ -840,6 +840,7 @@ export default function Home() {
                   "Roam",
                   "Vercel",
                   "Confluent",
+                  "Windsurf",
                 ].map((name) => (
                   <li key={name} className="text-white font-mono text-xs tracking-widest uppercase">
                     {name}
