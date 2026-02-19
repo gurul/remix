@@ -256,7 +256,7 @@ export default function Home() {
     },
     {
       name: "Michael A. Agustin",
-      role: "HEAD OF GROWTH",
+      role: "GROWTH LEAD",
       bio: "Michael Agustin has nearly 3 decades for experience building technical ecosystems across multiple parts of the world, for the IGDA, Apple, Malaysia (MaGIC), and VRARA. He's raised over $30M from investors across 3 ventures. Michael previously worked at Apple on macOS' Platform Experience team and built the 1st no-code solution for mobile, reaching 150M players per month by the time he vested. He recently co-founded Curie, focused on Commerce World Models for Physical AI.",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/michael-a.-agustin-ea4.jpeg",
       linkedin: "https://www.linkedin.com/in/michaelagustin/"
