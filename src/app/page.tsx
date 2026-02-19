@@ -839,6 +839,7 @@ export default function Home() {
                   "Oracle",
                   "Roam",
                   "Vercel",
+                  "Confluent",
                 ].map((name) => (
                   <li key={name} className="text-white font-mono text-xs tracking-widest uppercase">
                     {name}
