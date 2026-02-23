@@ -7,7 +7,7 @@ const ADMIN_AUTH_KEY = "admin_authed";
 
 interface Event {
   id: string;
-  lumaUrl: string;
+  lumaUrl?: string;
   title: string;
   description?: string;
   startAt: string;
@@ -29,6 +29,16 @@ const EVENT_TYPES = [
   "Other",
 ] as const;
 
+const TIMEZONES = [
+  { value: "America/Los_Angeles", label: "Pacific (PT)" },
+  { value: "America/Denver", label: "Mountain (MT)" },
+  { value: "America/Chicago", label: "Central (CT)" },
+  { value: "America/New_York", label: "Eastern (ET)" },
+  { value: "America/Anchorage", label: "Alaska (AKT)" },
+  { value: "Pacific/Honolulu", label: "Hawaii (HT)" },
+  { value: "UTC", label: "UTC" },
+] as const;
+
 export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState<boolean | null>(null);
   const [password, setPassword] = useState("");
@@ -36,7 +46,22 @@ export default function AdminPage() {
   const [loginLoading, setLoginLoading] = useState(false);
 
   const [events, setEvents] = useState<Event[]>([]);
+  const [addMode, setAddMode] = useState<"luma" | "manual">("luma");
+
+  // Luma form
   const [lumaUrl, setLumaUrl] = useState("");
+
+  // Manual form
+  const [manualTitle, setManualTitle] = useState("");
+  const [manualStartAt, setManualStartAt] = useState("");
+  const [manualEndAt, setManualEndAt] = useState("");
+  const [manualTimezone, setManualTimezone] = useState("America/Los_Angeles");
+  const [manualLocation, setManualLocation] = useState("");
+  const [manualImageUrl, setManualImageUrl] = useState("");
+  const [manualDescription, setManualDescription] = useState("");
+  const [manualExternalUrl, setManualExternalUrl] = useState("");
+
+  // Shared
   const [eventType, setEventType] = useState<string>("Other");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -87,6 +112,19 @@ export default function AdminPage() {
     }
   };
 
+  const resetForm = () => {
+    setLumaUrl("");
+    setManualTitle("");
+    setManualStartAt("");
+    setManualEndAt("");
+    setManualTimezone("America/Los_Angeles");
+    setManualLocation("");
+    setManualImageUrl("");
+    setManualDescription("");
+    setManualExternalUrl("");
+    setEventType("Other");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -94,10 +132,26 @@ export default function AdminPage() {
     setSuccess("");
 
     try {
+      const body =
+        addMode === "luma"
+          ? { lumaUrl, type: eventType }
+          : {
+              manual: true,
+              title: manualTitle,
+              startAt: manualStartAt,
+              endAt: manualEndAt || undefined,
+              timezone: manualTimezone,
+              location: manualLocation || undefined,
+              imageUrl: manualImageUrl || undefined,
+              description: manualDescription || undefined,
+              externalUrl: manualExternalUrl || undefined,
+              type: eventType,
+            };
+
       const response = await fetch("/api/events", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lumaUrl, type: eventType }),
+        body: JSON.stringify(body),
       });
 
       const text = await response.text();
@@ -114,8 +168,7 @@ export default function AdminPage() {
       }
 
       setSuccess(`Successfully added: ${data.title}`);
-      setLumaUrl("");
-      setEventType("Other");
+      resetForm();
       fetchEvents();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to add event");
@@ -235,7 +288,7 @@ export default function AdminPage() {
         <div className="mb-12">
           <h1 className="text-4xl font-serif italic mb-2">Event Admin</h1>
           <p className="text-[#a8a29e] font-mono text-sm">
-            Manage Lu.ma events for the Seattle Chapter
+            Manage events for the Seattle Chapter
           </p>
         </div>
 
@@ -248,20 +301,159 @@ export default function AdminPage() {
             Add New Event
           </h2>
 
+          {/* Mode Toggle */}
+          <div className="flex mb-6 border border-white/10">
+            <button
+              type="button"
+              onClick={() => { setAddMode("luma"); setError(""); }}
+              className={`flex-1 py-2 text-xs font-mono uppercase tracking-widest transition-colors ${
+                addMode === "luma"
+                  ? "bg-[#f59e0b] text-black font-bold"
+                  : "text-[#a8a29e] hover:text-white"
+              }`}
+            >
+              Lu.ma Event
+            </button>
+            <button
+              type="button"
+              onClick={() => { setAddMode("manual"); setError(""); }}
+              className={`flex-1 py-2 text-xs font-mono uppercase tracking-widest transition-colors ${
+                addMode === "manual"
+                  ? "bg-[#f59e0b] text-black font-bold"
+                  : "text-[#a8a29e] hover:text-white"
+              }`}
+            >
+              Manual Entry
+            </button>
+          </div>
+
           <div className="space-y-4">
-            <div>
-              <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
-                Lu.ma Event URL
-              </label>
-              <input
-                type="url"
-                value={lumaUrl}
-                onChange={(e) => setLumaUrl(e.target.value)}
-                placeholder="https://lu.ma/your-event"
-                required
-                className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white placeholder-white/30 font-mono text-sm focus:border-[#f59e0b] focus:outline-none"
-              />
-            </div>
+            {addMode === "luma" ? (
+              <div>
+                <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
+                  Lu.ma Event URL
+                </label>
+                <input
+                  type="url"
+                  value={lumaUrl}
+                  onChange={(e) => setLumaUrl(e.target.value)}
+                  placeholder="https://lu.ma/your-event"
+                  required
+                  className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white placeholder-white/30 font-mono text-sm focus:border-[#f59e0b] focus:outline-none"
+                />
+              </div>
+            ) : (
+              <>
+                <div>
+                  <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
+                    Event Title <span className="text-[#f59e0b]">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={manualTitle}
+                    onChange={(e) => setManualTitle(e.target.value)}
+                    placeholder="e.g. AI Collective Happy Hour"
+                    required
+                    className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white placeholder-white/30 font-mono text-sm focus:border-[#f59e0b] focus:outline-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
+                      Start Date &amp; Time <span className="text-[#f59e0b]">*</span>
+                    </label>
+                    <input
+                      type="datetime-local"
+                      value={manualStartAt}
+                      onChange={(e) => setManualStartAt(e.target.value)}
+                      required
+                      className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white font-mono text-sm focus:border-[#f59e0b] focus:outline-none [color-scheme:dark]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
+                      End Date &amp; Time
+                    </label>
+                    <input
+                      type="datetime-local"
+                      value={manualEndAt}
+                      onChange={(e) => setManualEndAt(e.target.value)}
+                      className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white font-mono text-sm focus:border-[#f59e0b] focus:outline-none [color-scheme:dark]"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
+                    Timezone
+                  </label>
+                  <select
+                    value={manualTimezone}
+                    onChange={(e) => setManualTimezone(e.target.value)}
+                    className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white font-mono text-sm focus:border-[#f59e0b] focus:outline-none"
+                  >
+                    {TIMEZONES.map((tz) => (
+                      <option key={tz.value} value={tz.value} className="bg-[#0c0a09]">
+                        {tz.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
+                    Location
+                  </label>
+                  <input
+                    type="text"
+                    value={manualLocation}
+                    onChange={(e) => setManualLocation(e.target.value)}
+                    placeholder="e.g. Seattle, WA or 123 Main St"
+                    className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white placeholder-white/30 font-mono text-sm focus:border-[#f59e0b] focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
+                    Image URL
+                  </label>
+                  <input
+                    type="url"
+                    value={manualImageUrl}
+                    onChange={(e) => setManualImageUrl(e.target.value)}
+                    placeholder="https://example.com/image.jpg"
+                    className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white placeholder-white/30 font-mono text-sm focus:border-[#f59e0b] focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
+                    Description
+                  </label>
+                  <textarea
+                    value={manualDescription}
+                    onChange={(e) => setManualDescription(e.target.value)}
+                    placeholder="Short description of the event"
+                    rows={3}
+                    className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white placeholder-white/30 font-mono text-sm focus:border-[#f59e0b] focus:outline-none resize-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
+                    External Link (optional)
+                  </label>
+                  <input
+                    type="url"
+                    value={manualExternalUrl}
+                    onChange={(e) => setManualExternalUrl(e.target.value)}
+                    placeholder="https://eventbrite.com/your-event"
+                    className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white placeholder-white/30 font-mono text-sm focus:border-[#f59e0b] focus:outline-none"
+                  />
+                </div>
+              </>
+            )}
 
             <div>
               <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
@@ -300,7 +492,7 @@ export default function AdminPage() {
               {loading ? (
                 <>
                   <Loader2 size={14} className="animate-spin" />
-                  Fetching Event...
+                  {addMode === "luma" ? "Fetching Event..." : "Adding Event..."}
                 </>
               ) : (
                 <>
@@ -320,7 +512,7 @@ export default function AdminPage() {
 
           {sortedEvents.length === 0 ? (
             <p className="text-[#a8a29e] font-mono text-sm text-center py-8">
-              No events added yet. Add your first Lu.ma event above.
+              No events added yet. Add your first event above.
             </p>
           ) : (
             <div className="space-y-4">
@@ -363,15 +555,17 @@ export default function AdminPage() {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <a
-                      href={event.lumaUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 text-[#a8a29e] hover:text-[#f59e0b] transition-colors"
-                      title="View on Lu.ma"
-                    >
-                      <ExternalLink size={16} />
-                    </a>
+                    {event.lumaUrl && (
+                      <a
+                        href={event.lumaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 text-[#a8a29e] hover:text-[#f59e0b] transition-colors"
+                        title="View event link"
+                      >
+                        <ExternalLink size={16} />
+                      </a>
+                    )}
                     <button
                       onClick={() => handleDelete(event.id, event.title)}
                       className="p-2 text-[#a8a29e] hover:text-red-400 transition-colors"
