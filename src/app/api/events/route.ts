@@ -16,7 +16,7 @@ function getRedis(): Redis | null {
 
 export interface Event {
   id: string;
-  lumaUrl: string;
+  lumaUrl?: string;
   title: string;
   description?: string;
   startAt: string;
@@ -225,10 +225,22 @@ export async function GET() {
   }
 }
 
-// POST - Add a new event (fetch from Lu.ma, save to JSON)
+// POST - Add a new event (fetch from Lu.ma, or manual entry)
 export async function POST(request: Request) {
   try {
-    let body: { lumaUrl?: string; type?: string };
+    let body: {
+      lumaUrl?: string;
+      type?: string;
+      manual?: boolean;
+      title?: string;
+      startAt?: string;
+      endAt?: string;
+      timezone?: string;
+      location?: string;
+      imageUrl?: string;
+      description?: string;
+      externalUrl?: string;
+    };
     try {
       body = await request.json();
     } catch {
@@ -237,6 +249,67 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    let newEvent: Event;
+
+    if (body.manual) {
+      // Manual event — validate required fields
+      if (!body.title?.trim()) {
+        return NextResponse.json(
+          { error: "Title is required" },
+          { status: 400 }
+        );
+      }
+      if (!body.startAt) {
+        return NextResponse.json(
+          { error: "Start date/time is required" },
+          { status: 400 }
+        );
+      }
+
+      newEvent = {
+        id: crypto.randomUUID(),
+        lumaUrl: body.externalUrl?.trim() || undefined,
+        title: body.title.trim(),
+        description: body.description?.trim() || undefined,
+        startAt: body.startAt,
+        endAt: body.endAt || undefined,
+        timezone: body.timezone || "America/Los_Angeles",
+        location: body.location?.trim() || undefined,
+        imageUrl: body.imageUrl?.trim() || undefined,
+        type: (body.type as Event["type"]) || "Other",
+        addedAt: new Date().toISOString(),
+      };
+
+      const data = await readEvents();
+      const isDuplicate = data.events.some((e) => e.title === newEvent.title);
+      if (isDuplicate) {
+        return NextResponse.json(
+          { error: "An event with this title already exists" },
+          { status: 400 }
+        );
+      }
+
+      data.events.push(newEvent);
+      try {
+        await writeEvents(data);
+      } catch (writeErr) {
+        const code = writeErr && typeof writeErr === "object" && "code" in writeErr ? (writeErr as NodeJS.ErrnoException).code : "";
+        if (code === "EROFS" || (typeof (writeErr as Error).message === "string" && (writeErr as Error).message.includes("read-only file system"))) {
+          return NextResponse.json(
+            {
+              error:
+                "Adding events isn’t available in this environment (read-only). Add events by editing src/data/events.json and redeploying, or run the app locally (e.g. npm run dev) to use this form.",
+            },
+            { status: 503 }
+          );
+        }
+        throw writeErr;
+      }
+      return NextResponse.json(newEvent, { status: 201 });
+    }
+
+    // Lu.ma event flow
     const { lumaUrl, type } = body;
 
     if (!lumaUrl) {
@@ -264,7 +337,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const newEvent: Event = {
+    newEvent = {
       id: crypto.randomUUID(),
       lumaUrl,
       title: lumaData.title,
