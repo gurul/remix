@@ -424,7 +424,7 @@ export default function Home() {
                 </div>
                 <div className="flex justify-between text-[8px] font-mono text-secondary">
                   <span>SEATTLE_COUNT</span>
-                  <span className="text-white">1,600+</span>
+                  <span className="text-white">1,800+</span>
                 </div>
               </div>
             </div>
