@@ -835,6 +835,8 @@ export default function Home() {
                   "GitHub",
                   "Fidelity",
                   "Amazon Web Services",
+                  "CoreWeave",
+                  "ProjectWorks",
                   "Notion",
                   "Oracle",
                   "Roam",
