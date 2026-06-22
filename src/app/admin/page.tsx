@@ -1,7 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Trash2, Plus, ExternalLink, Calendar, Loader2, Lock } from "lucide-react";
+import {
+  Trash2,
+  Plus,
+  ExternalLink,
+  Calendar,
+  Loader2,
+  Lock,
+  Pencil,
+  Save,
+  X,
+} from "lucide-react";
+import Link from "next/link";
 
 const ADMIN_AUTH_KEY = "admin_authed";
 
@@ -14,9 +25,21 @@ interface Event {
   endAt?: string;
   timezone: string;
   location?: string;
-  imageUrl?: string;
+  imageUrl?: string | string[];
   type: string;
   addedAt: string;
+}
+
+interface EditEventForm {
+  title: string;
+  description: string;
+  startAt: string;
+  endAt: string;
+  timezone: string;
+  location: string;
+  imageUrl: string;
+  lumaUrl: string;
+  type: string;
 }
 
 const EVENT_TYPES = [
@@ -66,6 +89,10 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState<EditEventForm | null>(null);
+  const [editLoading, setEditLoading] = useState(false);
+  const [editError, setEditError] = useState("");
 
   // Check session on mount (client-only)
   useEffect(() => {
@@ -196,6 +223,78 @@ export default function AdminPage() {
     }
   };
 
+  const toDateTimeLocal = (value?: string) => {
+    if (!value) return "";
+    const match = value.match(/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})/);
+    return match?.[1] || "";
+  };
+
+  const startEditing = (event: Event) => {
+    setEditingId(event.id);
+    setEditError("");
+    setEditForm({
+      title: event.title,
+      description: event.description || "",
+      startAt: toDateTimeLocal(event.startAt),
+      endAt: toDateTimeLocal(event.endAt),
+      timezone: event.timezone || "America/Los_Angeles",
+      location: event.location || "",
+      imageUrl: Array.isArray(event.imageUrl)
+        ? event.imageUrl[0] || ""
+        : event.imageUrl || "",
+      lumaUrl: event.lumaUrl || "",
+      type: event.type || "Other",
+    });
+  };
+
+  const cancelEditing = () => {
+    setEditingId(null);
+    setEditForm(null);
+    setEditError("");
+  };
+
+  const updateEditField = (field: keyof EditEventForm, value: string) => {
+    setEditForm((current) =>
+      current ? { ...current, [field]: value } : current
+    );
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingId || !editForm) return;
+
+    setEditLoading(true);
+    setEditError("");
+    setSuccess("");
+
+    try {
+      const response = await fetch(
+        `/api/events?id=${encodeURIComponent(editingId)}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(editForm),
+        }
+      );
+      const data = (await response.json()) as Event & { error?: string };
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to update event");
+      }
+
+      setEvents((current) =>
+        current.map((event) => (event.id === data.id ? data : event))
+      );
+      setSuccess(`Updated: ${data.title}`);
+      cancelEditing();
+    } catch (err) {
+      setEditError(
+        err instanceof Error ? err.message : "Failed to update event"
+      );
+    } finally {
+      setEditLoading(false);
+    }
+  };
+
   const formatDate = (dateStr: string) => {
     try {
       return new Date(dateStr).toLocaleDateString("en-US", {
@@ -271,12 +370,12 @@ export default function AdminPage() {
               </button>
             </form>
           </div>
-          <a
+          <Link
             href="/"
             className="block mt-6 text-center text-[#a8a29e] hover:text-[#f59e0b] font-mono text-xs uppercase tracking-widest transition-colors"
           >
             ← Back to Homepage
-          </a>
+          </Link>
         </div>
       </main>
     );
@@ -519,61 +618,249 @@ export default function AdminPage() {
               {sortedEvents.map((event) => (
                 <div
                   key={event.id}
-                  className="bg-black/30 border border-white/5 p-4 flex items-start gap-4 group hover:border-white/20 transition-colors"
+                  className={`bg-black/30 border transition-colors ${
+                    editingId === event.id
+                      ? "border-[#f59e0b]/40"
+                      : "border-white/5 hover:border-white/20"
+                  }`}
                 >
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span
-                        className={`text-[8px] font-mono border px-2 py-0.5 uppercase tracking-widest ${
-                          isUpcoming(event.startAt)
-                            ? "border-green-500/30 text-green-400"
-                            : "border-white/20 text-[#a8a29e]"
-                        }`}
-                      >
-                        {isUpcoming(event.startAt) ? "Upcoming" : "Past"}
-                      </span>
-                      <span className="text-[8px] font-mono border border-[#f59e0b]/30 text-[#f59e0b] px-2 py-0.5 uppercase tracking-widest">
-                        {event.type}
-                      </span>
-                    </div>
-
-                    <h3 className="font-serif italic text-lg mb-1 truncate">
-                      {event.title}
-                    </h3>
-
-                    <div className="flex items-center gap-4 text-[#a8a29e] text-xs font-mono">
-                      <span className="flex items-center gap-1">
-                        <Calendar size={10} />
-                        {formatDate(event.startAt)}
-                      </span>
-                      {event.location && (
-                        <span className="truncate max-w-[200px]">
-                          {event.location}
+                  <div className="p-4 flex items-start gap-4">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span
+                          className={`text-[8px] font-mono border px-2 py-0.5 uppercase tracking-widest ${
+                            isUpcoming(event.startAt)
+                              ? "border-green-500/30 text-green-400"
+                              : "border-white/20 text-[#a8a29e]"
+                          }`}
+                        >
+                          {isUpcoming(event.startAt) ? "Upcoming" : "Past"}
                         </span>
+                        <span className="text-[8px] font-mono border border-[#f59e0b]/30 text-[#f59e0b] px-2 py-0.5 uppercase tracking-widest">
+                          {event.type}
+                        </span>
+                      </div>
+
+                      <h3 className="font-serif italic text-lg mb-1 truncate">
+                        {event.title}
+                      </h3>
+
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[#a8a29e] text-xs font-mono">
+                        <span className="flex items-center gap-1">
+                          <Calendar size={10} />
+                          {formatDate(event.startAt)}
+                        </span>
+                        {event.location && (
+                          <span className="truncate max-w-[200px]">
+                            {event.location}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          editingId === event.id
+                            ? cancelEditing()
+                            : startEditing(event)
+                        }
+                        className="p-2 text-[#a8a29e] hover:text-[#f59e0b] transition-colors"
+                        title={editingId === event.id ? "Close editor" : "Edit event"}
+                      >
+                        {editingId === event.id ? (
+                          <X size={16} />
+                        ) : (
+                          <Pencil size={16} />
+                        )}
+                      </button>
+                      {event.lumaUrl && (
+                        <a
+                          href={event.lumaUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 text-[#a8a29e] hover:text-[#f59e0b] transition-colors"
+                          title="View event link"
+                        >
+                          <ExternalLink size={16} />
+                        </a>
                       )}
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(event.id, event.title)}
+                        className="p-2 text-[#a8a29e] hover:text-red-400 transition-colors"
+                        title="Delete event"
+                      >
+                        <Trash2 size={16} />
+                      </button>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    {event.lumaUrl && (
-                      <a
-                        href={event.lumaUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 text-[#a8a29e] hover:text-[#f59e0b] transition-colors"
-                        title="View event link"
-                      >
-                        <ExternalLink size={16} />
-                      </a>
-                    )}
-                    <button
-                      onClick={() => handleDelete(event.id, event.title)}
-                      className="p-2 text-[#a8a29e] hover:text-red-400 transition-colors"
-                      title="Delete event"
+                  {editingId === event.id && editForm && (
+                    <form
+                      onSubmit={handleEditSubmit}
+                      className="border-t border-white/10 p-4 sm:p-6 space-y-4"
                     >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
+                      <div>
+                        <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
+                          Event Title <span className="text-[#f59e0b]">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          value={editForm.title}
+                          onChange={(e) => updateEditField("title", e.target.value)}
+                          required
+                          className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white font-mono text-sm focus:border-[#f59e0b] focus:outline-none"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
+                            Start Date &amp; Time <span className="text-[#f59e0b]">*</span>
+                          </label>
+                          <input
+                            type="datetime-local"
+                            value={editForm.startAt}
+                            onChange={(e) => updateEditField("startAt", e.target.value)}
+                            required
+                            className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white font-mono text-sm focus:border-[#f59e0b] focus:outline-none [color-scheme:dark]"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
+                            End Date &amp; Time
+                          </label>
+                          <input
+                            type="datetime-local"
+                            value={editForm.endAt}
+                            onChange={(e) => updateEditField("endAt", e.target.value)}
+                            className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white font-mono text-sm focus:border-[#f59e0b] focus:outline-none [color-scheme:dark]"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
+                            Timezone
+                          </label>
+                          <select
+                            value={editForm.timezone}
+                            onChange={(e) => updateEditField("timezone", e.target.value)}
+                            className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white font-mono text-sm focus:border-[#f59e0b] focus:outline-none"
+                          >
+                            {TIMEZONES.map((tz) => (
+                              <option key={tz.value} value={tz.value} className="bg-[#0c0a09]">
+                                {tz.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
+                            Event Type
+                          </label>
+                          <select
+                            value={editForm.type}
+                            onChange={(e) => updateEditField("type", e.target.value)}
+                            className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white font-mono text-sm focus:border-[#f59e0b] focus:outline-none"
+                          >
+                            {EVENT_TYPES.map((type) => (
+                              <option key={type} value={type} className="bg-[#0c0a09]">
+                                {type}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
+                          Location
+                        </label>
+                        <input
+                          type="text"
+                          value={editForm.location}
+                          onChange={(e) => updateEditField("location", e.target.value)}
+                          placeholder="Seattle, WA or a full address"
+                          className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white placeholder-white/30 font-mono text-sm focus:border-[#f59e0b] focus:outline-none"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
+                            Event Link
+                          </label>
+                          <input
+                            type="url"
+                            value={editForm.lumaUrl}
+                            onChange={(e) => updateEditField("lumaUrl", e.target.value)}
+                            placeholder="https://luma.com/your-event"
+                            className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white placeholder-white/30 font-mono text-sm focus:border-[#f59e0b] focus:outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
+                            Thumbnail URL
+                          </label>
+                          <input
+                            type="url"
+                            value={editForm.imageUrl}
+                            onChange={(e) => updateEditField("imageUrl", e.target.value)}
+                            placeholder="https://example.com/event-image.jpg"
+                            className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white placeholder-white/30 font-mono text-sm focus:border-[#f59e0b] focus:outline-none"
+                          />
+                          <p className="mt-2 text-[10px] font-mono text-[#78716c]">
+                            Overrides the thumbnail imported from Lu.ma.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-mono uppercase tracking-widest text-[#a8a29e] mb-2">
+                          Description
+                        </label>
+                        <textarea
+                          value={editForm.description}
+                          onChange={(e) => updateEditField("description", e.target.value)}
+                          rows={5}
+                          className="w-full bg-black/30 border border-white/10 px-4 py-3 text-white font-mono text-sm focus:border-[#f59e0b] focus:outline-none resize-y"
+                        />
+                      </div>
+
+                      {editError && (
+                        <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 text-sm font-mono">
+                          {editError}
+                        </div>
+                      )}
+
+                      <div className="flex flex-wrap gap-3">
+                        <button
+                          type="submit"
+                          disabled={editLoading}
+                          className="bg-[#f59e0b] text-black px-5 py-3 text-xs font-mono font-bold uppercase tracking-widest hover:bg-white transition-colors disabled:opacity-50 flex items-center gap-2"
+                      >
+                          {editLoading ? (
+                            <Loader2 size={14} className="animate-spin" />
+                          ) : (
+                            <Save size={14} />
+                          )}
+                          Save Changes
+                        </button>
+                        <button
+                          type="button"
+                          onClick={cancelEditing}
+                          disabled={editLoading}
+                          className="border border-white/10 px-5 py-3 text-xs font-mono uppercase tracking-widest text-[#a8a29e] hover:text-white hover:border-white/30 transition-colors disabled:opacity-50"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  )}
                 </div>
               ))}
             </div>
@@ -582,12 +869,12 @@ export default function AdminPage() {
 
         {/* Back to Home Link */}
         <div className="mt-8 text-center">
-          <a
+          <Link
             href="/"
             className="text-[#a8a29e] hover:text-[#f59e0b] font-mono text-xs uppercase tracking-widest transition-colors"
           >
             ← Back to Homepage
-          </a>
+          </Link>
         </div>
       </div>
     </main>

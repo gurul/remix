@@ -5,6 +5,16 @@ import { Redis } from "@upstash/redis";
 
 const EVENTS_KEY = "aic-events";
 
+const EVENT_TYPES = new Set<Event["type"]>([
+  "Summit",
+  "Roundtable",
+  "Workshop",
+  "Forum",
+  "Demo Night",
+  "Meetup",
+  "Other",
+]);
+
 function getRedis(): Redis | null {
   const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
@@ -384,6 +394,136 @@ export async function POST(request: Request) {
     console.error("Error adding event:", error);
     return NextResponse.json(
       { error: `Failed to add event: ${message}` },
+      { status: 500 }
+    );
+  }
+}
+
+// PUT - Update an existing event
+export async function PUT(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+    if (!id) {
+      return NextResponse.json(
+        { error: "Event ID is required" },
+        { status: 400 }
+      );
+    }
+
+    let body: {
+      title?: string;
+      description?: string;
+      startAt?: string;
+      endAt?: string;
+      timezone?: string;
+      location?: string;
+      imageUrl?: string;
+      lumaUrl?: string;
+      type?: string;
+    };
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid request body. Expected JSON." },
+        { status: 400 }
+      );
+    }
+
+    const title = body.title?.trim();
+    const startAt = body.startAt?.trim();
+    const endAt = body.endAt?.trim() || undefined;
+    const type = body.type as Event["type"] | undefined;
+
+    if (!title) {
+      return NextResponse.json({ error: "Title is required" }, { status: 400 });
+    }
+    if (!startAt || Number.isNaN(Date.parse(startAt))) {
+      return NextResponse.json(
+        { error: "A valid start date/time is required" },
+        { status: 400 }
+      );
+    }
+    if (endAt && Number.isNaN(Date.parse(endAt))) {
+      return NextResponse.json(
+        { error: "End date/time must be valid" },
+        { status: 400 }
+      );
+    }
+    if (endAt && Date.parse(endAt) < Date.parse(startAt)) {
+      return NextResponse.json(
+        { error: "End date/time cannot be before the start" },
+        { status: 400 }
+      );
+    }
+    if (type && !EVENT_TYPES.has(type)) {
+      return NextResponse.json({ error: "Invalid event type" }, { status: 400 });
+    }
+
+    const data = await readEvents();
+    const eventIndex = data.events.findIndex((event) => event.id === id);
+    if (eventIndex === -1) {
+      return NextResponse.json({ error: "Event not found" }, { status: 404 });
+    }
+
+    const lumaUrl = body.lumaUrl?.trim() || undefined;
+    const hasDuplicate = data.events.some(
+      (event) =>
+        event.id !== id &&
+        (event.title === title || (lumaUrl && event.lumaUrl === lumaUrl))
+    );
+    if (hasDuplicate) {
+      return NextResponse.json(
+        { error: "Another event already uses this title or event link" },
+        { status: 400 }
+      );
+    }
+
+    const existingEvent = data.events[eventIndex];
+    const updatedEvent: Event = {
+      ...existingEvent,
+      title,
+      description: body.description?.trim() || undefined,
+      startAt,
+      endAt,
+      timezone: body.timezone?.trim() || "America/Los_Angeles",
+      location: body.location?.trim() || undefined,
+      imageUrl: body.imageUrl?.trim() || undefined,
+      lumaUrl,
+      type: type || existingEvent.type,
+    };
+
+    data.events[eventIndex] = updatedEvent;
+    try {
+      await writeEvents(data);
+    } catch (writeErr) {
+      const code =
+        writeErr && typeof writeErr === "object" && "code" in writeErr
+          ? (writeErr as NodeJS.ErrnoException).code
+          : "";
+      if (
+        code === "EROFS" ||
+        (typeof (writeErr as Error).message === "string" &&
+          (writeErr as Error).message.includes("read-only file system"))
+      ) {
+        return NextResponse.json(
+          {
+            error:
+              "Editing events isn’t available in this environment (read-only). Edit src/data/events.json and redeploy, or run the app locally.",
+          },
+          { status: 503 }
+        );
+      }
+      throw writeErr;
+    }
+
+    return NextResponse.json(updatedEvent);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    console.error("Error updating event:", error);
+    return NextResponse.json(
+      { error: `Failed to update event: ${message}` },
       { status: 500 }
     );
   }
