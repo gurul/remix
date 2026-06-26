@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
-import { Redis } from "@upstash/redis";
-
-const EVENTS_KEY = "aic-events";
 
 const EVENT_TYPES = new Set<Event["type"]>([
   "Summit",
@@ -14,15 +11,6 @@ const EVENT_TYPES = new Set<Event["type"]>([
   "Meetup",
   "Other",
 ]);
-
-function getRedis(): Redis | null {
-  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (url && token) {
-    return new Redis({ url, token });
-  }
-  return null;
-}
 
 export interface Event {
   id: string;
@@ -62,6 +50,18 @@ interface LumaEventData {
 
 const EVENTS_FILE = path.join(process.cwd(), "src/data/events.json");
 
+function isReadOnlyFileSystemError(error: unknown): boolean {
+  const code =
+    error && typeof error === "object" && "code" in error
+      ? (error as NodeJS.ErrnoException).code
+      : "";
+
+  return (
+    code === "EROFS" ||
+    (error instanceof Error && error.message.includes("read-only file system"))
+  );
+}
+
 async function readEventsFromFile(): Promise<EventsData> {
   try {
     const data = await fs.readFile(EVENTS_FILE, "utf-8");
@@ -72,38 +72,14 @@ async function readEventsFromFile(): Promise<EventsData> {
 }
 
 async function readEvents(): Promise<EventsData> {
-  const redis = getRedis();
-  if (redis) {
-    try {
-      const stored = await redis.get<EventsData>(EVENTS_KEY);
-      if (stored && typeof stored === "object" && Array.isArray(stored.events)) {
-        return stored;
-      }
-    } catch {
-      // fall back to file
-    }
-    const fileData = await readEventsFromFile();
-    try {
-      await redis.set(EVENTS_KEY, fileData);
-    } catch {
-      // ignore seed failure
-    }
-    return fileData;
-  }
+  return readEventsFromFile();
+}
+
+async function readEventsForMutation(): Promise<EventsData> {
   return readEventsFromFile();
 }
 
 async function writeEvents(data: EventsData): Promise<void> {
-  const redis = getRedis();
-  if (redis) {
-    try {
-      await redis.set(EVENTS_KEY, data);
-      return;
-    } catch (err) {
-      console.error("Redis set failed:", err);
-      throw err;
-    }
-  }
   await fs.writeFile(EVENTS_FILE, JSON.stringify(data, null, 2));
 }
 
@@ -291,7 +267,7 @@ export async function POST(request: Request) {
         addedAt: new Date().toISOString(),
       };
 
-      const data = await readEvents();
+      const data = await readEventsForMutation();
       const isDuplicate = data.events.some((e) => e.title === newEvent.title);
       if (isDuplicate) {
         return NextResponse.json(
@@ -304,8 +280,7 @@ export async function POST(request: Request) {
       try {
         await writeEvents(data);
       } catch (writeErr) {
-        const code = writeErr && typeof writeErr === "object" && "code" in writeErr ? (writeErr as NodeJS.ErrnoException).code : "";
-        if (code === "EROFS" || (typeof (writeErr as Error).message === "string" && (writeErr as Error).message.includes("read-only file system"))) {
+        if (isReadOnlyFileSystemError(writeErr)) {
           return NextResponse.json(
             {
               error:
@@ -361,7 +336,7 @@ export async function POST(request: Request) {
       addedAt: new Date().toISOString(),
     };
 
-    const data = await readEvents();
+    const data = await readEventsForMutation();
     const isDuplicate = data.events.some(
       (e) => e.lumaUrl === lumaUrl || e.title === newEvent.title
     );
@@ -376,8 +351,7 @@ export async function POST(request: Request) {
     try {
       await writeEvents(data);
     } catch (writeErr) {
-      const code = writeErr && typeof writeErr === "object" && "code" in writeErr ? (writeErr as NodeJS.ErrnoException).code : "";
-      if (code === "EROFS" || (typeof (writeErr as Error).message === "string" && (writeErr as Error).message.includes("read-only file system"))) {
+      if (isReadOnlyFileSystemError(writeErr)) {
         return NextResponse.json(
           {
             error:
@@ -461,7 +435,7 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "Invalid event type" }, { status: 400 });
     }
 
-    const data = await readEvents();
+    const data = await readEventsForMutation();
     const eventIndex = data.events.findIndex((event) => event.id === id);
     if (eventIndex === -1) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
@@ -498,15 +472,7 @@ export async function PUT(request: Request) {
     try {
       await writeEvents(data);
     } catch (writeErr) {
-      const code =
-        writeErr && typeof writeErr === "object" && "code" in writeErr
-          ? (writeErr as NodeJS.ErrnoException).code
-          : "";
-      if (
-        code === "EROFS" ||
-        (typeof (writeErr as Error).message === "string" &&
-          (writeErr as Error).message.includes("read-only file system"))
-      ) {
+      if (isReadOnlyFileSystemError(writeErr)) {
         return NextResponse.json(
           {
             error:
@@ -540,7 +506,7 @@ export async function DELETE(request: Request) {
         { status: 400 }
       );
     }
-    const data = await readEvents();
+    const data = await readEventsForMutation();
     const initialLength = data.events.length;
     data.events = data.events.filter((e) => e.id !== id);
     if (data.events.length === initialLength) {
@@ -549,8 +515,7 @@ export async function DELETE(request: Request) {
     try {
       await writeEvents(data);
     } catch (writeErr) {
-      const code = writeErr && typeof writeErr === "object" && "code" in writeErr ? (writeErr as NodeJS.ErrnoException).code : "";
-      if (code === "EROFS" || (typeof (writeErr as Error).message === "string" && (writeErr as Error).message.includes("read-only file system"))) {
+      if (isReadOnlyFileSystemError(writeErr)) {
         return NextResponse.json(
           {
             error:
