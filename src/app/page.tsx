@@ -255,6 +255,23 @@ export default function Home() {
       linkedin: "https://www.linkedin.com/in/bhola-chhetri/"
     },
     {
+      name: "Gurucharan Lingamallu",
+      role: "TECHNICAL/MEDIA LEAD",
+      bio: "Guru is a Computer Science student at the University of Washington focused on human-centered technology. He's interested in how tools shape memory, agency, and ownership, and focuses on building systems grounded in trust.",
+      img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/gurucharan-lingamallu-062.png",
+      linkedin: "https://www.linkedin.com/in/gurul/"
+    },
+    {
+      name: "Keshav Ummat",
+      role: "STRATEGY LEAD",
+      bio: "Keshav is an Enterprise Account Executive at Glean, where he leads tech sales for customers in the PNW. Prior to Glean, he worked at AWS for 6 years and was also part of the founding team at Intently AI. He's deeply passionate about public speaking and community building, and was also raised here in Seattle! Outside of work, Keshav enjoys tennis, new food experiences and traveling the world!",
+      img: "/keshav.png",
+      linkedin: "https://www.linkedin.com/in/keshav-ummat-8418b4106/"
+    }
+  ];
+
+  const previousTeam = [
+    {
       name: "Michael A. Agustin",
       role: "GROWTH LEAD",
       bio: "Michael Agustin has nearly 3 decades for experience building technical ecosystems across multiple parts of the world, for the IGDA, Apple, Malaysia (MaGIC), and VRARA. He's raised over $30M from investors across 3 ventures. Michael previously worked at Apple on macOS' Platform Experience team and built the 1st no-code solution for mobile, reaching 150M players per month by the time he vested. He recently co-founded Curie, focused on Commerce World Models for Physical AI.",
@@ -276,13 +293,6 @@ export default function Home() {
       linkedin: "https://www.linkedin.com/in/samridhb/"
     },
     {
-      name: "Gurucharan Lingamallu",
-      role: "TECHNICAL/MEDIA LEAD",
-      bio: "Guru is a Computer Science student at the University of Washington focused on human-centered technology. He's interested in how tools shape memory, agency, and ownership, and focuses on building systems grounded in trust.",
-      img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/gurucharan-lingamallu-062.png",
-      linkedin: "https://www.linkedin.com/in/gurul/"
-    },
-    {
       name: "Cyndi Song",
       role: "CHAPTER ORGANIZER",
       bio: "Cyndi is a Product Strategist and Chief of Staff at Google Cloud. Beyond her day job, she is deeply embedded in the Seattle startup ecosystem as the Chapter Lead for 12 Scrappy Founders, where she connects entrepreneurs to support their startup journeys. Driven by a passion for human-centered AI, she spends her downtime at hackathons prototyping new products, with a recent focus on voice agents. When she isn't building, she loves aerial yoga and dancing.",
@@ -302,13 +312,6 @@ export default function Home() {
       bio: "Rachel is a Private Investments Analyst at Multi-Family Office Lenora Capital. She is a prior award-winning investigative journalist passionate about deep research and investing in great teams, and believes in bridging the gap between founders and funders through community. Outside of work, Rachel is a Global Shaper with the World Economic Forum and loves cooking, running, and writing.",
       img: "/rachel-kloepfer.png",
       linkedin: "https://www.linkedin.com/in/rachelkloepfer/"
-    },
-    {
-      name: "Keshav Ummat",
-      role: "STRATEGY LEAD",
-      bio: "Keshav is an Enterprise Account Executive at Glean, where he leads tech sales for customers in the PNW. Prior to Glean, he worked at AWS for 6 years and was also part of the founding team at Intently AI. He's deeply passionate about public speaking and community building, and was also raised here in Seattle! Outside of work, Keshav enjoys tennis, new food experiences and traveling the world!",
-      img: "/keshav.png",
-      linkedin: "https://www.linkedin.com/in/keshav-ummat-8418b4106/"
     }
   ];
 
@@ -926,6 +929,36 @@ export default function Home() {
                 </span>
               </div>
             </a>
+          </div>
+
+          {/* Previous Officers */}
+          <div className="mt-24 pt-16 border-t border-white/10">
+            <Mono className="text-accent mb-6 block">Alumni_Layer</Mono>
+            <h3 className="text-4xl md:text-5xl font-serif italic mb-12">Previous Officers.</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/10 border border-white/10">
+              {previousTeam.map((member, i) => (
+                <a
+                  key={`prev-${i}`}
+                  href={member.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-[#0c0a09] p-6 flex items-center gap-4 group border border-transparent hover:border-accent/20 transition-colors"
+                >
+                  <div className="relative w-12 h-12 shrink-0 rounded-full overflow-hidden opacity-80 group-hover:opacity-100 transition-opacity">
+                    <Image src={member.img} alt={member.name} width={48} height={48} className="object-cover w-full h-full" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg font-serif italic truncate">{member.name}</span>
+                      <span className="text-secondary group-hover:text-accent transition-colors shrink-0">
+                        <Linkedin size={14} />
+                      </span>
+                    </div>
+                    <Mono className="text-accent/60 block text-[9px]">{member.role}</Mono>
+                  </div>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </section>
