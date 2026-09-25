@@ -272,13 +272,6 @@ export default function Home() {
 
   const previousTeam = [
     {
-      name: "Michael A. Agustin",
-      role: "GROWTH LEAD",
-      bio: "Michael Agustin has nearly 3 decades for experience building technical ecosystems across multiple parts of the world, for the IGDA, Apple, Malaysia (MaGIC), and VRARA. He's raised over $30M from investors across 3 ventures. Michael previously worked at Apple on macOS' Platform Experience team and built the 1st no-code solution for mobile, reaching 150M players per month by the time he vested. He recently co-founded Curie, focused on Commerce World Models for Physical AI.",
-      img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/michael-a.-agustin-ea4.jpeg",
-      linkedin: "https://www.linkedin.com/in/michaelagustin/"
-    },
-    {
       name: "Ajita Ananth",
       role: "EVENTS LEAD",
       bio: "Ajita K Ananth is a Staff Technical Program Manager at Google where she leads engineering programs within Google Maps. Prior to Google, she led major product and technical initiatives at Coinbase and DocuSign. She thrives on empowering teams to tackle challenging engineering problems, and shipping products that improve people's lives. Outside of work, she loves trying new restaurants, and traveling to new countries.",
@@ -678,7 +671,7 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
           <div className="order-2 lg:order-1 aspect-video w-full overflow-hidden border border-white/10 bg-white/5">
             <iframe
-              src="https://www.youtube.com/embed/36i7pkaHqow?start=9"
+              src="https://www.youtube.com/embed/5Pl0nqh7ZLU"
               title="About Us - AI Collective Seattle"
               className="w-full h-full"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
