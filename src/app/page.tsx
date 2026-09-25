@@ -272,6 +272,18 @@ export default function Home() {
 
   const previousTeam = [
     {
+      name: "Ken Aragon",
+      role: "CHAPTER LEAD",
+      img: "/ken-aragon.jpg",
+      linkedin: "https://www.linkedin.com/in/ken-aragon/"
+    },
+    {
+      name: "Kulbir Singh",
+      role: "CHAPTER LEAD",
+      img: "/kulbir-singh.jpg",
+      linkedin: "https://www.linkedin.com/in/kulbir123/"
+    },
+    {
       name: "Ajita Ananth",
       role: "EVENTS LEAD",
       bio: "Ajita K Ananth is a Staff Technical Program Manager at Google where she leads engineering programs within Google Maps. Prior to Google, she led major product and technical initiatives at Coinbase and DocuSign. She thrives on empowering teams to tackle challenging engineering problems, and shipping products that improve people's lives. Outside of work, she loves trying new restaurants, and traveling to new countries.",
@@ -938,7 +950,13 @@ export default function Home() {
                   className="bg-[#0c0a09] p-6 flex items-center gap-4 group border border-transparent hover:border-accent/20 transition-colors"
                 >
                   <div className="relative w-12 h-12 shrink-0 rounded-full overflow-hidden opacity-80 group-hover:opacity-100 transition-opacity">
-                    <Image src={member.img} alt={member.name} width={48} height={48} className="object-cover w-full h-full" />
+                    {member.img ? (
+                      <Image src={member.img} alt={member.name} width={48} height={48} className="object-cover w-full h-full" />
+                    ) : (
+                      <div aria-hidden="true" className="w-full h-full flex items-center justify-center bg-accent/10 border border-accent/30 rounded-full font-mono text-sm text-accent">
+                        {member.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
+                      </div>
+                    )}
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
@@ -950,6 +968,13 @@ export default function Home() {
                     <Mono className="text-accent/60 block text-[9px]">{member.role}</Mono>
                   </div>
                 </a>
+              ))}
+              {/* Blank cells so the last row never shows the grid gap colour */}
+              {Array.from({ length: (3 - (previousTeam.length % 3)) % 3 }).map((_, i) => (
+                <div key={`prev-fill-lg-${i}`} aria-hidden="true" className="hidden lg:block bg-[#0c0a09]" />
+              ))}
+              {Array.from({ length: previousTeam.length % 2 }).map((_, i) => (
+                <div key={`prev-fill-sm-${i}`} aria-hidden="true" className="hidden sm:block lg:hidden bg-[#0c0a09]" />
               ))}
             </div>
           </div>
