@@ -940,42 +940,44 @@ export default function Home() {
           <div className="mt-24 pt-16 border-t border-white/10">
             <Mono className="text-accent mb-6 block">Alumni_Layer</Mono>
             <h3 className="text-4xl md:text-5xl font-serif italic mb-12">Previous Officers.</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/10 border border-white/10">
-              {previousTeam.map((member, i) => (
-                <a
-                  key={`prev-${i}`}
-                  href={member.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-[#0c0a09] p-6 flex items-center gap-4 group border border-transparent hover:border-accent/20 transition-colors"
-                >
-                  <div className="relative w-12 h-12 shrink-0 rounded-full overflow-hidden opacity-80 group-hover:opacity-100 transition-opacity">
-                    {member.img ? (
-                      <Image src={member.img} alt={member.name} width={48} height={48} className="object-cover w-full h-full" />
-                    ) : (
-                      <div aria-hidden="true" className="w-full h-full flex items-center justify-center bg-accent/10 border border-accent/30 rounded-full font-mono text-sm text-accent">
-                        {member.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
-                      </div>
-                    )}
-                  </div>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg font-serif italic truncate">{member.name}</span>
-                      <span className="text-secondary group-hover:text-accent transition-colors shrink-0">
-                        <Linkedin size={14} />
-                      </span>
-                    </div>
-                    <Mono className="text-accent/60 block text-[9px]">{member.role}</Mono>
-                  </div>
-                </a>
-              ))}
-              {/* Blank cells so the last row never shows the grid gap colour */}
-              {Array.from({ length: (3 - (previousTeam.length % 3)) % 3 }).map((_, i) => (
-                <div key={`prev-fill-lg-${i}`} aria-hidden="true" className="hidden lg:block bg-[#0c0a09]" />
-              ))}
-              {Array.from({ length: previousTeam.length % 2 }).map((_, i) => (
-                <div key={`prev-fill-sm-${i}`} aria-hidden="true" className="hidden sm:block lg:hidden bg-[#0c0a09]" />
-              ))}
+            {/* Rotating band: two identical copies scroll left forever; the second copy is hidden from assistive tech */}
+            <div className="marquee relative overflow-hidden border-y border-white/10 bg-[#0c0a09] scrollbar-hide">
+              <div className="marquee-track flex w-max">
+                {[0, 1].map((copy) => (
+                  <ul key={copy} aria-hidden={copy === 1 ? true : undefined} className="flex shrink-0">
+                    {previousTeam.map((member, i) => (
+                      <li key={`prev-${copy}-${i}`} className="shrink-0 border-r border-white/10">
+                        <a
+                          href={member.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          tabIndex={copy === 1 ? -1 : undefined}
+                          className="px-8 py-6 flex items-center gap-4 group hover:bg-white/[0.03] focus-visible:outline focus-visible:outline-1 focus-visible:outline-accent focus-visible:-outline-offset-2 transition-colors"
+                        >
+                          <div className="relative w-12 h-12 shrink-0 rounded-full overflow-hidden opacity-80 group-hover:opacity-100 transition-opacity">
+                            {member.img ? (
+                              <Image src={member.img} alt={member.name} width={48} height={48} className="object-cover w-full h-full" />
+                            ) : (
+                              <div aria-hidden="true" className="w-full h-full flex items-center justify-center bg-accent/10 border border-accent/30 rounded-full font-mono text-sm text-accent">
+                                {member.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
+                              </div>
+                            )}
+                          </div>
+                          <div className="whitespace-nowrap">
+                            <div className="flex items-center gap-2">
+                              <span className="text-lg font-serif italic">{member.name}</span>
+                              <span className="text-secondary group-hover:text-accent transition-colors shrink-0">
+                                <Linkedin size={14} />
+                              </span>
+                            </div>
+                            <Mono className="text-accent/60 block text-[9px]">{member.role}</Mono>
+                          </div>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                ))}
+              </div>
             </div>
           </div>
         </div>

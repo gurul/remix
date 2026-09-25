@@ -61,3 +61,33 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Rotating band (Previous Officers). The track holds two identical copies,
+   so moving it left by half its width loops with no visible jump. */
+.marquee {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+.marquee-track {
+  animation: marquee-scroll 45s linear infinite;
+}
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    overflow-x: auto;
+  }
+  .marquee-track {
+    animation: none;
+  }
+  .marquee-track > [aria-hidden="true"] {
+    display: none;
+  }
+}
