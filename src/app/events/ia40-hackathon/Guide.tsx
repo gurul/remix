@@ -29,14 +29,6 @@ const FOCUS_AREAS = [
     title: "Tools for trust and digital safety",
     body: "Help people tell what's real and protect what's theirs. Every scam caught early is an evening someone doesn't lose to cleanup.",
   },
-  {
-    title: "Climate resilience",
-    body: "Help neighborhoods, farms and cities see what's coming and act sooner, before the smoke, the flood or the heat wave arrives.",
-  },
-  {
-    title: "Accessible healthcare",
-    body: "Cut the hours lost to phone trees, paperwork and waiting rooms, so care reaches the people who need it, when they need it.",
-  },
 ];
 
 const IDEAS = [
@@ -74,7 +66,7 @@ const SECTIONS = [
 const NARRATION = [
   "Welcome to the I A forty Hackathon, Harnessing the Value of AI, Building Agency. This year's theme is technology that gives time back. It's presented by Madrona with Vercel and Open A I, in partnership with AI Collective Seattle. It runs Tuesday, September twenty ninth, from one to five in the afternoon, at the Four Seasons Seattle, ninety nine Union Street, on the second floor. Check-in opens at twelve thirty. The WiFi network and password are on this page, with copy buttons. Please arrive before kickoff to make sure you get a spot, and update your R S V P if you can no longer come.",
   "Here's the afternoon. Doors open at twelve thirty. Kickoff and rules at one. Team formation at one fifteen. Building starts at one thirty and runs for almost three hours. Submissions close at four fifteen, then live demos and voting. Winners are announced at four fifty five, and the I A forty Welcome Reception starts at five.",
-  "The theme is technology that gives time back. Every hour a tool hands back is an hour someone spends with family, on the work they care about, or simply resting. This year, four areas matter most. AI that gives people more agency over their own day. Tools for trust and digital safety, so people can tell what's real and protect what's theirs. Climate resilience, helping communities see what's coming and act sooner. And accessible healthcare, cutting the hours lost to phone trees, paperwork and waiting rooms. Whatever you pick, build something with real agency. Not AI that only advises, summarizes, or drafts, but AI that does useful work. Think AI that takes action, runs a workflow, handles work people usually ignore, or makes someone meaningfully better at their job. Memory, evals, guardrails and real-world execution all count. So does something completely new. Come solo, or find a team.",
+  "The theme is technology that gives time back. Every hour a tool hands back is an hour someone spends with family, on the work they care about, or simply resting. This year, two areas matter most. AI that gives people more agency over their own day. And tools for trust and digital safety, so people can tell what's real and protect what's theirs. Whatever you pick, build something with real agency. Not AI that only advises, summarizes, or drafts, but AI that does useful work. Think AI that takes action, runs a workflow, handles work people usually ignore, or makes someone meaningfully better at their job. Memory, evals, guardrails and real-world execution all count. So does something completely new. Come solo, or find a team.",
   "Every participant gets four credit codes. From Vercel, one for v zero, Vercel's AI app builder, which pays for the model tokens it uses as it writes your app. And one for the A I Gateway, a single A P I key for models from Open A I, Anthropic, Google and others, billed at each provider's list price with no markup. Pick a cheaper v zero model for small edits to make the credits last. From Open A I, one hundred dollars of Codex credit and fifty dollars of A P I credit. The codes arrive by email after you check in. Redeem the Open A I links by October first, and ask the Vercel and Open A I staff on site if you get stuck.",
   "Bring your laptop and power cord. Snacks and drinks are provided. Before you arrive, install Node, sign in to Vercel with GitHub linked, and install the Vercel command line tool. Sign in to Chat G P T, and install the Codex command line tool or the VS Code extension. The install commands are on the page.",
   "Prizes. First place wins thirty thousand dollars in Vercel credits and ten thousand in Open A I credits. Second place wins twelve thousand and five thousand. Third wins two thousand four hundred and one thousand. Winners get their codes by email after the event. Good luck.",
@@ -192,7 +184,7 @@ function useNarration() {
   );
   const [state, setState] = useState<NarrationState>("idle");
   const [index, setIndex] = useState(0);
-  const [status, setStatus] = useState(`Audio walkthrough · ${NARRATION.length} sections · about 5 min`);
+  const [status, setStatus] = useState(`Audio walkthrough · ${NARRATION.length} sections · about 4 min`);
   const stateRef = useRef<NarrationState>("idle");
 
   const setBoth = (s: NarrationState) => {
@@ -270,7 +262,7 @@ function useNarration() {
   const stop = () => {
     setBoth("idle");
     window.speechSynthesis.cancel();
-    setStatus(`Stopped · ${NARRATION.length} sections · about 5 min`);
+    setStatus(`Stopped · ${NARRATION.length} sections · about 4 min`);
   };
 
   return {
