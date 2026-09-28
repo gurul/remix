@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import createGlobe from "cobe";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
@@ -23,6 +22,7 @@ import {
   Linkedin
 } from "lucide-react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 
 const Mono = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <span className={`font-mono text-[10px] uppercase tracking-[0.2em] text-accent ${className}`}>
@@ -30,62 +30,21 @@ const Mono = ({ children, className = "" }: { children: React.ReactNode; classNa
   </span>
 );
 
-// Shared animation speed: event cards px/s; globe rotation uses same rate
+// Shared animation speed: event cards px/s; Earth rotation uses same rate
 const ANIMATION_SPEED = 36 * 0.6;
 
 const PAST_EVENTS_PAGE_SIZE = 3;
 
-// Accent orange for globe (matches #ff7a1a) – original cobe color
-const GLOBE_AMBER = [255 / 255, 122 / 255, 26 / 255] as [number, number, number];
+// Textured three.js Earth (from storeybox); loaded client-side only, since
+// it needs WebGL and pulls in three.
+const Earth = dynamic(() => import("./Earth"), { ssr: false });
 
-const Globe = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    let phi = 0;
-    if (!canvasRef.current) return;
-
-    const globe = createGlobe(canvasRef.current, {
-      devicePixelRatio: 2,
-      width: 600 * 2,
-      height: 600 * 2,
-      phi: 0,
-      theta: 0,
-      dark: 0,
-      diffuse: 1.8,
-      mapSamples: 16000,
-      mapBrightness: 25,
-      baseColor: GLOBE_AMBER,
-      markerColor: GLOBE_AMBER,
-      glowColor: GLOBE_AMBER,
-      markers: [],
-      onRender: (state) => {
-        state.phi = phi;
-        phi -= ANIMATION_SPEED * 0.00004;
-      },
-    });
-
-    return () => globe.destroy();
-  }, []);
-
-  return (
-    <div className="relative w-full aspect-square max-w-[600px] mx-auto opacity-100 transition-all duration-1000 hidden md:block">
-      <canvas
-        ref={canvasRef}
-        style={{ width: "100%", height: "100%", maxWidth: "100%", aspectRatio: "1" }}
-      />
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <Image
-          src="/Untitled_design.png"
-          alt="AI Collective mark"
-          width={360}
-          height={360}
-          className="opacity-100 mix-blend-screen"
-        />
-      </div>
-    </div>
-  );
-};
+const Globe = () => (
+  <div className="relative w-full aspect-square max-w-[600px] mx-auto hidden md:block">
+    {/* Same rate the old cobe globe spun at: ANIMATION_SPEED * 0.00004 rad per frame at 60fps. */}
+    <Earth spinRate={ANIMATION_SPEED * 0.00004 * 60} />
+  </div>
+);
 
 interface ApiEvent {
   id: string;
@@ -428,7 +387,7 @@ export default function Home() {
               <div className="space-y-3">
                 <div className="flex justify-between text-[8px] font-mono text-secondary">
                   <span>GLOBAL_COUNT</span>
-                  <span className="text-white">200,000+</span>
+                  <span className="text-white">250,000+</span>
                 </div>
                 <div className="flex justify-between text-[8px] font-mono text-secondary">
                   <span>SEATTLE_COUNT</span>
@@ -696,7 +655,7 @@ export default function Home() {
               <Mono className="text-accent mb-6 block">Legacy_Manifesto</Mono>
               <h2 className="text-5xl md:text-6xl font-serif italic mb-8">About Us.</h2>
               <p className="text-lg text-secondary leading-relaxed">
-                The AI Collective is a non-profit, grassroots community uniting <span className="text-white">200,000+ pioneers</span> – founders, researchers, operators, and investors – exploring the frontier of AI.
+                The AI Collective is a non-profit, grassroots community uniting <span className="text-white">250,000+ pioneers</span> – founders, researchers, operators, and investors – exploring the frontier of AI.
               </p>
             </div>
             <p className="text-secondary leading-relaxed font-light">
