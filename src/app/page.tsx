@@ -30,6 +30,11 @@ const Mono = ({ children, className = "" }: { children: React.ReactNode; classNa
   </span>
 );
 
+// Event links to pages on this site open in the same tab; everything else opens a new one.
+function externalLinkProps(href?: string) {
+  return href?.startsWith("/") ? {} : { target: "_blank", rel: "noopener noreferrer" };
+}
+
 // Shared animation speed: event cards px/s; Earth rotation uses same rate
 const ANIMATION_SPEED = 36 * 0.6;
 
@@ -443,8 +448,7 @@ export default function Home() {
               {upcomingEvents.map((event, i) => (
                 <motion.a
                   href={event.lumaUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...externalLinkProps(event.lumaUrl)}
                   layout
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -506,8 +510,7 @@ export default function Home() {
                     {pastEvents.map((event, i) => (
                       <a
                         href={event.lumaUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        {...externalLinkProps(event.lumaUrl)}
                         key={`past-mobile-${i}`}
                         className="group border border-white/20 bg-white/[0.07] hover:border-accent/30 transition-all flex flex-col overflow-hidden flex-shrink-0 w-[280px] min-w-[280px] h-[380px] min-h-[380px] snap-center"
                       >
@@ -561,8 +564,7 @@ export default function Home() {
                         {pastEventsSlice.map((event, i) => (
                           <motion.a
                             href={event.lumaUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            {...externalLinkProps(event.lumaUrl)}
                             key={`past-${pastEventsPage}-${i}`}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
