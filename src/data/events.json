@@ -172,7 +172,8 @@
       "timezone": "America/Los_Angeles",
       "location": "Four Seasons Seattle, 99 Union St, Seattle, Washington",
       "type": "Hackathon",
-      "addedAt": "2026-09-28T00:00:00.000Z"
+      "addedAt": "2026-09-28T00:00:00.000Z",
+      "imageUrl": "/events/ia40-hackathon.jpg"
     }
   ]
 }
