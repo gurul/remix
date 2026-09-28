@@ -43,6 +43,15 @@ const Globe = () => (
   <div className="relative w-full aspect-square max-w-[600px] mx-auto hidden md:block">
     {/* Same rate the old cobe globe spun at: ANIMATION_SPEED * 0.00004 rad per frame at 60fps. */}
     <Earth spinRate={ANIMATION_SPEED * 0.00004 * 60} />
+    <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+      <Image
+        src="/Untitled_design.png"
+        alt="AI Collective mark"
+        width={360}
+        height={360}
+        className="opacity-100 mix-blend-screen"
+      />
+    </div>
   </div>
 );
 
