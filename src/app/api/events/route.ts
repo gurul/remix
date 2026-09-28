@@ -8,6 +8,7 @@ const EVENT_TYPES = new Set<Event["type"]>([
   "Workshop",
   "Forum",
   "Demo Night",
+  "Hackathon",
   "Meetup",
   "Other",
 ]);
@@ -28,6 +29,7 @@ export interface Event {
     | "Workshop"
     | "Forum"
     | "Demo Night"
+    | "Hackathon"
     | "Meetup"
     | "Other";
   addedAt: string;

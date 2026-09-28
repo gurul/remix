@@ -48,6 +48,7 @@ const EVENT_TYPES = [
   "Workshop",
   "Forum",
   "Demo Night",
+  "Hackathon",
   "Meetup",
   "Other",
 ] as const;
