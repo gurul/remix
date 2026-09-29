@@ -539,7 +539,7 @@ export default function Guide() {
 
           <Details summary="Redeem your Vercel credits">
             <p className="text-[15px] leading-relaxed max-w-[70ch]">
-              v0 and AI Gateway use different codes. The v0 code is below, and your AI Gateway code is in your email. They aren&apos;t interchangeable, so use each code only in its own steps.
+              Your email has two different Vercel codes, one for v0 and one for AI Gateway. They aren&apos;t interchangeable, so use each code only in its own steps below.
             </p>
             <h4 className="font-sans text-sm font-semibold">v0 credits: use your v0 code</h4>
             <Steps>
@@ -548,7 +548,7 @@ export default function Guide() {
               </li>
               <li>Click your credit balance in the bottom-left corner, next to your name.</li>
               <li>
-                Click Redeem Code and enter <code className="font-mono text-sm">V0-MADRONA-30</code>.
+                Click Redeem Code and enter the v0 code from your email.
               </li>
             </Steps>
             <h4 className="font-sans text-sm font-semibold">AI Gateway credits: use your AI Gateway code</h4>
