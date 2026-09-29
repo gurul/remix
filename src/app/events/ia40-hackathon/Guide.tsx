@@ -539,9 +539,19 @@ export default function Guide() {
 
           <Details summary="Redeem your Vercel credits">
             <p className="text-[15px] leading-relaxed max-w-[70ch]">
-              Your email has two different Vercel codes, one for v0 and one for AI Gateway. They aren&apos;t interchangeable, so use each code only in its own steps below.
+              v0 and AI Gateway use different codes. The v0 code is below, and your AI Gateway code is in your email. They aren&apos;t interchangeable, so use each code only in its own steps.
             </p>
             <h4 className="font-sans text-sm font-semibold">v0 credits: use your v0 code</h4>
+            <Steps>
+              <li>
+                Go to <ExtLink href="https://v0.app/">v0.app</ExtLink> and sign in, or create an account if you&apos;re new.
+              </li>
+              <li>Click your credit balance in the bottom-left corner, next to your name.</li>
+              <li>
+                Click Redeem Code and enter <code className="font-mono text-sm">V0-MADRONA-30</code>.
+              </li>
+            </Steps>
+            <h4 className="font-sans text-sm font-semibold">AI Gateway credits: use your AI Gateway code</h4>
             <Steps>
               <li>
                 Sign in at <ExtLink href="https://vercel.com">vercel.com</ExtLink>, or create a Vercel account if you&apos;re new.
@@ -550,13 +560,10 @@ export default function Guide() {
                 Select the team that should receive the credits. Go to Settings, then General, scroll to Team ID, and copy the full ID starting with <code className="font-mono text-sm">team_</code>. Copy it directly. Don&apos;t use your team name, project ID, or personal user ID.
               </li>
               <li>
-                Go to <ExtLink href="https://credits.vercel.sh/">credits.vercel.sh</ExtLink> and enter your email, the Team ID you copied, and your v0 code.
+                Go to <ExtLink href="https://credits.vercel.sh/">credits.vercel.sh</ExtLink> and enter your email, the Team ID you copied, and your AI Gateway code.
               </li>
               <li>Select Redeem Code and check the result. Submitting sends your request for processing. It doesn&apos;t mean the credits are available yet.</li>
-            </Steps>
-            <h4 className="font-sans text-sm font-semibold">AI Gateway credits: use your AI Gateway code</h4>
-            <Steps>
-              <li>Once the organizer applies your AI Gateway credits, select the same team in Vercel and open AI Gateway.</li>
+              <li>Once the organizer applies your credits, select the same team in Vercel and open AI Gateway.</li>
               <li>If you don&apos;t have an AI Gateway key yet, open the AI Gateway sidebar, then API Keys, then Create API Key. Give it a name you&apos;ll recognize.</li>
               <li>Go back to AI Gateway, then Overview. Your credit balance shows in the top-right corner. Use your credits before the expiration date in your email.</li>
             </Steps>
