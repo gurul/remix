@@ -23,6 +23,7 @@ export interface Event {
   timezone: string;
   location?: string;
   imageUrl?: string | string[];
+  featured?: boolean;
   type:
     | "Summit"
     | "Roundtable"

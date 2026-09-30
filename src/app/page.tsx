@@ -70,6 +70,7 @@ interface ApiEvent {
   timezone: string;
   location?: string;
   imageUrl?: string;
+  featured?: boolean;
   type: string;
   addedAt: string;
 }
@@ -82,6 +83,7 @@ interface DisplayEvent {
   ago: string;
   lumaUrl?: string;
   imageUrl?: string;
+  featured?: boolean;
 }
 
 function formatEventDate(dateStr: string): string {
@@ -156,6 +158,7 @@ function convertApiEventToDisplay(event: ApiEvent): DisplayEvent {
     ago: getRelativeTime(event.startAt),
     lumaUrl: event.lumaUrl,
     imageUrl,
+    featured: event.featured,
   };
 }
 
@@ -453,7 +456,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   key={`upcoming-${i}`}
-                  className="group border border-accent/30 bg-accent/5 hover:border-accent transition-all flex flex-col h-full overflow-hidden"
+                  className={`group border transition-all flex flex-col h-full overflow-hidden ${event.featured ? "card-gold" : "border-accent/30 bg-accent/5 hover:border-accent"}`}
                 >
                   {event.imageUrl && (
                     <div className="relative w-full aspect-[16/9] overflow-hidden">
@@ -468,12 +471,12 @@ export default function Home() {
                   )}
                   <div className="p-8 flex flex-col flex-grow">
                     <div className="flex justify-between items-start mb-6">
-                      <span className="text-[8px] font-mono border border-accent/40 text-accent px-2 py-1 uppercase tracking-widest">
+                      <span className={`text-[8px] font-mono border px-2 py-1 uppercase tracking-widest ${event.featured ? "border-amber-300/60 bg-amber-300/10 text-amber-200" : "border-accent/40 text-accent"}`}>
                         {event.type}
                       </span>
                       <span className="text-[9px] font-mono text-accent">{event.ago}</span>
                     </div>
-                    <h3 className="text-lg font-serif italic leading-snug mb-8 group-hover:text-accent transition-colors flex-grow">
+                    <h3 className={`text-lg font-serif italic leading-snug mb-8 transition-colors flex-grow ${event.featured ? "text-gold" : "group-hover:text-accent"}`}>
                       {event.title}
                     </h3>
                     <div className="pt-6 border-t border-accent/20 space-y-2">
@@ -512,7 +515,7 @@ export default function Home() {
                         href={event.lumaUrl}
                         {...externalLinkProps(event.lumaUrl)}
                         key={`past-mobile-${i}`}
-                        className="group border border-white/20 bg-white/[0.07] hover:border-accent/30 transition-all flex flex-col overflow-hidden flex-shrink-0 w-[280px] min-w-[280px] h-[380px] min-h-[380px] snap-center"
+                        className={`group border transition-all flex flex-col overflow-hidden flex-shrink-0 w-[280px] min-w-[280px] h-[380px] min-h-[380px] snap-center ${event.featured ? "card-gold" : "border-white/20 bg-white/[0.07] hover:border-accent/30"}`}
                       >
                         {event.imageUrl ? (
                           <div className="relative w-full h-[140px] min-h-[140px] shrink-0 overflow-hidden bg-white/5">
@@ -529,15 +532,15 @@ export default function Home() {
                         )}
                         <div className="p-6 flex flex-col flex-grow min-h-0 overflow-hidden">
                           <div className="flex justify-between items-start gap-2 mb-3 shrink-0">
-                            <span className="text-[8px] font-mono border border-accent/40 text-accent px-2 py-0.5 uppercase tracking-widest">
+                            <span className={`text-[8px] font-mono border px-2 py-0.5 uppercase tracking-widest ${event.featured ? "border-amber-300/60 bg-amber-300/10 text-amber-200" : "border-accent/40 text-accent"}`}>
                               {event.type}
                             </span>
                             <span className="text-[9px] font-mono text-secondary shrink-0">{event.ago}</span>
                           </div>
-                          <h3 className="text-base font-serif italic leading-snug mb-4 group-hover:text-accent transition-colors text-white line-clamp-2 shrink-0">
+                          <h3 className={`text-base font-serif italic leading-snug mb-4 transition-colors line-clamp-2 shrink-0 ${event.featured ? "text-gold" : "text-white group-hover:text-accent"}`}>
                             {event.title}
                           </h3>
-                          <div className="pt-4 mt-auto border-t border-white/10 space-y-1 shrink-0">
+                          <div className={`pt-4 mt-auto border-t space-y-1 shrink-0 ${event.featured ? "border-amber-300/25" : "border-white/10"}`}>
                             <div className="flex items-center gap-2 text-secondary font-mono text-[9px]">
                               <Calendar size={10} className="text-accent/60 shrink-0" />
                               {event.date}
@@ -570,7 +573,7 @@ export default function Home() {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.2 }}
-                            className="group border border-white/20 bg-white/[0.07] hover:border-accent/30 transition-all flex flex-col overflow-hidden w-full h-[440px] min-h-[440px]"
+                            className={`group border transition-all flex flex-col overflow-hidden w-full h-[440px] min-h-[440px] ${event.featured ? "card-gold" : "border-white/20 bg-white/[0.07] hover:border-accent/30"}`}
                           >
                             {event.imageUrl ? (
                               <div className="relative w-full h-[180px] min-h-[180px] shrink-0 overflow-hidden bg-white/5">
@@ -587,15 +590,15 @@ export default function Home() {
                             )}
                             <div className="p-6 flex flex-col flex-grow min-h-0 overflow-hidden">
                               <div className="flex justify-between items-start gap-2 mb-3 shrink-0">
-                                <span className="text-[8px] font-mono border border-accent/40 text-accent px-2 py-0.5 uppercase tracking-widest">
+                                <span className={`text-[8px] font-mono border px-2 py-0.5 uppercase tracking-widest ${event.featured ? "border-amber-300/60 bg-amber-300/10 text-amber-200" : "border-accent/40 text-accent"}`}>
                                   {event.type}
                                 </span>
                                 <span className="text-[9px] font-mono text-secondary shrink-0">{event.ago}</span>
                               </div>
-                              <h3 className="text-base font-serif italic leading-snug mb-4 group-hover:text-accent transition-colors text-white line-clamp-2 shrink-0">
+                              <h3 className={`text-base font-serif italic leading-snug mb-4 transition-colors line-clamp-2 shrink-0 ${event.featured ? "text-gold" : "text-white group-hover:text-accent"}`}>
                                 {event.title}
                               </h3>
-                              <div className="pt-4 mt-auto border-t border-white/10 space-y-1 shrink-0">
+                              <div className={`pt-4 mt-auto border-t space-y-1 shrink-0 ${event.featured ? "border-amber-300/25" : "border-white/10"}`}>
                                 <div className="flex items-center gap-2 text-secondary font-mono text-[9px]">
                                   <Calendar size={10} className="text-accent/60 shrink-0" />
                                   {event.date}
