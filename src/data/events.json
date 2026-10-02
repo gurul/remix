@@ -175,6 +175,32 @@
       "addedAt": "2026-09-28T00:00:00.000Z",
       "imageUrl": "/events/ia40-hackathon.jpg",
       "featured": true
+    },
+    {
+      "id": "444b2f14-9b14-4889-bf0c-5acec95ce696",
+      "lumaUrl": "https://luma.com/19mw3lea",
+      "title": "Engineering for eCommerce Search [AI Agent Workshop]",
+      "description": "Join us for a fun evening of hands-on building with the AI Collective, Code & Coffee, and Superoptimal.\nCome to meet fellow engineers building product search for business impact.\n🗓️ Event Agenda\n5:30pm — Doors open | Food, drinks & networking\n6:10pm — Talk by BAML: Your Users Are Now Developers\n6:35pm — Workshop by Qdrant: From Relevance to Revenue Workshop\n7:30pm — Breakout for networking\n🎒 Come Prepared\nThis is a hands-on evening, so please arrive with:\nPython 3.11 or newer installed\nA coding agent of your choice, ready to go\nYou'll be using it throughout the workshop to build and experiment with search yourself.\n🤖 AI Engineering Talk: Your Users Are Now Developers\nCoding agents are changing who gets to build software.\nWhat happens when everyday shoppers can use them to build their own search, filters, and workflows on top of your product?\nVaibhav from BAML will kick things off by exploring what happens when users are no longer limited to the interfaces we design for them - and what that means for engineers building search and product experiences.\nThen we’ll put that idea into practice: bring your coding assistant and use it to build and experiment with search yourself.\n🔎 Workshop: From Relevance to Revenue\nFrom there, we'll move from the future of how users search to the nuts and bolts of making search actually work.\nEverybody knows semantic search is a commodity now. So what's the problem with search?\nWell, what happens when a search for “iPhone” returns iPhone cases? When an exact part number fails because someone added a dash? Or when page one is technically relevant, but commercially useless?\nIn this hands-on workshop with Qdrant, Neil will walk us through a real product catalog and tackle the retrieval and ranking problems that actually affect businesses.\nYou’ll experiment with:\nHybrid search — combine semantic understanding with exact SKU and brand matching\nFiltering & ranking — keep results relevant under tight product constraints\nBusiness signals — bring stock, margin, freshness, and delivery into scoring\nScale & performance — see what happens to latency, recall, and cost as the catalog grows\n🏁 And yes, it’s competitive.\nEveryone starts with the same catalog, baseline, and eval harness. You’ll use your coding assistant to improve the system and see how your approach performs.\nThe goal isn’t just to win the benchmark. It’s to leave knowing which knobs to turn when search goes wrong — and how to prove your fix actually worked.\n👋 Who Should Join?\nAnyone building infra behind product discovery, E-commerce and marketplace engineers, search and relevance teams, platform engineers will enjoy this!\nCome for the workshop. Stay for the food, drinks, and people. 🍛🍻\nSpace is limited — register early.\nThe AI Collective is a global non-profit building the human layer for the AI era. We unite 200,000+ leaders, builders, and stakeholders across 100+ forums worldwide to democratize the frontier, build trust, and coordinate how society navigates the rapid acceleration of technological progress.\nCode & Coffee is a meetup for developers to make friends and grow, active in over 30 cities. 100% volunteer-led and volunteer-run, with 80,000+ devs and growing.",
+      "startAt": "2026-09-16T17:30:00.000-07:00",
+      "endAt": "2026-09-16T21:00:00.000-07:00",
+      "timezone": "America/Los_Angeles",
+      "location": "Seattle, Washington",
+      "imageUrl": "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=1,anim=false,background=white,quality=75,width=1920,height=1920/uploads/4x/cc8f9eee-2fd7-4c27-a690-06c83e11b9a6.png",
+      "type": "Workshop",
+      "addedAt": "2026-10-02T00:00:00.000Z"
+    },
+    {
+      "id": "787c6a26-11d7-4d1b-bb6b-9baeb8c28494",
+      "lumaUrl": "https://luma.com/lozx21c4",
+      "title": "Off the Record: Tech Week Pre-Game Sunday on the Deck for Founders & Funders",
+      "description": "Kick Off Seattle Tech Week the right way.\nBefore the sessions fill up and the schedules get hectic, come find your people. Join us for an evening of conversation and connection, no program, while taking in the views over the water on Pier 70.\nWhether you're a longtime local or just arriving for the week, this is your chance to warm up and meet a few new faces before Tech Week hits full stride.\nWho this is for\nA curated room of founders (seed to Series B), GTM leaders, and early-stage investors — all done with playbooks that stopped working.\nCold outreach is dead. Paid ROI keeps shrinking. So we’re trading what’s actually driving pipeline in 2026: brand bets, community-led motions, and the weird stuff quietly outperforming the decks everyone else is still pitching.\nConversation · Drinks · Waterfront views\nDate: Sunday, July 26\nTime: 3:30 - 7:00\nLocation: AI House, Pier 70\nBrought to you by Optimly, the brand trust registry for AI. Every LLM is a compressed record of what the market believes about your brand. Optimly is the brand trust registry for AI that shows you what what ChatGPT, Claude, Gemini, etc. say about your brand to the market.\nFind your brand in the AI Brand Index → optimly.ai/brand\nAnd brought to you by Finch. Helping you run your gtm dinners and in-person events so that they deliver real results to your pipeline.",
+      "startAt": "2026-07-26T15:30:00.000-07:00",
+      "endAt": "2026-07-26T19:00:00.000-07:00",
+      "timezone": "America/Los_Angeles",
+      "location": "AI House, 2801 Alaskan Wy, Seattle, Washington",
+      "imageUrl": "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=1,anim=false,background=white,quality=75,width=1920,height=1920/uploads/et/31cb19a0-e4ed-4262-b73b-c007ca275fd8.jpg",
+      "type": "Meetup",
+      "addedAt": "2026-10-02T00:00:00.000Z"
     }
   ]
 }
