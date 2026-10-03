@@ -753,9 +753,9 @@ export default function Home() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             {[
-              { src: "/gather-1.png", alt: "Community gathering with hands raised" },
+              { src: "/gather-ia40.png", alt: "Community members at the Intelligent Applications 40 summit" },
               { src: "/gather-2.png", alt: "Casual work session with food and laptops" },
-              { src: "/gather-3.png", alt: "Fireside chat panel discussion" },
+              { src: "/gather-living-room.png", alt: "Panel discussion at the AI Living Room" },
               { src: "/gather-4.png", alt: "Large event space with tables and presentations" }
             ].map((image, i) => (
               <div key={i} className="aspect-square bg-white/5 border border-white/5 relative overflow-hidden group">
