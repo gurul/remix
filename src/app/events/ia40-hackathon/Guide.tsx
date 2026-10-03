@@ -92,9 +92,21 @@ const WINNERS = [
   },
 ];
 
+const JUDGES = [
+  { name: "Mary Sha", org: "OpenAI", url: "https://www.linkedin.com/in/mary-sha/" },
+  { name: "Homer Wang", org: "TinyFish", url: "https://www.linkedin.com/in/homer-w-000/" },
+  { name: "Ted Kummert", org: "Madrona", url: "https://www.linkedin.com/in/ted-kummert-53021568/" },
+  { name: "Keshav Ummat", org: "Glean", url: "https://www.linkedin.com/in/keshav-ummat-8418b4106/" },
+  { name: "Neha Manoj", org: "Vercel", url: "https://www.linkedin.com/in/neha-manoj/" },
+  { name: "Phoebe Weiser", org: "Madrona", url: "https://www.linkedin.com/in/phoebe-weiser-154a6b18/" },
+  { name: "Rolanda Fu", org: "Madrona", url: "https://www.linkedin.com/in/rolandafu/" },
+  { name: "Gurucharan Lingamallu", org: "Era", url: "https://www.linkedin.com/in/gurul" },
+];
+
 const SECTIONS = [
   { id: "overview", label: "Overview" },
   { id: "winners", label: "Winners" },
+  { id: "judges", label: "Judges" },
   { id: "schedule", label: "Schedule" },
   { id: "challenge", label: "Challenge" },
   { id: "credits", label: "Credits" },
@@ -106,6 +118,7 @@ const SECTIONS = [
 const NARRATION = [
   "Welcome to the I A forty Hackathon, Harnessing the Value of AI, Building Agency. This year's theme is technology that gives time back. It's presented by Madrona with Vercel and Open A I, in partnership with AI Collective Seattle. It runs Tuesday, September twenty ninth, from one to five in the afternoon, at the Four Seasons Seattle, ninety nine Union Street, on the second floor. Check-in opens at twelve thirty. The WiFi network and password are on this page, with copy buttons. Please arrive before kickoff to make sure you get a spot, and update your R S V P if you can no longer come.",
   "And the winners. First place went to FireLine, by Jacob Lee, Jay Shivanna and Graeme Huntley: a command console for wildfire air attack, where an AI planner assigns tankers and helicopters to fire sectors, and every order passes a fixed safety check. Second place went to DocHand, by Sam Crombie, Amaya Kejriwal, Morgan White, Arpitha Dhanapathi and Shweta Jindal, which turns boxes of paper into organized digital records. Third place went to W A Medicaid Helper, by Adam Burgh, a Chat G P T and Codex plugin that helps Washington Medicaid members get reimbursed for trips to medical appointments. Congratulations to all three teams.",
+  "Thank you to our judges: Mary Sha of Open A I, Homer Wang of TinyFish, Ted Kummert of Madrona, Keshav Ummat of Glean, Neha Manoj of Vercel, Phoebe Weiser and Rolanda Fu of Madrona, and Gurucharan Lingamallu of Era.",
   "Here's the afternoon. Doors open at twelve thirty. Kickoff and rules at one. Team formation at one fifteen. Building starts at one thirty, and you have two and a half hours. At three forty five, the submission form goes out by email and on Orena, and submissions close at four. The top five finalists then demo live, five minutes each, starting at four fifteen. Judges deliberate at four forty five, winners are announced at four fifty five, and the I A forty Welcome Reception starts at five.",
   "The theme is technology that gives time back. Every hour a tool hands back is an hour someone spends with family, on the work they care about, or simply resting. This year, two areas matter most. AI that gives people more agency over their own day. And tools for trust and digital safety, so people can tell what's real and protect what's theirs. Whatever you pick, build something with real agency. Not AI that only advises, summarizes, or drafts, but AI that does useful work. Think AI that takes action, runs a workflow, handles work people usually ignore, or makes someone meaningfully better at their job. Memory, evals, guardrails and real-world execution all count. So does something completely new. Come solo, or find a team.",
   "Every participant gets four credit codes. From Vercel, one for v zero, Vercel's AI app builder, which pays for the model tokens it uses as it writes your app. And one for the A I Gateway, a single A P I key for models from Open A I, Anthropic, Google and others, billed at each provider's list price with no markup. Pick a cheaper v zero model for small edits to make the credits last. From Open A I, one hundred dollars of Codex credit and fifty dollars of A P I credit. The codes arrive by email after you check in. Ask the Vercel and Open A I staff on site if you get stuck.",
@@ -537,6 +550,31 @@ export default function Guide() {
           <SectionHead eyebrow="Results · Sep 29" title="Congratulations to the winners" />
           <p className="max-w-[60ch] text-secondary">Select a project on the podium to read about it.</p>
           <WinnersPodium />
+        </section>
+
+        {/* Judges */}
+        <section id="judges" className={sectionClass("judges")}>
+          <SectionHead eyebrow="Judging panel" title="The judges" />
+          <ul className="grid border-t border-white/10 sm:grid-cols-2 sm:gap-x-10">
+            {JUDGES.map((j) => (
+              <li key={j.name} className="flex items-baseline justify-between gap-4 border-b border-white/10 px-2 py-3.5">
+                <span className="min-w-0">
+                  {j.name}
+                  <span className="ml-3 font-mono text-[10px] uppercase tracking-[0.2em] text-secondary">{j.org}</span>
+                </span>
+                <a
+                  href={j.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${j.name} of ${j.org} on LinkedIn`}
+                  className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.2em] text-secondary hover:text-accent transition-colors"
+                >
+                  LinkedIn
+                  <ArrowUpRight size={11} />
+                </a>
+              </li>
+            ))}
+          </ul>
         </section>
 
         {/* Schedule */}
