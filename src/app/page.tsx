@@ -804,6 +804,7 @@ export default function Home() {
                 {[
                   "Meta",
                   "Anthropic",
+                  "OpenAI",
                   "Andreessen Horowitz",
                   "Microsoft",
                   "Norwest Venture Partners",
