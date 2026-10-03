@@ -751,14 +751,15 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
             {[
               { src: "/gather-ia40.png", alt: "Community members at the Intelligent Applications 40 summit" },
               { src: "/gather-2.png", alt: "Casual work session with food and laptops" },
               { src: "/gather-living-room.png", alt: "Panel discussion at the AI Living Room" },
-              { src: "/gather-4.png", alt: "Large event space with tables and presentations" }
-            ].map((image, i) => (
-              <div key={i} className="aspect-square bg-white/5 border border-white/5 relative overflow-hidden group">
+              { src: "/gather-4.png", alt: "Large event space with tables and presentations" },
+              { src: "/gather-frontier-forum.jpg", alt: "Sunset mixer overlooking Elliott Bay at the Seattle Frontier Technologies Forum" }
+            ].map((image, i, images) => (
+              <div key={i} className={`${i === images.length - 1 ? "col-span-2 aspect-[2/1] md:col-span-1 md:aspect-square" : "aspect-square"} bg-white/5 border border-white/5 relative overflow-hidden group`}>
                 <Image 
                   src={image.src} 
                   alt={image.alt} 
