@@ -753,7 +753,7 @@ export default function Home() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             {[
-              { src: "/gather-ia40.png", alt: "Community members at the Intelligent Applications 40 summit" },
+              { src: "/gather-ia40-group.png", alt: "AI Collective Seattle members at the Madrona Intelligent Applications 40 summit" },
               { src: "/gather-frontier-forum.jpg", alt: "Sunset mixer overlooking Elliott Bay at the Seattle Frontier Technologies Forum" },
               { src: "/gather-living-room.png", alt: "Panel discussion at the AI Living Room" },
               { src: "/gather-4.png", alt: "Large event space with tables and presentations" }
