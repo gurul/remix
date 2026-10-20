@@ -895,25 +895,27 @@ export default function Home() {
                 href={member.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#0c0a09] p-10 flex flex-col group relative overflow-hidden block border border-transparent hover:border-accent/20 transition-colors"
+                className="bg-[#0c0a09] px-6 py-5 flex items-center gap-4 group relative overflow-hidden block border border-transparent hover:border-accent/20 transition-colors"
               >
-                <div className="absolute top-0 right-0 w-24 h-24 bg-accent/5 -mr-12 -mt-12 rotate-45 group-hover:bg-accent/10 transition-colors" />
-                <div className="mb-8 relative w-16 h-16 rounded-full overflow-hidden">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-accent/5 -mr-8 -mt-8 rotate-45 group-hover:bg-accent/10 transition-colors" />
+                <div className="relative w-12 h-12 shrink-0 rounded-full overflow-hidden">
                   <div className="absolute inset-0 border border-accent/20 -m-1 group-hover:m-0 transition-all rounded-full" />
-                  <Image src={member.img} alt={member.name} width={64} height={64} className="object-cover w-full h-full" />
+                  <Image src={member.img} alt={member.name} width={48} height={48} className="object-cover w-full h-full" />
                 </div>
-                <div className="flex items-center gap-2 mb-2">
-                  <h3 className="text-2xl font-serif italic">{member.name}</h3>
-                  <span className="text-secondary group-hover:text-accent transition-colors">
-                    <Linkedin size={16} />
-                  </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-lg font-serif italic leading-tight pr-0.5">{member.name}</h3>
+                    <span className="text-secondary group-hover:text-accent transition-colors shrink-0">
+                      <Linkedin size={14} />
+                    </span>
+                  </div>
+                  <Mono className="text-accent/60 block text-[9px]">{member.role}</Mono>
                 </div>
-                <Mono className="text-accent/60 block text-[9px]">{member.role}</Mono>
-                <div className="mt-auto pt-10 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
-                  <Mono className="text-[8px]">PROFILE_00{i+1}</Mono>
+                <div className="ml-auto self-end flex flex-col items-end gap-1 opacity-40 group-hover:opacity-100 transition-opacity">
                   <span className="text-secondary group-hover:text-accent transition-colors">
                     <ArrowUpRight size={14} />
                   </span>
+                  <Mono className="hidden sm:block text-[8px]">PROFILE_00{i+1}</Mono>
                 </div>
               </a>
             ))}
