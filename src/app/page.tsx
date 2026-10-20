@@ -933,7 +933,7 @@ export default function Home() {
               <p className="text-black text-sm md:text-base leading-snug font-normal md:flex-1 max-w-xl">
                 We&apos;re always looking for volunteers to help organize events and shape the future of AI in Seattle.
               </p>
-              <span className="inline-flex self-start md:self-auto shrink-0 items-center justify-center gap-2 py-2.5 px-5 bg-black text-white text-xs font-mono font-bold uppercase tracking-[0.2em] border-2 border-black group-hover:bg-white group-hover:text-black transition-colors">
+              <span className="inline-flex self-start md:self-auto md:ml-auto shrink-0 items-center justify-center gap-2 py-2.5 px-5 bg-black text-white text-xs font-mono font-bold uppercase tracking-[0.2em] border-2 border-black group-hover:bg-white group-hover:text-black transition-colors">
                 Apply to volunteer
                 <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </span>
