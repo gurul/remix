@@ -226,63 +226,54 @@ export default function Home() {
     {
       name: "Bhola Chhetri",
       role: "CHAPTER LEAD",
-      bio: "Bhola is a Solutions Architect at Broadcom and the founder of CropTop. He's deeply passionate about go-to-market initiatives for businesses and individuals. Outside of work, Bhola loves cars, events, and traveling.",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/bhola@aicollective.com.jpeg",
       linkedin: "https://www.linkedin.com/in/bhola-chhetri/"
     },
     {
       name: "Gurucharan Lingamallu",
       role: "TECHNICAL & MEDIA LEAD",
-      bio: "Guru is a Computer Science student at the University of Washington focused on human-centered technology. He's interested in how tools shape memory, agency, and ownership, and focuses on building systems grounded in trust.",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/gurucharan-lingamallu-062.png",
       linkedin: "https://www.linkedin.com/in/gurul/"
     },
     {
       name: "Keshav Ummat",
       role: "STRATEGY LEAD",
-      bio: "Keshav is an Enterprise Account Executive at Glean, where he leads tech sales for customers in the PNW. Prior to Glean, he worked at AWS for 6 years and was also part of the founding team at Intently AI. He's deeply passionate about public speaking and community building, and was also raised here in Seattle! Outside of work, Keshav enjoys tennis, new food experiences and traveling the world!",
       img: "/keshav.png",
       linkedin: "https://www.linkedin.com/in/keshav-ummat-8418b4106/"
     },
     {
       name: "Jiyae Choi",
       role: "CHAPTER ORGANIZER",
-      bio: "Jiyae builds the systems that make products trustworthy, from identity management to the workflows people actually use. Over 5+ years at KFTC, South Korea's national financial infrastructure org, Jiyae shipped AI-powered biometric authentication and digital identity systems that grew to 500K daily active users, and contributed to ISO 19092:2023. With an M.S. in Human-Centered Design & Engineering from the University of Washington, Jiyae now focuses on AI Trust & Safety and Responsible AI.",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/jiyae-choi-636.png",
       linkedin: "https://www.linkedin.com/in/jiyae-choi/"
     },
     {
       name: "Graeme Huntley",
       role: "CHAPTER ORGANIZER",
-      bio: "Graeme is the Technical Chief Product Officer at Centring, building Beedy, a grant platform that helps nonprofits find funders and draft proposals grounded in their own knowledge. Graeme spent three years writing and managing grants at nonprofits before moving into software, and is finishing an MS in Artificial Intelligence at Northeastern while serving as a TA and student ambassador.",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/graeme-huntley-58e.jpeg",
       linkedin: "https://www.linkedin.com/in/graeme-huntley/"
     },
     {
       name: "Siddharth Kathrani",
       role: "CHAPTER ORGANIZER",
-      bio: "Siddharth works at the intersection of product, security, and AI. At Meta, Siddharth supported the secure launch of products used by 3+ billion people, leading architecture security reviews and pre-launch risk assessments of large language models. The work also included shaping Meta's response to EU cybersecurity regulations, including the Cyber Resilience Act and NIS2.",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/siddharth-kathrani-334.png",
       linkedin: "https://www.linkedin.com/in/siddharth-kathrani-bab496130/"
     },
     {
       name: "Jacob Lee",
       role: "CHAPTER ORGANIZER",
-      bio: "",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/jacob-lee-ac1.jpeg",
       linkedin: "https://www.linkedin.com/in/jacob-lee-8b7b12226/"
     },
     {
       name: "Emma Pan",
       role: "CHAPTER ORGANIZER",
-      bio: "",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/emma-pan-803.jpeg",
       linkedin: "https://www.linkedin.com/in/emmapan0/"
     },
     {
       name: "Jaya Ramaprasad",
       role: "CHAPTER ORGANIZER",
-      bio: "Jaya is the founder of Metriq-AI, a reasoning intelligence platform that helps people think first and check AI output before acting, accepted to ACM CHI WORK 2026. Jaya brings 15 years of product experience at Amazon, Microsoft, and Meta, a PhD in atmospheric physics, and hosts a podcast on Human-AI interaction.",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/jaya-ramaprasad-eae.jpeg",
       linkedin: "https://www.linkedin.com/in/jaya-ramaprasad/"
     }
@@ -917,10 +908,7 @@ export default function Home() {
                     <Linkedin size={16} />
                   </span>
                 </div>
-                <Mono className="text-accent/60 mb-6 block text-[9px]">{member.role}</Mono>
-                <p className="text-secondary text-sm leading-relaxed font-light">
-                  {member.bio}
-                </p>
+                <Mono className="text-accent/60 block text-[9px]">{member.role}</Mono>
                 <div className="mt-auto pt-10 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
                   <Mono className="text-[8px]">PROFILE_00{i+1}</Mono>
                   <span className="text-secondary group-hover:text-accent transition-colors">
