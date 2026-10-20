@@ -926,19 +926,17 @@ export default function Home() {
               href="https://docs.google.com/forms/d/e/1FAIpQLSexvCAcYFJASap0tDcu29esoWj-56x87gcoUKj0HQfQ9GbczA/viewform?usp=header"
               target="_blank"
               rel="noopener noreferrer"
-              className="col-span-full bg-accent p-10 flex flex-col items-center text-center group relative overflow-hidden border border-transparent hover:border-black/20 transition-colors text-black"
+              className="col-span-full bg-accent px-6 py-5 md:px-8 flex flex-col md:flex-row md:items-center gap-4 md:gap-8 text-left group relative overflow-hidden border border-transparent hover:border-black/20 transition-colors text-black"
             >
-              <div className="absolute top-0 right-0 w-24 h-24 bg-black/5 -mr-12 -mt-12 rotate-45 group-hover:bg-black/10 transition-colors" />
-              <h3 className="text-5xl md:text-6xl font-serif italic mb-6 text-black">You?</h3>
-              <p className="text-black text-lg leading-relaxed font-normal mb-8 max-w-xl">
+              <div className="absolute top-0 right-0 w-16 h-16 bg-black/5 -mr-8 -mt-8 rotate-45 group-hover:bg-black/10 transition-colors" />
+              <h3 className="text-3xl md:text-4xl font-serif italic text-black shrink-0">You?</h3>
+              <p className="text-black text-sm md:text-base leading-snug font-normal md:flex-1 max-w-xl">
                 We&apos;re always looking for volunteers to help organize events and shape the future of AI in Seattle.
               </p>
-              <div className="mt-auto pt-6">
-                <span className="inline-flex items-center justify-center gap-2 py-4 px-6 bg-black text-white text-base font-mono font-bold uppercase tracking-[0.2em] border-2 border-black group-hover:bg-white group-hover:text-black transition-colors">
-                  Apply to volunteer
-                  <ArrowUpRight size={18} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </span>
-              </div>
+              <span className="inline-flex self-start md:self-auto shrink-0 items-center justify-center gap-2 py-2.5 px-5 bg-black text-white text-xs font-mono font-bold uppercase tracking-[0.2em] border-2 border-black group-hover:bg-white group-hover:text-black transition-colors">
+                Apply to volunteer
+                <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </span>
             </a>
           </div>
 
