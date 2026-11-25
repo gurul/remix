@@ -390,20 +390,9 @@ export default function Home() {
               The AI<br />
               <span className="italic text-accent">Collective.</span>
             </h1>
-            <p className="text-xl md:text-2xl text-secondary font-light max-w-lg leading-relaxed mb-12 border-l border-accent/20 pl-8">
-              Connect with local pioneers and innovators shaping the future of AI through <span className="text-white">meaningful gatherings</span> and collaborative exploration.
+            <p className="text-xl md:text-2xl text-secondary font-light max-w-lg leading-relaxed border-l border-accent/20 pl-8">
+              The Seattle chapter brought together local pioneers and innovators shaping the future of AI through <span className="text-white">meaningful gatherings</span> and collaborative exploration. The chapter has now sunset.
             </p>
-            <div className="flex flex-wrap gap-6">
-              <a 
-                href="https://docs.google.com/forms/d/e/1FAIpQLSelDyidSPMTyFagOEp7AYuRXH8-Wt8JgJqCwGnR_puhUScyJg/viewform?usp=header"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-4 bg-accent text-black border border-accent px-8 py-5 hover:bg-white hover:text-black hover:border-white transition-all"
-              >
-                <span className="font-mono text-[10px] uppercase tracking-[0.3em] font-bold">Partner With Us</span>
-                <ArrowUpRight size={14} className="text-black group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </a>
-            </div>
           </div>
           
           <div className="relative flex justify-center items-center group">
@@ -449,7 +438,7 @@ export default function Home() {
 
           {/* Chapter sunset notice */}
           <div className="relative border border-white/10 bg-[#0c0a09] overflow-hidden">
-            <div className="relative w-full aspect-[16/9] md:aspect-[21/9]">
+            <div className="relative w-full">
               <Image
                 src="/sunset.jpg"
                 alt="A red sun setting over the water behind layered clouds"
@@ -458,7 +447,7 @@ export default function Home() {
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] via-[#0c0a09]/40 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-8 md:p-12">
+              <div className="relative px-8 pb-8 pt-28 md:px-12 md:pb-10 md:pt-36">
                 <Mono className="text-accent mb-4 block">Chapter_Status: Sunset</Mono>
                 <h3 className="text-3xl md:text-5xl font-serif italic text-white mb-4">
                   We have sunset the chapter.
@@ -762,17 +751,6 @@ export default function Home() {
                 We bring our community together through diverse, intentional gatherings designed for deep connection and meaningful dialogue. From intimate living room meetups to large-scale demo nights, every event centers on <span className="text-white">thoughtful conversation</span> and shared exploration.
               </p>
             </div>
-            <div className="lg:w-1/2 lg:text-right pb-4">
-              <a
-                href="https://www.instagram.com/aicseattle"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-4 bg-accent text-black border border-accent px-8 py-5 text-[10px] font-mono font-bold uppercase tracking-[0.3em] hover:bg-white hover:text-black hover:border-white transition-all group"
-              >
-                SEE OUR INSTAGRAM
-                <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </a>
-            </div>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -805,7 +783,7 @@ export default function Home() {
           <Mono className="text-accent mb-6 block">Close_Friends</Mono>
           <h2 className="text-5xl md:text-6xl font-serif italic mb-6">Thank You to Our Sponsors & Partners.</h2>
           <p className="text-secondary text-lg leading-relaxed max-w-2xl">
-            We are grateful for the continued support of our mission and community. These organizations help make our events, research, and gatherings possible.
+            We are grateful for the support of our mission and community. These organizations helped make our events, research, and gatherings possible.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
@@ -858,17 +836,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="mt-16 pt-8 border-t border-white/10">
-          <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSelDyidSPMTyFagOEp7AYuRXH8-Wt8JgJqCwGnR_puhUScyJg/viewform"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-4 bg-accent text-black px-8 py-5 text-[10px] font-mono font-bold uppercase tracking-[0.3em] hover:bg-white transition-all border-2 border-accent group"
-          >
-            Sponsor us
-            <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-          </a>
-        </div>
       </section>
 
       {/* Officer History */}
@@ -914,7 +881,13 @@ export default function Home() {
               </a>
             ))}
             {/* Fills the last desktop row (16 officers in 3 columns) so the grid stays solid */}
-            <div aria-hidden="true" className="hidden lg:block lg:col-span-2 bg-[#0c0a09]" />
+            <div className="hidden lg:flex lg:col-span-2 bg-[#0c0a09] px-8 py-5 items-center justify-between gap-8 relative overflow-hidden">
+              <div className="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-accent/10 to-transparent pointer-events-none" />
+              <p className="relative text-2xl font-serif italic text-white/90">
+                Sixteen people, one chapter. <span className="text-accent">Thank you.</span>
+              </p>
+              <Mono className="relative text-accent/60 text-[9px] shrink-0">Seattle_Chapter // Signing_Off</Mono>
+            </div>
           </div>
         </div>
       </section>
