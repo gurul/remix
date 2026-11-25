@@ -222,12 +222,25 @@ export default function Home() {
     fetchEvents();
   }, []);
 
-  const team = [
+  // Everyone who served as a chapter officer, leads first.
+  const officers = [
     {
       name: "Bhola Chhetri",
       role: "CHAPTER LEAD",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/bhola@aicollective.com.jpeg",
       linkedin: "https://www.linkedin.com/in/bhola-chhetri/"
+    },
+    {
+      name: "Ken Aragon",
+      role: "CHAPTER LEAD",
+      img: "/ken-aragon.jpg",
+      linkedin: "https://www.linkedin.com/in/ken-aragon/"
+    },
+    {
+      name: "Kulbir Singh",
+      role: "CHAPTER LEAD",
+      img: "/kulbir-singh.jpg",
+      linkedin: "https://www.linkedin.com/in/kulbir123/"
     },
     {
       name: "Gurucharan Lingamallu",
@@ -240,6 +253,27 @@ export default function Home() {
       role: "STRATEGY LEAD",
       img: "/keshav.png",
       linkedin: "https://www.linkedin.com/in/keshav-ummat-8418b4106/"
+    },
+    {
+      name: "Ajita Ananth",
+      role: "EVENTS LEAD",
+      bio: "Ajita K Ananth is a Staff Technical Program Manager at Google where she leads engineering programs within Google Maps. Prior to Google, she led major product and technical initiatives at Coinbase and DocuSign. She thrives on empowering teams to tackle challenging engineering problems, and shipping products that improve people's lives. Outside of work, she loves trying new restaurants, and traveling to new countries.",
+      img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/ajita-ananth-b65.JPG",
+      linkedin: "https://www.linkedin.com/in/ajita-ananth-47559531/"
+    },
+    {
+      name: "Rachel Kloepfer",
+      role: "INSTITUTIONAL LEAD",
+      bio: "Rachel is a Private Investments Analyst at Multi-Family Office Lenora Capital. She is a prior award-winning investigative journalist passionate about deep research and investing in great teams, and believes in bridging the gap between founders and funders through community. Outside of work, Rachel is a Global Shaper with the World Economic Forum and loves cooking, running, and writing.",
+      img: "/rachel-kloepfer.png",
+      linkedin: "https://www.linkedin.com/in/rachelkloepfer/"
+    },
+    {
+      name: "Samridh Bhattacharjee",
+      role: "GROWTH/COMMUNITY ORGANIZER",
+      bio: "Samridh is an AI Product Manager at Mircosoft AI and the co-founder of Claimrunner. He's deeply passionate about advancing the human condition through AI and helping others however he can. Outside of work, Samridh enjoys golf, tennis, and DJ'ing.",
+      img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/samridhb@aicollective.com.jpg",
+      linkedin: "https://www.linkedin.com/in/samridhb/"
     },
     {
       name: "Jiyae Choi",
@@ -276,35 +310,6 @@ export default function Home() {
       role: "CHAPTER ORGANIZER",
       img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/jaya-ramaprasad-eae.jpeg",
       linkedin: "https://www.linkedin.com/in/jaya-ramaprasad/"
-    }
-  ];
-
-  const previousTeam = [
-    {
-      name: "Ken Aragon",
-      role: "CHAPTER LEAD",
-      img: "/ken-aragon.jpg",
-      linkedin: "https://www.linkedin.com/in/ken-aragon/"
-    },
-    {
-      name: "Kulbir Singh",
-      role: "CHAPTER LEAD",
-      img: "/kulbir-singh.jpg",
-      linkedin: "https://www.linkedin.com/in/kulbir123/"
-    },
-    {
-      name: "Ajita Ananth",
-      role: "EVENTS LEAD",
-      bio: "Ajita K Ananth is a Staff Technical Program Manager at Google where she leads engineering programs within Google Maps. Prior to Google, she led major product and technical initiatives at Coinbase and DocuSign. She thrives on empowering teams to tackle challenging engineering problems, and shipping products that improve people's lives. Outside of work, she loves trying new restaurants, and traveling to new countries.",
-      img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/ajita-ananth-b65.JPG",
-      linkedin: "https://www.linkedin.com/in/ajita-ananth-47559531/"
-    },
-    {
-      name: "Samridh Bhattacharjee",
-      role: "GROWTH/COMMUNITY ORGANIZER",
-      bio: "Samridh is an AI Product Manager at Mircosoft AI and the co-founder of Claimrunner. He's deeply passionate about advancing the human condition through AI and helping others however he can. Outside of work, Samridh enjoys golf, tennis, and DJ'ing.",
-      img: "https://storage.googleapis.com/aic-platform-assets/images/team-members/samridhb@aicollective.com.jpg",
-      linkedin: "https://www.linkedin.com/in/samridhb/"
     },
     {
       name: "Cyndi Song",
@@ -319,13 +324,6 @@ export default function Home() {
       bio: "Abe is a seasoned technology executive with deep experience in product strategy, digital marketing, business intelligence, go-to-market execution, and business operations. He has held leadership roles at companies including Microsoft, eBay, and IBM, as well as startups and smaller organizations. Outside of work, Abe enjoys traveling, volunteering, mentoring, cooking, hiking, and engaging in thoughtful discussions about technology.",
       img: "/abe-thomas.png",
       linkedin: "https://www.linkedin.com/in/abethomas01/"
-    },
-    {
-      name: "Rachel Kloepfer",
-      role: "INSTITUTIONAL LEAD",
-      bio: "Rachel is a Private Investments Analyst at Multi-Family Office Lenora Capital. She is a prior award-winning investigative journalist passionate about deep research and investing in great teams, and believes in bridging the gap between founders and funders through community. Outside of work, Rachel is a Global Shaper with the World Economic Forum and loves cooking, running, and writing.",
-      img: "/rachel-kloepfer.png",
-      linkedin: "https://www.linkedin.com/in/rachelkloepfer/"
     }
   ];
 
@@ -349,20 +347,11 @@ export default function Home() {
             <a href="#events" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">Events</a>
             <a href="#about-us" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">About Us</a>
             <a href="#partnerships" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">Partnerships</a>
-            <a href="#get-involved" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">Get Involved</a>
+            <a href="#officers" className="text-[9px] uppercase tracking-[0.3em] text-secondary hover:text-accent transition-colors font-mono">Officers</a>
           </div>
         </div>
         
         <div className="flex items-center gap-8">
-          <a 
-            href="https://docs.google.com/forms/d/e/1FAIpQLScmUC8KSPhafE_8FZBUs2pNPJVkJkRl-E9eE2cE5b34RQ3BTQ/viewform"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-accent text-black px-5 py-2 text-[9px] font-mono font-bold hover:bg-white transition-all uppercase tracking-[0.2em] shadow-[3px_3px_0px_0px_rgba(255,122,26,0.2)] group"
-          >
-            Apply_Member
-            <ArrowUpRight size={12} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-          </a>
           <button className="xl:hidden text-secondary" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -384,7 +373,7 @@ export default function Home() {
             <a href="#events" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">Events</a>
             <a href="#about-us" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">About Us</a>
             <a href="#partnerships" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">Partnerships</a>
-            <a href="#get-involved" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">Get Involved</a>
+            <a href="#officers" onClick={() => setIsMenuOpen(false)} className="text-5xl font-serif italic text-white hover:text-accent transition-colors">Officers</a>
           </motion.div>
         )}
       </AnimatePresence>
@@ -405,15 +394,6 @@ export default function Home() {
               Connect with local pioneers and innovators shaping the future of AI through <span className="text-white">meaningful gatherings</span> and collaborative exploration.
             </p>
             <div className="flex flex-wrap gap-6">
-              <a 
-                href="https://docs.google.com/forms/d/e/1FAIpQLScmUC8KSPhafE_8FZBUs2pNPJVkJkRl-E9eE2cE5b34RQ3BTQ/viewform?usp=header"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-4 bg-accent text-black border border-accent px-8 py-5 hover:bg-white hover:text-black hover:border-white transition-all"
-              >
-                <span className="font-mono text-[10px] uppercase tracking-[0.3em] font-bold">Join Our Chapter</span>
-                <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </a>
               <a 
                 href="https://docs.google.com/forms/d/e/1FAIpQLSelDyidSPMTyFagOEp7AYuRXH8-Wt8JgJqCwGnR_puhUScyJg/viewform?usp=header"
                 target="_blank"
@@ -467,20 +447,31 @@ export default function Home() {
             </a>
           </div>
 
-          {eventsLoading ? (
-            <div className="border border-white/10 bg-[#0c0a09] p-12 text-center">
-              <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-              <p className="text-secondary font-mono text-sm tracking-widest">LOADING EVENTS...</p>
+          {/* Chapter sunset notice */}
+          <div className="relative border border-white/10 bg-[#0c0a09] overflow-hidden">
+            <div className="relative w-full aspect-[16/9] md:aspect-[21/9]">
+              <Image
+                src="/sunset.jpg"
+                alt="A red sun setting over the water behind layered clouds"
+                fill
+                sizes="(max-width: 1400px) 100vw, 1400px"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0c0a09] via-[#0c0a09]/40 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-8 md:p-12">
+                <Mono className="text-accent mb-4 block">Chapter_Status: Sunset</Mono>
+                <h3 className="text-3xl md:text-5xl font-serif italic text-white mb-4">
+                  We have sunset the chapter.
+                </h3>
+                <p className="text-white/80 font-serif italic text-base md:text-xl max-w-2xl">
+                  Thank you for all the wonderful memories, and to everyone who showed up, shared, and built alongside us.
+                </p>
+              </div>
             </div>
-          ) : upcomingEvents.length === 0 ? (
-            <div className="border border-white/10 bg-[#0c0a09] p-12 text-center relative overflow-hidden group">
-              <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <Calendar className="w-12 h-12 text-accent/20 mx-auto mb-6" />
-              <p className="text-secondary font-mono text-sm tracking-widest mb-2">NO UPCOMING EVENTS AT THIS TIME.</p>
-              <p className="text-white/40 text-[10px] font-mono">CHECK BACK SOON FOR UPDATES.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          </div>
+
+          {!eventsLoading && upcomingEvents.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
               {upcomingEvents.map((event, i) => (
                 <motion.a
                   href={event.lumaUrl}
@@ -880,22 +871,25 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="py-32 bg-white/[0.02] border-y border-white/5">
+      {/* Officer History */}
+      <section id="officers" className="py-32 bg-white/[0.02] border-y border-white/5 scroll-mt-16">
         <div className="px-6 md:px-12 max-w-[1400px] mx-auto">
-          <div className="max-w-3xl mb-24">
+          <div className="max-w-3xl mb-16">
             <Mono className="text-accent mb-6 block">The_Human_Layer</Mono>
-            <h2 className="text-6xl md:text-7xl font-serif italic mb-8">Meet the Seattle Team.</h2>
+            <h2 className="text-6xl md:text-7xl font-serif italic mb-8">Officer History.</h2>
+            <p className="text-secondary text-lg font-light leading-relaxed border-l border-accent/20 pl-8">
+              The {officers.length} people who led, organized, and advised the Seattle chapter.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/10 border border-white/10">
-            {team.map((member, i) => (
+            {officers.map((member, i) => (
               <a
-                key={i}
+                key={member.name}
                 href={member.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#0c0a09] px-6 py-5 flex items-center gap-4 group relative overflow-hidden block border border-transparent hover:border-accent/20 transition-colors"
+                className="bg-[#0c0a09] px-6 py-5 flex items-center gap-4 group relative overflow-hidden border border-transparent hover:border-accent/20 transition-colors"
               >
                 <div className="absolute top-0 right-0 w-16 h-16 bg-accent/5 -mr-8 -mt-8 rotate-45 group-hover:bg-accent/10 transition-colors" />
                 <div className="relative w-12 h-12 shrink-0 rounded-full overflow-hidden">
@@ -915,74 +909,12 @@ export default function Home() {
                   <span className="text-secondary group-hover:text-accent transition-colors">
                     <ArrowUpRight size={14} />
                   </span>
-                  <Mono className="hidden sm:block text-[8px]">PROFILE_00{i+1}</Mono>
+                  <Mono className="hidden sm:block text-[8px]">PROFILE_{String(i + 1).padStart(3, "0")}</Mono>
                 </div>
               </a>
             ))}
-            {/* Join the team CTA card */}
-            <a
-              id="get-involved"
-              key="cta"
-              href="https://docs.google.com/forms/d/e/1FAIpQLSexvCAcYFJASap0tDcu29esoWj-56x87gcoUKj0HQfQ9GbczA/viewform?usp=header"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="col-span-full bg-accent px-6 py-5 md:px-8 flex flex-col md:flex-row md:items-center gap-4 md:gap-8 text-left group relative overflow-hidden border border-transparent hover:border-black/20 transition-colors text-black"
-            >
-              <div className="absolute top-0 right-0 w-16 h-16 bg-black/5 -mr-8 -mt-8 rotate-45 group-hover:bg-black/10 transition-colors" />
-              <h3 className="text-3xl md:text-4xl font-serif italic text-black shrink-0">You?</h3>
-              <p className="text-black text-sm md:text-base leading-snug font-normal md:flex-1 max-w-xl">
-                We&apos;re always looking for volunteers to help organize events and shape the future of AI in Seattle.
-              </p>
-              <span className="inline-flex self-start md:self-auto md:ml-auto shrink-0 items-center justify-center gap-2 py-2.5 px-5 bg-black text-white text-xs font-mono font-bold uppercase tracking-[0.2em] border-2 border-black group-hover:bg-white group-hover:text-black transition-colors">
-                Apply to volunteer
-                <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </span>
-            </a>
-          </div>
-
-          {/* Previous Officers */}
-          <div className="mt-24 pt-16 border-t border-white/10">
-            <Mono className="text-accent mb-6 block">Alumni_Layer</Mono>
-            <h3 className="text-4xl md:text-5xl font-serif italic mb-12">Previous Officers.</h3>
-            {/* Rotating band: two identical copies scroll left forever; the second copy is hidden from assistive tech */}
-            <div className="marquee relative overflow-hidden border-y border-white/10 bg-[#0c0a09] scrollbar-hide">
-              <div className="marquee-track flex w-max">
-                {[0, 1].map((copy) => (
-                  <ul key={copy} aria-hidden={copy === 1 ? true : undefined} className="flex shrink-0">
-                    {previousTeam.map((member, i) => (
-                      <li key={`prev-${copy}-${i}`} className="shrink-0 border-r border-white/10">
-                        <a
-                          href={member.linkedin}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          tabIndex={copy === 1 ? -1 : undefined}
-                          className="px-8 py-6 flex items-center gap-4 group hover:bg-white/[0.03] focus-visible:outline focus-visible:outline-1 focus-visible:outline-accent focus-visible:-outline-offset-2 transition-colors"
-                        >
-                          <div className="relative w-12 h-12 shrink-0 rounded-full overflow-hidden opacity-80 group-hover:opacity-100 transition-opacity">
-                            {member.img ? (
-                              <Image src={member.img} alt={member.name} width={48} height={48} className="object-cover w-full h-full" />
-                            ) : (
-                              <div aria-hidden="true" className="w-full h-full flex items-center justify-center bg-accent/10 border border-accent/30 rounded-full font-mono text-sm text-accent">
-                                {member.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
-                              </div>
-                            )}
-                          </div>
-                          <div className="whitespace-nowrap">
-                            <div className="flex items-center gap-2">
-                              <span className="text-lg font-serif italic">{member.name}</span>
-                              <span className="text-secondary group-hover:text-accent transition-colors shrink-0">
-                                <Linkedin size={14} />
-                              </span>
-                            </div>
-                            <Mono className="text-accent/60 block text-[9px]">{member.role}</Mono>
-                          </div>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                ))}
-              </div>
-            </div>
+            {/* Fills the last desktop row (16 officers in 3 columns) so the grid stays solid */}
+            <div aria-hidden="true" className="hidden lg:block lg:col-span-2 bg-[#0c0a09]" />
           </div>
         </div>
       </section>
